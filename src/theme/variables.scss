@@ -74,6 +74,7 @@
   --ion-color-light-contrast-rgb: 0, 0, 0;
   --ion-color-light-shade: #d7d8da;
   --ion-color-light-tint: #f5f6f9;
+  --ion-font-family: 'Poppins', sans-serif;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -233,4 +234,37 @@
 
     --ion-card-background: #1e1e1e;
   }
+}
+
+.drawer-menu{
+  // --ion-color-light: #f4f5f8;
+  --background: transparent;
+  --box-shadow: none;
+  --color: #000000;
+  --padding-start: 0;
+  --padding-end: 0;
+}
+
+.footer-link{
+  --background: linear-gradient(87deg, #5967ff 0, #5a99fe 100%) !important;
+}
+
+ion-footer{
+  background-color: #FAFBFD;
+  text-align: center;
+
+}
+ion-footer::before{
+  background-image: none;
+}
+ion-footer ion-button{
+  margin: 0;
+}
+.header-icons{
+  width: 30px;
+  height: 30px;
+  margin-left: 5px;
+}
+.header-logo{
+  height: 55px;
 }

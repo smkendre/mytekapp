@@ -1,0 +1,218 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-thumbnail slot="start" class="header-icons">
+      <ion-img src="../../assets/01-04.png"></ion-img>
+    </ion-thumbnail>
+      <ion-img src="../../assets/images/logo.jpg" class="header-logo"></ion-img>
+    <ion-thumbnail slot="primary" class="header-icons">
+      <ion-img src="../../assets/search-icon.png"></ion-img>
+    </ion-thumbnail>
+
+    <ion-thumbnail slot="primary" class="header-icons">
+      <ion-img src="../../assets/bellicon.png"></ion-img>
+    </ion-thumbnail>
+    <ion-thumbnail slot="primary" class="header-icons">
+      <ion-img src="../../assets/01-02.png"></ion-img>
+    </ion-thumbnail>
+    <ion-button slot="primary" class="drawer-menu">
+      <ion-menu-button >
+        <img src="../../assets/01-03.png" >
+      </ion-menu-button>
+    </ion-button>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+<ion-grid>
+
+  <ion-card class="transparent-card">
+    <ion-card-content>
+      <ion-row class="ion-text-center">
+        <ion-col size="12" size-sm="12">
+
+
+          <h1>Registration Form</h1>
+
+
+    </ion-col>
+
+    </ion-row>
+    </ion-card-content>
+  </ion-card>
+
+
+<form #form="ngForm" (ngSubmit)="onSubmit(form)">
+
+  <ion-card class="transparent-card">
+    <ion-card-content>
+      <ion-row>
+
+        <ion-col size="12" class="ion-no-padding">
+          <ion-input type="text" ngModel name="name" value="" placeholder="name" ></ion-input>
+        </ion-col>
+        <ion-col size="12" class="ion-no-padding">
+          <ion-input type="text" ngModel name="name" value="" placeholder="Company Name" ></ion-input>
+        </ion-col>
+        <ion-col size="12" class="ion-no-padding">
+          <ion-textarea col="5" ngModel name="name" value="" placeholder="address" ></ion-textarea>
+        </ion-col>
+      </ion-row>
+      <h2>Area of Interest</h2>
+
+      <ion-row>
+        <ion-col size="6">
+          <ion-checkbox name="area_of_interst"></ion-checkbox><ion-label>Arial</ion-label>
+
+        </ion-col>
+        <ion-col size="6">
+          <ion-checkbox name="area_of_interst"></ion-checkbox><ion-label> Electrical</ion-label>
+        </ion-col>
+      </ion-row>
+\ <ion-row>
+  <ion-col size="6">
+    <ion-checkbox name="area_of_interst"></ion-checkbox><ion-label> OFC Underground</ion-label>
+
+  </ion-col>
+  <ion-col size="6">
+    <ion-checkbox name="area_of_interst"></ion-checkbox><ion-label> Civil</ion-label>
+  </ion-col>
+</ion-row>
+<ion-row>
+  <ion-col size="6">
+    <ion-checkbox name="area_of_interst"></ion-checkbox><ion-label> CCTV</ion-label>
+
+  </ion-col>
+  <ion-col size="6">
+    <ion-checkbox name="area_of_interst"></ion-checkbox><ion-label> Safety & Surveillance</ion-label>
+  </ion-col>
+</ion-row>
+<ion-row>
+  <ion-col size="6">
+    <ion-checkbox name="area_of_interst"></ion-checkbox>
+  <ion-label> Integrated command & control center</ion-label>
+
+  </ion-col>
+  <ion-col size="6">
+    <ion-checkbox name="area_of_interst"></ion-checkbox>
+  <ion-label> Smart City Mission Offerings</ion-label>
+  </ion-col>
+</ion-row>
+<ion-row>
+  <ion-col size="6">
+    <ion-checkbox name="area_of_interst"></ion-checkbox>
+  <ion-label> Site survey & REKI</ion-label>
+
+  </ion-col>
+  <ion-col size="6">
+    <ion-checkbox name="area_of_interst"></ion-checkbox>
+  <ion-label> Telecommunication</ion-label>
+  </ion-col>
+</ion-row>
+<ion-row>
+  <ion-col size="6">
+    <ion-checkbox name="area_of_interst"></ion-checkbox>
+  <ion-label> IT & IBM</ion-label>
+
+  </ion-col>
+  <ion-col size="6">
+    <ion-checkbox name="area_of_interst"></ion-checkbox>
+  <ion-label> Technology Support & Consultation</ion-label>
+  </ion-col>
+</ion-row>
+<ion-row>
+  <ion-col size="6">
+    <ion-checkbox name="area_of_interst"></ion-checkbox>
+  <ion-label> Financial Assistance</ion-label>
+
+  </ion-col>
+  <ion-col size="6">
+    <ion-checkbox name="area_of_interst"></ion-checkbox>
+  <ion-label> Other</ion-label>
+  </ion-col>
+</ion-row>
+
+
+<ion-row>
+  <ion-col size="6">
+
+  </ion-col>
+  <ion-col size="6">
+    <ion-textarea name="area_of_interst_other"></ion-textarea>
+  </ion-col>
+</ion-row>
+<ion-row>
+
+  <ion-col size="12" class="ion-no-padding">
+    <ion-select type="text" ngModel name="name">
+      <ion-select-option value="">Select State</ion-select-option>
+      <ion-select-option value="">Maharashtra</ion-select-option>
+      <ion-select-option value="">Rajastan</ion-select-option>
+      <ion-select-option value="">Aasam</ion-select-option>
+
+    </ion-select>
+  </ion-col>
+  <ion-col size="12" class="ion-no-padding">
+    <ion-select  ngModel name="name">
+      <ion-select-option value="">Select District</ion-select-option>
+    </ion-select>  </ion-col>
+  <ion-col size="12" class="ion-no-padding">
+    <ion-select type="text" ngModel name="name">
+      <ion-select-option value="">Select Taluka</ion-select-option>
+    </ion-select>  </ion-col>
+    <ion-col size="12" class="ion-no-padding">
+      <ion-select ngModel name="name">
+        <ion-select-option value="">Work Location</ion-select-option>
+      </ion-select>  </ion-col>
+</ion-row>
+<ion-row>
+  <ion-col size="8" >
+    <ion-input type="text" ngModel name="name" value="" placeholder="Enter GST Number" ></ion-input>
+
+  </ion-col>
+  <ion-col size="4">
+    <ion-button class="ion-text-center">UPLOAD</ion-button>
+
+  </ion-col>
+</ion-row>
+
+<ion-row>
+  <ion-col size="8" >
+    <ion-input type="text" ngModel name="name" value="" placeholder="Enter Company Registration Number" ></ion-input>
+
+  </ion-col>
+  <ion-col size="4">
+    <ion-button class="ion-text-center">UPLOAD</ion-button>
+
+  </ion-col>
+</ion-row>
+<ion-row>
+  <ion-col size="8" >
+    <ion-input type="text" ngModel name="name" value="" placeholder="Enter Pan Card Number" ></ion-input>
+
+  </ion-col>
+  <ion-col size="4">
+    <ion-button class="ion-text-center">UPLOAD</ion-button>
+
+  </ion-col>
+</ion-row>
+<ion-row>
+  <ion-col size="8" >
+    <ion-input type="text" ngModel name="name" value="" placeholder="Enter Adhaar Card Number" ></ion-input>
+
+  </ion-col>
+  <ion-col size="4">
+    <ion-button class="ion-text-center">UPLOAD</ion-button>
+
+  </ion-col>
+</ion-row>
+      <ion-button type="submit" expand="block" class="ion-text-center">Submit</ion-button>
+    </ion-card-content>
+  </ion-card>
+
+
+</form>
+</ion-grid>
+</ion-content>
+
+<ion-footer>
+  <ion-button expand="full" class="footer-link">Call Us For Assistance</ion-button>
+</ion-footer>

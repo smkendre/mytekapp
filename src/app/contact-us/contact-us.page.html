@@ -1,0 +1,70 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-thumbnail slot="start" class="header-icons">
+      <ion-img src="../../assets/01-04.png"></ion-img>
+    </ion-thumbnail>
+      <ion-img src="../../assets/images/logo.jpg" class="header-logo"></ion-img>
+    <ion-thumbnail slot="primary" class="header-icons">
+      <ion-img src="../../assets/search-icon.png"></ion-img>
+    </ion-thumbnail>
+
+    <ion-thumbnail slot="primary" class="header-icons">
+      <ion-img src="../../assets/bellicon.png"></ion-img>
+    </ion-thumbnail>
+    <ion-thumbnail slot="primary" class="header-icons">
+      <ion-img src="../../assets/01-02.png"></ion-img>
+    </ion-thumbnail>
+    <ion-button slot="primary" class="drawer-menu">
+      <ion-menu-button >
+        <img src="../../assets/01-03.png" >
+      </ion-menu-button>
+    </ion-button>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+<ion-grid>
+
+  <ion-card class="transparent-card">
+    <ion-card-content>
+      <ion-row class="ion-text-center">
+        <ion-col size="12" size-sm="12">
+
+
+          <h1>Contact Us</h1>
+
+
+    </ion-col>
+
+    </ion-row>
+    </ion-card-content>
+  </ion-card>
+
+
+<form #form="ngForm" (ngSubmit)="onSubmit(form)">
+
+  <ion-card class="transparent-card">
+    <ion-card-content>
+      <ion-row>
+
+        <ion-col size="12" class="ion-no-padding">
+          <ion-input type="text" ngModel name="subject" value="" placeholder="Subject" ></ion-input>
+        </ion-col>
+
+        <ion-col size="12" class="ion-no-padding">
+          <ion-textarea rows="5" ngModel name="name" value="" placeholder="Message" ></ion-textarea>
+        </ion-col>
+      </ion-row>
+      <ion-button type="submit"  class="ion-text-center">Submit</ion-button>
+    </ion-card-content>
+  </ion-card>
+
+
+</form>
+
+<ion-img src="../../assets/images/contact-us.png"></ion-img>
+</ion-grid>
+</ion-content>
+
+<ion-footer>
+  <ion-button expand="full" class="footer-link">Call Us For Assistance</ion-button>
+</ion-footer>

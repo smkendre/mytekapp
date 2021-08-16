@@ -1,0 +1,64 @@
+ion-content{
+  height: 100%;
+  --background: linear-gradient( #5a99fe, #5967ff) !important
+}
+.curve-borders {
+  border-radius: 75px;
+  width: 250px;
+  margin: 20px auto;
+}
+ion-card-header{
+  padding: 10px 30px;
+}
+
+ion-item{
+  border: 2px solid #c8c8c8;
+  border-radius: 8px;
+  --background: #eaeaea;
+  margin-bottom: 20px;
+}
+
+.login-container{
+  border-radius: 20px;
+  --background-color: #edf1f4;
+  padding: 40px 20px;
+}
+
+.login-container ion-button{
+  --background: linear-gradient(87deg, #5967ff 0, #5a99fe 100%) !important;
+}
+
+.transparent-card{
+  background: transparent;
+  box-shadow: none;
+  padding: 10px 0 0;
+  color: #ffffff;
+}
+
+.transparent-card h2{
+  font-size: 28px;
+}
+.transparent-card ion-button{
+  color: #ffffff;
+  font-size: 20px;
+  font-weight: 700;
+
+}
+.errorMsg{
+  border: none;
+  border-radius: 0;
+  --background: transparent;
+}
+
+ion-grid{
+
+  height: 100%;
+}
+
+form{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+
+}

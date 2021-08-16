@@ -1,0 +1,13 @@
+.menu-container{
+  --background: linear-gradient( #5a99fe, #5967ff) !important
+
+}
+.menu-container ion-list{
+  background: transparent;
+}
+
+.menu-container ion-item{
+  --background: transparent;
+  --border-color: transparent;
+  --color: #ffffff;
+}

@@ -1,0 +1,115 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-thumbnail slot="start" class="header-icons">
+      <ion-img src="../../assets/01-04.png"></ion-img>
+    </ion-thumbnail>
+      <ion-img src="../../assets/images/logo.jpg" class="header-logo"></ion-img>
+    <ion-thumbnail slot="primary" class="header-icons">
+      <ion-img src="../../assets/search-icon.png"></ion-img>
+    </ion-thumbnail>
+
+    <ion-thumbnail slot="primary" class="header-icons">
+      <ion-img src="../../assets/bellicon.png"></ion-img>
+    </ion-thumbnail>
+    <ion-thumbnail slot="primary" class="header-icons">
+      <ion-img src="../../assets/01-02.png"></ion-img>
+    </ion-thumbnail>
+    <ion-button slot="primary" class="drawer-menu">
+      <ion-menu-button >
+        <img src="../../assets/01-03.png" >
+      </ion-menu-button>
+    </ion-button>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content >
+
+
+  <ion-row>
+    <ion-col size="12">
+
+    </ion-col>
+  </ion-row>
+  <ion-grid class="ion-no-padding" >
+
+    <ion-card class="transparent-card">
+      <ion-card-content>
+        <ion-row>
+          <ion-col size="12" size-sm="12">
+
+
+            <h1>Send Material Request</h1>
+
+
+      </ion-col>
+
+      </ion-row>
+      </ion-card-content>
+    </ion-card>
+
+<form #form="ngForm" (ngSubmit)="onSubmit(form)">
+
+    <ion-card class="transparent-card">
+
+      <ion-card-content>
+        <ion-row class="ion-align-items-center">
+          <ion-col size="4" size-sm="4" class="ion-no-padding">
+            <ion-label>Tender List: </ion-label>
+            <ion-select name="tender">
+              <ion-select-option value="">Select Tender</ion-select-option>
+            </ion-select>
+          </ion-col>
+          <ion-col size="4" size-sm="4" class="ion-no-padding">
+            <ion-label>Material List: </ion-label>
+            <ion-select name="tender">
+              <ion-select-option value="">Select Material</ion-select-option>
+            </ion-select>
+          </ion-col>
+          <ion-col size="3" size-sm="3" class="ion-no-padding">
+            <ion-label>Quantity: </ion-label>
+            <ion-input type="text" name="qnt" value="" placeholder="Quantity"></ion-input>
+          </ion-col>
+          <ion-col size="1" size-sm="1" class="ion-no-padding middle_align">
+            <ion-label></ion-label>
+
+            <ion-icon color="success" name="add-circle"></ion-icon>
+            <ion-icon color="danger" name="remove-circle"></ion-icon>
+          </ion-col>
+        </ion-row>
+        <ion-row class="ion-align-items-center">
+          <ion-col size="4" size-sm="4" class="ion-no-padding">
+            <ion-select name="tender">
+              <ion-select-option value="">Select Tender</ion-select-option>
+            </ion-select>
+          </ion-col>
+          <ion-col size="4" size-sm="4" class="ion-no-padding">
+            <ion-select name="tender">
+              <ion-select-option value="">Select Material</ion-select-option>
+            </ion-select>
+          </ion-col>
+          <ion-col size="3" size-sm="3" class="ion-no-padding">
+            <ion-input type="text" name="qnt" value="" placeholder="Quantity"></ion-input>
+          </ion-col>
+          <ion-col size="1" size-sm="1" class="ion-no-padding middle_align">
+            <ion-label></ion-label>
+
+            <ion-icon color="success" name="add-circle"></ion-icon>
+            <ion-icon color="danger" name="remove-circle"></ion-icon>
+          </ion-col>
+        </ion-row>
+
+        <div class="ion-text-center">
+        <ion-button routerLink="/material-request-list" class="ion-text-center">Submit Request</ion-button>
+      </div>
+      </ion-card-content>
+    </ion-card>
+
+
+  </form>
+
+  </ion-grid>
+</ion-content>
+
+<ion-footer>
+  <ion-button expand="full" class="footer-link">Call Us For Assistance</ion-button>
+</ion-footer>

@@ -1,0 +1,55 @@
+.transparent-card{
+  background: transparent;
+  box-shadow: none;
+  padding: 10px 0 0;
+}
+
+.transparent-card h2{
+  font-size: 20px;
+  font-weight: 600;
+  color: #313469;
+
+}
+.filter_options{
+  font-size: 14px;
+  color: #000000;
+}
+.filter_options ion-icon{
+  vertical-align: middle;
+}
+ion-content{
+  --background: #eef1f4;
+  background: #eef1f4;
+}
+
+ion-card{
+  margin: 0;
+  border-radius: 0;
+}
+
+
+ion-list{
+  padding: 0;
+  background: transparent;
+}
+
+ion-row{
+  margin-bottom: 10px;
+}
+
+h2{
+  margin-right: 7px;
+  vertical-align: middle;
+  color: #737373;
+  font-size: 18px;
+}
+
+ion-input, ion-textarea, ion-select{
+  --background: linear-gradient(to right, #eae8ea 0%, rgb(255, 255, 255) 100%);
+  margin: 0 0 15px;
+  border-radius: 10px;
+  box-shadow: rgb(0 0 0 / 20%) 0px 3px 1px -2px, rgb(0 0 0 / 14%) 0px 2px 2px 0px, rgb(0 0 0 / 12%) 0px 1px 5px 0px;
+}
+h1{
+  font-weight: 700;
+}

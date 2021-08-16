@@ -1,5 +1,12 @@
 {
   "name": "mytek-mobile-app",
-  "integrations": {},
+  "integrations": {
+    "capacitor": {
+      "appId": "myteck.app",
+      "appName": "mytek-mobile-app",
+      "webDir": "www",
+      "bundledWebRuntime": false
+    }
+  },
   "type": "angular"
 }
