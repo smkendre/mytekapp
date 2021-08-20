@@ -100,6 +100,14 @@ const routes: Routes = [
     loadChildren: () => import('./contact-us/contact-us.module').then( m => m.ContactUsPageModule),
     // canActivate: [AuthGuard]
 
+  },
+  {
+    path: 'signup',
+    loadChildren: () => import('./signup/signup.module').then( m => m.SignupPageModule)
+  },
+  {
+    path: 'about-us',
+    loadChildren: () => import('./about-us/about-us.module').then( m => m.AboutUsPageModule)
   }
 ];
 

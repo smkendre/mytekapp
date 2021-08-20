@@ -4,7 +4,8 @@
 
 export const environment = {
   production: false,
-  apiUrl: 'http://localhost:8888/mytek/php-api/public/api/'
+ // apiUrl: 'http://localhost:8888/mytek/php-api/public/api/'
+   apiUrl: 'https://demo.transmogtech.com/api/public/api/'
 
 };
 

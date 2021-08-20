@@ -53,30 +53,32 @@
 
       <ion-card-content>
         <ion-row class="ion-align-items-center">
-          <ion-col size="4" size-sm="4" class="ion-no-padding">
+          <ion-col size="12" size-sm="12" >
             <ion-label>Tender List: </ion-label>
-            <ion-select name="tender">
+            <ion-select name="tender" ngModel required  (ionChange)="onChangeTender($event.target.value)">
               <ion-select-option value="">Select Tender</ion-select-option>
+              <ion-select-option value="{{item.id}}" *ngFor="let item of Tenders">{{item.name}}</ion-select-option>
             </ion-select>
           </ion-col>
-          <ion-col size="4" size-sm="4" class="ion-no-padding">
+          <ion-col size="12" size-sm="12">
             <ion-label>Material List: </ion-label>
-            <ion-select name="tender">
+            <ion-select name="material" ngModel required >
               <ion-select-option value="">Select Material</ion-select-option>
+              <ion-select-option value="{{item.id}}" *ngFor="let item of Materials">{{item.name}}</ion-select-option>
             </ion-select>
           </ion-col>
-          <ion-col size="3" size-sm="3" class="ion-no-padding">
+          <ion-col size="12" size-sm="12" >
             <ion-label>Quantity: </ion-label>
-            <ion-input type="text" name="qnt" value="" placeholder="Quantity"></ion-input>
+            <ion-input type="text" name="qnt" value="" placeholder="Quantity" ngModel required ></ion-input>
           </ion-col>
-          <ion-col size="1" size-sm="1" class="ion-no-padding middle_align">
+          <!-- <ion-col size="1" size-sm="1" class="ion-no-padding middle_align">
             <ion-label></ion-label>
 
             <ion-icon color="success" name="add-circle"></ion-icon>
             <ion-icon color="danger" name="remove-circle"></ion-icon>
-          </ion-col>
+          </ion-col> -->
         </ion-row>
-        <ion-row class="ion-align-items-center">
+        <!-- <ion-row class="ion-align-items-center">
           <ion-col size="4" size-sm="4" class="ion-no-padding">
             <ion-select name="tender">
               <ion-select-option value="">Select Tender</ion-select-option>
@@ -96,10 +98,10 @@
             <ion-icon color="success" name="add-circle"></ion-icon>
             <ion-icon color="danger" name="remove-circle"></ion-icon>
           </ion-col>
-        </ion-row>
+        </ion-row> -->
 
         <div class="ion-text-center">
-        <ion-button routerLink="/material-request-list" class="ion-text-center">Submit Request</ion-button>
+        <ion-button type="submit" class="ion-text-center">Submit Request</ion-button>
       </div>
       </ion-card-content>
     </ion-card>

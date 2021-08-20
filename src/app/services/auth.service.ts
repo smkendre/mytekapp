@@ -62,6 +62,21 @@ export class AuthService {
 
   }
 
+  contactUs(postData: any, token: string): Observable<any>{
+    return this.httpService.find('contact-us', postData, token);
+
+  }
+
+
+
+
+registration(formData: any, token: string):Observable<any>{
+
+
+  return this.httpService.find('registration', formData, token);
+
+}
+
 
   logout(){
     this.storageService.removeStorageItem(AuthConstants.AUTH).then(res => {

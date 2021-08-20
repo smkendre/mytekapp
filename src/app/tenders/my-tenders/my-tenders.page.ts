@@ -22,6 +22,12 @@ export class MyTendersPage implements OnInit {
     this.storageService.get(AuthConstants.AUTH).then(res => {
       // console.log(res.name);
 
+
+      if(res.status == 2) {
+        this.router.navigate(['registration']);
+
+      }
+
       if(res){
         this.accessToken = res.token;
         this.userId = res.id;

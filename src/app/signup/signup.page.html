@@ -18,8 +18,16 @@
           <ion-card-content>
             <ion-item>
               <ion-label position="floating"><ion-icon name="mail-outline" slot="start"></ion-icon>
+                Name</ion-label>
+              <ion-input type="text" ngModel name="uname" id="uname" placeholder="Name" required  #nameCtrl="ngModel"></ion-input>
+            </ion-item>
+            <ion-item *ngIf="!nameCtrl.valid && nameCtrl.touched" lines="none" class="errorMsg">
+              <ion-label>Please enter name</ion-label>
+            </ion-item>
+            <ion-item>
+              <ion-label position="floating"><ion-icon name="mail-outline" slot="start"></ion-icon>
                 Email Address</ion-label>
-              <ion-input type="text" ngModel name="email" id="email" placeholder="Email Address" required email #emailCtrl="ngModel"></ion-input>
+              <ion-input type="email" ngModel name="email" id="email" placeholder="Email Address" required email #emailCtrl="ngModel"></ion-input>
             </ion-item>
             <ion-item *ngIf="!emailCtrl.valid && emailCtrl.touched" lines="none" class="errorMsg">
               <ion-label>Please enter valid email address</ion-label>
@@ -31,7 +39,14 @@
             <ion-item *ngIf="!pwdCtrl.valid && pwdCtrl.touched" lines="none" class="errorMsg">
               <ion-label>Password should be 6 character long</ion-label>
             </ion-item>
-            <ion-button type="submit" [disabled]="!f.valid">{{ isLogin ? 'Login': 'Signup'}}</ion-button>
+            <ion-item>
+              <ion-label position="floating"><ion-icon name="lock-closed-outline" slot="start"></ion-icon>Confirm Password</ion-label>
+              <ion-input type="password" ngModel name="cpwd" id="cpwd" placeholder="Confirm Password" required minlength="6" #cpwdCtrl="ngModel"></ion-input>
+            </ion-item>
+            <ion-item *ngIf="!cpwdCtrl.valid && cpwdCtrl.touched" lines="none" class="errorMsg">
+              <ion-label>Password and confirm password do not match</ion-label>
+            </ion-item>
+            <ion-button type="submit" [disabled]="!f.valid">Signup</ion-button>
 
           </ion-card-content>
 
@@ -39,8 +54,8 @@
 
         <ion-card class="transparent-card">
           <ion-card-content color="light" class="ion-text-center ">
-            <h2>  New User?</h2>
-            <ion-button expand="full" routerLink="/signup" fill="clear">Signup!</ion-button>
+            <h2>  Alredy a User?</h2>
+            <ion-button expand="full" routerLink="/auth" fill="clear">Login!</ion-button>
           </ion-card-content>
         </ion-card>
       </ion-col>

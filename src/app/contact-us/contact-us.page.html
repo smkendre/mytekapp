@@ -47,14 +47,20 @@
       <ion-row>
 
         <ion-col size="12" class="ion-no-padding">
-          <ion-input type="text" ngModel name="subject" value="" placeholder="Subject" ></ion-input>
+          <ion-input type="text" ngModel name="subject" value="" placeholder="Subject" required #subjectCtrl="ngModel"></ion-input>
+          <ion-item *ngIf="!subjectCtrl.valid && subjectCtrl.touched" lines="none" class="errorMsg">
+            <ion-label>Please enter subject</ion-label>
+          </ion-item>
         </ion-col>
 
         <ion-col size="12" class="ion-no-padding">
-          <ion-textarea rows="5" ngModel name="name" value="" placeholder="Message" ></ion-textarea>
+          <ion-textarea rows="5" ngModel name="message" value="" placeholder="Message" required  #msgCtrl="ngModel"></ion-textarea>
+          <ion-item *ngIf="!msgCtrl.valid && msgCtrl.touched" lines="none" class="errorMsg">
+            <ion-label>Please enter your message</ion-label>
+          </ion-item>
         </ion-col>
       </ion-row>
-      <ion-button type="submit"  class="ion-text-center">Submit</ion-button>
+      <ion-button type="submit"  class="ion-text-center" [disabled]="!form.valid">Submit</ion-button>
     </ion-card-content>
   </ion-card>
 

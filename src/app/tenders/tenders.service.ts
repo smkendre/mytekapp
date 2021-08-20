@@ -3,9 +3,6 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 
 import { of, Observable } from 'rxjs';
-import { catchError, tap } from 'rxjs/operators';
-
-import {Tenders } from './tenders.model';
 
 @Injectable({
   providedIn: 'root'
@@ -110,6 +107,26 @@ submitReportData(formData: any, user_id: string, tender_id: string, token: strin
 
 }
 
+
+
+submitMaterialRequest(formData: any, token: string):Observable<any>{
+
+
+  const httpHeader = {
+    headers: new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'POST, GET, OPTIONS, PUT',
+
+      'Authorization': 'Bearer '+token })
+  };
+
+
+  const url = environment.apiUrl + 'material-request';
+
+  return this.http.post(url, formData, httpHeader);
+
+}
 getReportFields(tender_id: string, token: string):Observable<any>{
 
   const httpHeader = {
@@ -142,6 +159,38 @@ getMyreports(user_id: string, token: string):Observable<any>{
   return this.http.post(url, postData, httpHeader);
 
 }
+
+getMaterialRequests(user_id: string, token: string):Observable<any>{
+
+  const httpHeader = {
+    headers: new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer '+token })
+  };
+
+
+  const url = environment.apiUrl + 'get-material-requests';
+  const postData = {user_id: user_id};
+
+  return this.http.post(url, postData, httpHeader);
+}
+
+getMaterialList(tender_id: number, token: string):Observable<any>{
+
+  const httpHeader = {
+    headers: new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer '+token })
+  };
+
+
+  const url = environment.apiUrl + 'materials';
+  const postData = {tender_id: tender_id};
+
+  return this.http.post(url, postData, httpHeader);
+
+}
+
 
 
 

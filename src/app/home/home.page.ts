@@ -10,9 +10,10 @@ import { StorageService } from '../services/storage.service';
   styleUrls: ['home.page.scss'],
 })
 export class HomePage {
-  logoImg : string;
+  userStatus : string;
   userId: any;
   accessToken: any;
+
 
   public slideOpts = {
     on: {
@@ -82,11 +83,12 @@ export class HomePage {
 
 
     this.storageService.get(AuthConstants.AUTH).then(res => {
-      // console.log(res.name);
+       console.log(res.status);
 
       if(res){
         this.userId = res.id;
         this.accessToken = res.token;
+        this.userStatus = res.status;
       }else{
         this.router.navigate(['auth']);
       }

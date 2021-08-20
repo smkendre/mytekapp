@@ -15,6 +15,7 @@ export class TendersPage implements OnInit {
    Tenders : any = [];
    accessToken: any;
    userId: string;
+   userStatus: string;
 
    isLoading = false;
   constructor(private tenderService: TendersService, private router: Router, private storageService: StorageService, private alertCtrl: AlertController) { }
@@ -24,8 +25,15 @@ export class TendersPage implements OnInit {
       // console.log(res.name);
 
       if(res){
+
+        // if(res.status == 2) {
+        //   this.router.navigate(['registration']);
+
+        // }
         this.accessToken = res.token;
         this.userId = res.id;
+        this.userStatus = res.status;
+
       }else{
         this.router.navigate(['auth']);
       }
@@ -35,31 +43,6 @@ export class TendersPage implements OnInit {
   ionViewWillEnter(){
     this.isLoading = true;
 
-  //   this.Tenders = [
-  //     {
-  //     id: 1,
-  //     name: 'Tender 1',
-  //     category: 'civil',
-  //     location: 'hinjewadi, pune, mh'
-  //   },{
-  //     id: 2,
-  //     name: 'Tender 2',
-  //     category: 'cctv',
-  //     location: 'borivali, mumbai, mh'
-  //   },
-  //   {
-  //     id: 3,
-  //     name: 'Tender 3',
-  //     category: 'ORF Arial',
-  //     location: 'bhuj, pune, mh'
-  //   },
-  //   {
-  //     id: 4,
-  //     name: 'Tender 4',
-  //     category: 'IT',
-  //     location: 'hinjewadi, pune, mh'
-  //   }
-  // ];
 
 
     this.tenderService.fetchTenders(this.accessToken).subscribe((response) => {
@@ -69,8 +52,6 @@ export class TendersPage implements OnInit {
       this.Tenders = response.data;
 
     });
-
-    //  this.tenderService.fetchTenders().subscribe();
   }
 
   submitRequest(id: string){
