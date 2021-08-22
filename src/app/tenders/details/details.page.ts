@@ -1,56 +1,61 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AlertController } from '@ionic/angular';
-import { AuthConstants } from '../config/auth-constant';
-import { StorageService } from '../services/storage.service';
-import { TendersService } from './tenders.service';
-// import {subscribe} from 'rxjs/operators';
-@Component({
-  selector: 'app-tenders',
-  templateUrl: './tenders.page.html',
-  styleUrls: ['./tenders.page.scss'],
-})
-export class TendersPage implements OnInit {
+import { AuthConstants } from 'src/app/config/auth-constant';
+import { StorageService } from 'src/app/services/storage.service';
+import { TendersService } from '../tenders.service';
 
-   Tenders : any = [];
+@Component({
+  selector: 'app-details',
+  templateUrl: './details.page.html',
+  styleUrls: ['./details.page.scss'],
+})
+export class DetailsPage implements OnInit {
+
+  tender : any = [];
    accessToken: any;
    userId: string;
    userStatus: string;
+    isLoading = false;
+    tenderId: string;
 
-   isLoading: boolean;
-  constructor(private tenderService: TendersService, private router: Router, private storageService: StorageService, private alertCtrl: AlertController) { }
+  constructor(
+    private router: Router,
+    private storageService: StorageService,
+    private tenderService: TendersService,
+    private alertCtrl: AlertController,
+    private route: ActivatedRoute
+  ) { }
 
   ngOnInit() {
+
     this.storageService.get(AuthConstants.AUTH).then(res => {
-      // console.log(res.name);
 
       if(res){
 
-        // if(res.status == 2) {
-        //   this.router.navigate(['registration']);
-
-        // }
         this.accessToken = res.token;
         this.userId = res.id;
-        this.userStatus = res.status;
-
       }else{
         this.router.navigate(['auth']);
       }
     });
+
+    this.tenderId = this.route.snapshot.paramMap.get('tenderId');
+
+    // console.log(this.tenderId);
+
   }
+
 
   ionViewWillEnter(){
     this.isLoading = true;
-    //console.log('Token: ');
-    //console.log(this.accessToken);
-    this.tenderService.fetchTenders(this.accessToken).subscribe((response) => {
+
+
+
+    this.tenderService.tenderDetails(this.tenderId, this.accessToken).subscribe((response) => {
       this.isLoading = false;
-
-      //alert(JSON.stringify(response));
-
       if(response.status == 'success')
-      this.Tenders = response.data;
+      {this.tender = response.data;}
 
     });
   }
@@ -79,4 +84,5 @@ export class TendersPage implements OnInit {
       })
       .then(alertEl => alertEl.present());
   }
+
 }

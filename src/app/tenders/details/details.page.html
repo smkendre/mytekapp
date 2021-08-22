@@ -1,0 +1,72 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-thumbnail slot="start" class="header-icons">
+      <ion-img src="../../assets/01-04.png"></ion-img>
+    </ion-thumbnail>
+      <ion-img src="../../assets/images/logo.jpg" class="header-logo"></ion-img>
+    <ion-thumbnail slot="primary" class="header-icons">
+      <ion-img src="../../assets/search-icon.png"></ion-img>
+    </ion-thumbnail>
+
+    <ion-thumbnail slot="primary" class="header-icons">
+      <ion-img src="../../assets/bellicon.png"></ion-img>
+    </ion-thumbnail>
+    <ion-thumbnail slot="primary" class="header-icons">
+      <ion-img src="../../assets/01-02.png"></ion-img>
+    </ion-thumbnail>
+    <ion-button slot="primary" class="drawer-menu">
+      <ion-menu-button >
+        <img src="../../assets/01-03.png" >
+      </ion-menu-button>
+    </ion-button>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+
+  <ion-row>
+    <ion-col size="12">
+      <div class="ion-text-center"  *ngIf="isLoading">
+        <ion-spinner color="primary"></ion-spinner>
+
+      </div>
+
+    </ion-col>
+  </ion-row>
+
+  <ion-grid class="ion-no-padding"  *ngIf="!isLoading">
+
+  <ion-card >
+    <ion-card-header><h2>{{tender.name}}</h2></ion-card-header>
+    <ion-card-content>
+      <ion-row>
+        <ion-col size="12">
+          <strong>Category: </strong>{{tender.category}}
+          <hr>
+        </ion-col  >
+        <ion-col size=12>
+          <ion-label><strong>Work Locations: </strong></ion-label>
+          <div *ngFor="let loc of tender.work_location ">
+          <p>    <strong>State: </strong>{{loc.state}} </p>
+          <p>    <strong>Districts: </strong>{{loc.districts}} </p>
+          <p>    <strong>Talukas: </strong>{{loc.talukas}} </p>
+          <hr>
+        </div>
+        </ion-col>
+        <ion-col size=12>
+          <strong>Scope of work: </strong>{{tender.scope}}
+        </ion-col  >
+
+        <ion-col size=12>
+          <ion-button (click)="submitRequest(tender.id)" class="ion-text-center"  *ngIf=" tender.request_status == null" >Submit Request</ion-button>
+
+        </ion-col>
+      </ion-row>
+
+
+    </ion-card-content>
+  </ion-card>
+</ion-grid>
+
+</ion-content>

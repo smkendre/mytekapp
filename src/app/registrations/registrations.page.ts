@@ -121,6 +121,9 @@ export class RegistrationsPage implements OnInit {
     //this.router.navigateByUrl('/registration-thankyou');
   }
 
+  OnImagePicked(imageData: string){
+
+  }
 
   private showAlert(message: string) {
     this.alertCtrl

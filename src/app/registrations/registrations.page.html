@@ -198,6 +198,15 @@
         <ion-select-option value="">Work Location</ion-select-option>
       </ion-select>  </ion-col> -->
 </ion-row>
+<ion-row>
+  <ion-col size="8" >
+    <ion-input type="text" ngModel name="name" value="" placeholder="Enter GST Number" ></ion-input>
+
+  </ion-col>
+  <ion-col size="4">
+    <app-image-picker (imagePick)="OnImagePicked($event)"> </app-image-picker>
+  </ion-col>
+</ion-row>
 <!-- <ion-row>
   <ion-col size="8" >
     <ion-input type="text" ngModel name="name" value="" placeholder="Enter GST Number" ></ion-input>

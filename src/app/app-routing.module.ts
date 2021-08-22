@@ -28,6 +28,11 @@ const routes: Routes = [
 
   },
   {
+    path: 'tender-details/:tenderId',
+    loadChildren: () => import('./tenders/details/details.module').then( m => m.DetailsPageModule),
+    // canActivate: [AuthGuard]
+  },
+  {
     path: 'home',
     loadChildren: () => import('./home/home.module').then( m => m.HomePageModule),
     // canActivate: [AuthGuard]

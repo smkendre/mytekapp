@@ -68,6 +68,25 @@ export class TendersService {
 
 }
 
+
+
+tenderDetails(tender_id: string, token: string):Observable<any>{
+
+
+  const httpHeader = {
+    headers: new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer '+token })
+  };
+
+
+  const url = environment.apiUrl + 'tender-details';
+  const postData = {id: tender_id};
+
+  return this.http.post(url, postData, httpHeader);
+
+}
+
 submitRequest(tender_id: string, user_id: string, token: string):Observable<any>{
 
 

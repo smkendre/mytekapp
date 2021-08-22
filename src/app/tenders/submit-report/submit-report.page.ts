@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, NgForm  } from '@angular/forms';
+import { FormGroup, NgForm  } from '@angular/forms';
 import { TendersService } from '../tenders.service';
 import { LoadingController, AlertController } from '@ionic/angular';
-import { Observable } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { StorageService } from 'src/app/services/storage.service';
 import { AuthConstants } from 'src/app/config/auth-constant';
