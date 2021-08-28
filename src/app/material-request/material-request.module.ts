@@ -7,6 +7,8 @@ import { IonicModule } from '@ionic/angular';
 import { MaterialRequestPageRoutingModule } from './material-request-routing.module';
 
 import { MaterialRequestPage } from './material-request.page';
+import { HeaderComponent } from '../shared/header/header.component';
+import { FooterComponent } from '../shared/footer/footer.component';
 
 @NgModule({
   imports: [
@@ -15,6 +17,6 @@ import { MaterialRequestPage } from './material-request.page';
     IonicModule,
     MaterialRequestPageRoutingModule
   ],
-  declarations: [MaterialRequestPage]
+  declarations: [MaterialRequestPage, HeaderComponent, FooterComponent]
 })
 export class MaterialRequestPageModule {}

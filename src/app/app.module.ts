@@ -14,14 +14,15 @@ import { fab } from '@fortawesome/free-brands-svg-icons'
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 // import { IonicStorageModule } from '@ionic/storage-angular';
-
+import { CallNumber } from '@ionic-native/call-number/ngx';
 
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
   imports: [BrowserModule, IonicModule.forRoot(),  AppRoutingModule, FontAwesomeModule, HttpClientModule,
   FormsModule, ReactiveFormsModule],
-  providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
+  providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }, CallNumber
+],
   bootstrap: [AppComponent],
 })
 export class AppModule {

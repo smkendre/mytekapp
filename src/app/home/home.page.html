@@ -1,36 +1,13 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-thumbnail slot="start" class="header-icons">
-      <ion-img src="../../assets/01-04.png"></ion-img>
-    </ion-thumbnail>
-      <ion-img src="../../assets/images/logo.jpg" class="header-logo"></ion-img>
-    <ion-thumbnail slot="primary" class="header-icons">
-      <ion-img src="../../assets/search-icon.png"></ion-img>
-    </ion-thumbnail>
 
-    <ion-thumbnail slot="primary" class="header-icons">
-      <ion-img src="../../assets/bellicon.png"></ion-img>
-    </ion-thumbnail>
-    <ion-thumbnail slot="primary" class="header-icons">
-      <ion-img src="../../assets/01-02.png"></ion-img>
-    </ion-thumbnail>
-    <ion-button slot="primary" class="drawer-menu">
-      <ion-menu-button >
-        <img src="../../assets/01-03.png" >
-      </ion-menu-button>
-    </ion-button>
-  </ion-toolbar>
-</ion-header>
+<app-header></app-header>
+
 
 <ion-content>
+
   <ion-grid class="ion-no-padding">
     <ion-row>
       <ion-col size="12" size-md="6" offset-sm="3" class="ion-text-center">
-        <!-- <ion-card class="ion-no-padding ">
 
-          <ion-img src="../assets/slider1.jpeg"></ion-img>
-
-        </ion-card> -->
         <ion-slides #slides  autoplay="true" [options]="slideOpts" pager="true">
           <ion-slide class="bg-1">
             <ion-title>CCTV</ion-title>
@@ -78,7 +55,7 @@
 
           </ion-label>
           </ion-item>
-          <ion-item [routerLink]="['/', 'material-request']" detail class="btn-grad">
+          <ion-item [routerLink]="['/', 'material-request-list']" detail class="btn-grad">
             <ion-thumbnail slot="start">
               <ion-img src="../assets/01-07.png"></ion-img>
             </ion-thumbnail>
@@ -97,22 +74,21 @@
             <h2>My Reports</h2>
 
           </ion-label>
-          </ion-item>
-          <!-- <ion-item [routerLink]="" detail class="btn-grad">
-            <ion-thumbnail slot="start">
-              <ion-img src="../assets/01-09.png"></ion-img>
-            </ion-thumbnail>
-            <ion-label>
-            <h2>Invoice</h2>
-          </ion-label>
-          </ion-item> -->
+        </ion-item>
+        <ion-item [routerLink]="['/', 'invoice']" detail class="btn-grad">
+          <ion-thumbnail slot="start">
+            <ion-img src="../assets/01-09.png"></ion-img>
+          </ion-thumbnail>
+          <ion-label>
+
+          <h2>My Invoices</h2>
+
+        </ion-label>
+      </ion-item>
 
         </ion-list>
       </ion-col>
     </ion-row>
   </ion-grid>
 </ion-content>
-
-<ion-footer>
-  <ion-button expand="full" class="footer-link">Call Us For Assistance</ion-button>
-</ion-footer>
+<app-footer></app-footer>

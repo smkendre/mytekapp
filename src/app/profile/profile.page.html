@@ -1,0 +1,87 @@
+<app-header></app-header>
+
+<ion-content>
+
+  <ion-row  *ngIf="isLoading">
+    <ion-col size="12">
+      <div class="ion-text-center">
+        <ion-spinner color="primary"></ion-spinner>
+
+      </div>
+
+    </ion-col>
+  </ion-row>
+  <ion-grid >
+
+    <ion-card class="transparent-card">
+      <ion-card-content>
+        <ion-row class="ion-text-center">
+          <ion-col size="10" size-sm="10">
+            <h1>Profile</h1>
+        </ion-col>
+        <ion-col size="2" size-sm="2">
+            <ion-button
+              color="success"
+              size="small"
+              [routerLink]="['/', 'registration']"
+            >
+Edit            </ion-button>
+
+        </ion-col>
+      </ion-row>
+      </ion-card-content>
+    </ion-card>
+
+
+
+    <ion-card class="transparent-card" *ngIf="!isLoading && (user | keyvalue)?.length">
+
+      <ion-card-content>
+
+        <ion-row>
+
+          <ion-col size="12" class="ion-no-padding">
+            <ion-label>Name: </ion-label>{{user.name}}
+          </ion-col>
+          <ion-col size="12" class="ion-no-padding">
+            <ion-label>Company Name: </ion-label>{{user.cname}}
+          </ion-col>
+          <ion-col size="12" class="ion-no-padding">
+            <ion-label>Address: </ion-label>{{user.addr}}
+          </ion-col>
+          <ion-col size="12" class="ion-no-padding">
+            <ion-label>Area of Interest: </ion-label>{{this.area_of_interest}}
+          </ion-col>
+          <ion-col size="12" class="ion-no-padding">
+            <ion-label>Location: </ion-label>{{user.state_title}} {{user.district_title}}, {{user.city}}
+          </ion-col>
+          <ion-col size="12" class="ion-no-padding">
+            <ion-label>GST No.: </ion-label>{{user.gst_num}}
+          </ion-col>
+          <ion-col size="12" class="ion-no-padding">
+            <ion-label>Company Registration Number: </ion-label>{{user.reg_num}}
+          </ion-col>
+          <ion-col size="12" class="ion-no-padding">
+            <ion-label>Pan Card Number: </ion-label>{{user.pan_num}}
+          </ion-col>
+          <ion-col size="12" class="ion-no-padding">
+            <ion-label>Adhaar Card Number: </ion-label>{{user.adhaar_num}}
+          </ion-col>
+        </ion-row>
+
+
+      </ion-card-content>
+    </ion-card>
+
+
+
+  </ion-grid>
+  <img [src]="photo">
+
+  <ion-fab vertical="bottom" horizontal="center" slot="fixed">
+    <ion-fab-button (click)="takePicture()">
+      <ion-icon name="camera"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+</ion-content>
+<app-footer></app-footer>

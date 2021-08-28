@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AlertController } from '@ionic/angular';
 import { AuthConstants } from 'src/app/config/auth-constant';
 import { StorageService } from 'src/app/services/storage.service';
-import { TendersService } from '../tenders.service';
+import { TendersService } from '../../services/tenders.service';
 
 @Component({
   selector: 'app-details',
@@ -24,7 +24,7 @@ export class DetailsPage implements OnInit {
     private storageService: StorageService,
     private tenderService: TendersService,
     private alertCtrl: AlertController,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
   ) { }
 
   ngOnInit() {
@@ -84,5 +84,7 @@ export class DetailsPage implements OnInit {
       })
       .then(alertEl => alertEl.present());
   }
+
+
 
 }

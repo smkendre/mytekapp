@@ -7,6 +7,9 @@ import { IonicModule } from '@ionic/angular';
 import { MaterialListPageRoutingModule } from './material-list-routing.module';
 
 import { MaterialListPage } from './material-list.page';
+import { HeaderComponent } from '../shared/header/header.component';
+import { FooterComponent } from '../shared/footer/footer.component';
+
 
 @NgModule({
   imports: [
@@ -15,6 +18,6 @@ import { MaterialListPage } from './material-list.page';
     IonicModule,
     MaterialListPageRoutingModule
   ],
-  declarations: [MaterialListPage]
+  declarations: [MaterialListPage, HeaderComponent, FooterComponent]
 })
 export class MaterialListPageModule {}

@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { AlertController } from '@ionic/angular';
 import { AuthConstants } from '../config/auth-constant';
 import { StorageService } from '../services/storage.service';
-import { TendersService } from '../tenders/tenders.service';
+import { TendersService } from '../services/tenders.service';
 
 @Component({
   selector: 'app-material-request',
@@ -113,4 +113,6 @@ export class MaterialRequestPage implements OnInit {
       })
       .then(alertEl => alertEl.present());
   }
+
+
 }

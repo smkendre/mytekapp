@@ -2,8 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthConstants } from 'src/app/config/auth-constant';
 import { StorageService } from 'src/app/services/storage.service';
-import { TendersService } from 'src/app/tenders/tenders.service';
-
+import { TendersService } from 'src/app/services/tenders.service';
 @Component({
   selector: 'app-material-list',
   templateUrl: './material-list.page.html',
@@ -18,9 +17,8 @@ export class MaterialListPage implements OnInit {
   constructor(
     private router: Router,
     private tenderService: TendersService,
-    private storageService: StorageService,
-
-    ) { }
+    private storageService: StorageService
+   ) { }
 
   ngOnInit() {
 
@@ -67,6 +65,8 @@ export class MaterialListPage implements OnInit {
 
   // this.isLoading = false;
   }
+
+
 
   // submitRequest(form: object){
   //   this.router.navigateByUrl('/home');

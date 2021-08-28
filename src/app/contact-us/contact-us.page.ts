@@ -17,7 +17,11 @@ export class ContactUsPage implements OnInit {
   userId: string;
   slForm: NgForm;
 
-  constructor(private router: Router, private authService: AuthService, private storageService: StorageService, private alertCtrl: AlertController) { }
+  constructor(
+    private router: Router,
+     private authService: AuthService,
+     private storageService: StorageService,
+     private alertCtrl: AlertController) { }
 
   ngOnInit() {
 
@@ -67,4 +71,5 @@ export class ContactUsPage implements OnInit {
       })
       .then(alertEl => alertEl.present());
   }
+
 }

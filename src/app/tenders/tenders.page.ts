@@ -3,7 +3,8 @@ import { Router } from '@angular/router';
 import { AlertController } from '@ionic/angular';
 import { AuthConstants } from '../config/auth-constant';
 import { StorageService } from '../services/storage.service';
-import { TendersService } from './tenders.service';
+import { TendersService } from '../services/tenders.service';
+
 // import {subscribe} from 'rxjs/operators';
 @Component({
   selector: 'app-tenders',
@@ -18,11 +19,12 @@ export class TendersPage implements OnInit {
    userStatus: string;
 
    isLoading: boolean;
-  constructor(private tenderService: TendersService, private router: Router, private storageService: StorageService, private alertCtrl: AlertController) { }
+  constructor(private tenderService: TendersService, private router: Router, private storageService: StorageService, private alertCtrl: AlertController,
+    ) { }
 
   ngOnInit() {
     this.storageService.get(AuthConstants.AUTH).then(res => {
-      // console.log(res.name);
+      //console.log(res);
 
       if(res){
 
@@ -41,17 +43,20 @@ export class TendersPage implements OnInit {
   }
 
   ionViewWillEnter(){
+
     this.isLoading = true;
     //console.log('Token: ');
     //console.log(this.accessToken);
     this.tenderService.fetchTenders(this.accessToken).subscribe((response) => {
       this.isLoading = false;
 
+      //console.log("My res:",response);
       //alert(JSON.stringify(response));
 
       if(response.status == 'success')
       this.Tenders = response.data;
 
+      this.isLoading = false;
     });
   }
 
@@ -79,4 +84,5 @@ export class TendersPage implements OnInit {
       })
       .then(alertEl => alertEl.present());
   }
+
 }

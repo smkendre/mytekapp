@@ -34,14 +34,14 @@
             </ion-item>
             <ion-item>
               <ion-label position="floating"><ion-icon name="lock-closed-outline" slot="start"></ion-icon> Password</ion-label>
-              <ion-input type="password" ngModel name="pwd" id="pwd" placeholder="Password" required minlength="6" #pwdCtrl="ngModel"></ion-input>
+              <ion-input type="password" ngModel name="pwd" id="pwd" placeholder="Password" required minlength="8" #pwdCtrl="ngModel"></ion-input>
             </ion-item>
             <ion-item *ngIf="!pwdCtrl.valid && pwdCtrl.touched" lines="none" class="errorMsg">
-              <ion-label>Password should be 6 character long</ion-label>
+              <ion-label>Password should be 8 character long</ion-label>
             </ion-item>
             <ion-item>
               <ion-label position="floating"><ion-icon name="lock-closed-outline" slot="start"></ion-icon>Confirm Password</ion-label>
-              <ion-input type="password" ngModel name="cpwd" id="cpwd" placeholder="Confirm Password" required minlength="6" #cpwdCtrl="ngModel"></ion-input>
+              <ion-input type="password" ngModel name="cpwd" id="cpwd" placeholder="Confirm Password" required minlength="8" #cpwdCtrl="ngModel"></ion-input>
             </ion-item>
             <ion-item *ngIf="!cpwdCtrl.valid && cpwdCtrl.touched" lines="none" class="errorMsg">
               <ion-label>Password and confirm password do not match</ion-label>

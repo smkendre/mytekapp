@@ -7,6 +7,8 @@ import { IonicModule } from '@ionic/angular';
 import { DetailsPageRoutingModule } from './details-routing.module';
 
 import { DetailsPage } from './details.page';
+import { HeaderComponent } from 'src/app/shared/header/header.component';
+import { FooterComponent } from 'src/app/shared/footer/footer.component';
 
 @NgModule({
   imports: [
@@ -15,6 +17,6 @@ import { DetailsPage } from './details.page';
     IonicModule,
     DetailsPageRoutingModule
   ],
-  declarations: [DetailsPage]
+  declarations: [DetailsPage, HeaderComponent, FooterComponent]
 })
 export class DetailsPageModule {}

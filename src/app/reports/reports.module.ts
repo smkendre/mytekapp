@@ -7,6 +7,8 @@ import { IonicModule } from '@ionic/angular';
 import { ReportsPageRoutingModule } from './reports-routing.module';
 
 import { ReportsPage } from './reports.page';
+import { HeaderComponent } from '../shared/header/header.component';
+import { FooterComponent } from '../shared/footer/footer.component';
 
 @NgModule({
   imports: [
@@ -15,6 +17,6 @@ import { ReportsPage } from './reports.page';
     IonicModule,
     ReportsPageRoutingModule
   ],
-  declarations: [ReportsPage]
+  declarations: [ReportsPage, HeaderComponent, FooterComponent]
 })
 export class ReportsPageModule {}

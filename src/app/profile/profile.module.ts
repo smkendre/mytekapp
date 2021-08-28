@@ -4,9 +4,9 @@ import { FormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
-import { AboutUsPageRoutingModule } from './about-us-routing.module';
+import { ProfilePageRoutingModule } from './profile-routing.module';
 
-import { AboutUsPage } from './about-us.page';
+import { ProfilePage } from './profile.page';
 import { HeaderComponent } from '../shared/header/header.component';
 import { FooterComponent } from '../shared/footer/footer.component';
 
@@ -15,8 +15,8 @@ import { FooterComponent } from '../shared/footer/footer.component';
     CommonModule,
     FormsModule,
     IonicModule,
-    AboutUsPageRoutingModule
+    ProfilePageRoutingModule
   ],
-  declarations: [AboutUsPage, HeaderComponent, FooterComponent]
+  declarations: [ProfilePage, HeaderComponent, FooterComponent]
 })
-export class AboutUsPageModule {}
+export class ProfilePageModule {}

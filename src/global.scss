@@ -30,3 +30,17 @@
 .ion-invalid.ion-touched ion-label{
   color: var(--ion-color-danger);
 }
+
+input:-webkit-autofill {
+  height: 0px;
+  -webkit-box-shadow:0 0 0 10px #eaeaea inset;
+  -webkit-text-fill-color: black;
+  font-weight: 500px;
+}
+
+input:-webkit-autofill:focus {
+  height: 0px;
+  -webkit-box-shadow: 0 0 0 10px #eaeaea inset;
+  -webkit-text-fill-color: black;
+  font-weight: 500px;
+}

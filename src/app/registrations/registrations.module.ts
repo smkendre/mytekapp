@@ -8,6 +8,8 @@ import { RegistrationsPageRoutingModule } from './registrations-routing.module';
 
 import { RegistrationsPage } from './registrations.page';
 import { ImagePickerComponent } from '../shared/image-picker/image-picker.component';
+import { HeaderComponent } from '../shared/header/header.component';
+import { FooterComponent } from '../shared/footer/footer.component';
 
 @NgModule({
   imports: [
@@ -15,7 +17,7 @@ import { ImagePickerComponent } from '../shared/image-picker/image-picker.compon
     FormsModule,
     IonicModule,
     RegistrationsPageRoutingModule  ],
-  declarations: [RegistrationsPage, ImagePickerComponent],
+  declarations: [RegistrationsPage, ImagePickerComponent, HeaderComponent, FooterComponent],
   exports: [ImagePickerComponent]
 })
 export class RegistrationsPageModule {}

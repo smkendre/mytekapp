@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import {  Router } from '@angular/router';
 import { StorageService } from 'src/app/services/storage.service';
 import { AuthConstants } from 'src/app/config/auth-constant';
-import { TendersService } from '../tenders/tenders.service';
-import { LoadingController, AlertController } from '@ionic/angular';
+import { TendersService } from '../services/tenders.service';
+
 
 @Component({
   selector: 'app-reports',
@@ -15,11 +15,12 @@ export class ReportsPage implements OnInit {
   isLoading = false;
   accessToken: string;
   userId: string;
+
   constructor(private router: Router,
     private tenderService: TendersService,
-    private alertCtrl: AlertController,
     private storageService: StorageService,
-    private route: ActivatedRoute) { }
+
+   ) { }
 
   ngOnInit() {
 
@@ -72,5 +73,6 @@ export class ReportsPage implements OnInit {
 
     //  this.tenderService.fetchTenders().subscribe();
   }
+
 
 }

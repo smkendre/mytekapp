@@ -7,6 +7,8 @@ import { IonicModule } from '@ionic/angular';
 import { MilestonesPageRoutingModule } from './milestones-routing.module';
 
 import { MilestonesPage } from './milestones.page';
+import { HeaderComponent } from 'src/app/shared/header/header.component';
+import { FooterComponent } from 'src/app/shared/footer/footer.component';
 
 @NgModule({
   imports: [
@@ -15,6 +17,6 @@ import { MilestonesPage } from './milestones.page';
     IonicModule,
     MilestonesPageRoutingModule
   ],
-  declarations: [MilestonesPage]
+  declarations: [MilestonesPage, HeaderComponent, FooterComponent]
 })
 export class MilestonesPageModule {}

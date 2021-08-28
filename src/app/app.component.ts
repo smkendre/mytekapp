@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { AuthConstants } from './config/auth-constant';
 import { AuthService } from './services/auth.service';
 import { StorageService } from './services/storage.service';
+// import { CallNumber } from '@ionic-native/call-number/ngx';
 
 @Component({
   selector: 'app-root',
@@ -13,7 +14,9 @@ export class AppComponent {
 
   displayUserName: any;
 
-  constructor(private authService : AuthService, private router : Router, private storageService: StorageService) {}
+  constructor(private authService : AuthService, private router : Router, private storageService: StorageService,
+    // private callNumber: CallNumber
+    ) {}
 
   onLogout(){
     // this.authService.logout;
@@ -34,4 +37,11 @@ export class AppComponent {
     this.router.navigateByUrl('/home');
 
   }
+
+  // CallPhoneNumber(){
+  //   this.callNumber.callNumber("8828133339", true)
+  //   .then(res => console.log('Launched dialer!', res))
+  //   .catch(err => console.log('Error launching dialer', err));
+
+  // }
 }

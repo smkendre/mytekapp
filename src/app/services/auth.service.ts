@@ -78,6 +78,15 @@ registration(formData: any, token: string):Observable<any>{
 }
 
 
+
+user_details(formData: any, token: string):Observable<any>{
+
+
+  return this.httpService.find('user', formData, token);
+
+}
+
+
   logout(){
     this.storageService.removeStorageItem(AuthConstants.AUTH).then(res => {
       this.router.navigateByUrl('/auth');

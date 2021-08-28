@@ -4,6 +4,15 @@ import { environment } from 'src/environments/environment';
 
 import { of, Observable } from 'rxjs';
 
+
+
+export interface ApiImage {
+  _id: string;
+  name: string;
+  createdAt: Date;
+  url: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -18,7 +27,11 @@ export class TendersService {
     const httpHeader = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer '+token })
+        'Authorization': 'Bearer '+token,
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Headers': '*',
+        'Accept': 'application/json, text/plain'
+})
     };
 
 
@@ -39,7 +52,10 @@ export class TendersService {
     const httpHeader = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer '+token })
+        'Authorization': 'Bearer '+token,
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Headers': '*',
+        'Accept': 'application/json, text/plain' })
     };
 
 
@@ -57,7 +73,10 @@ export class TendersService {
   const httpHeader = {
     headers: new HttpHeaders({
       'Content-Type': 'application/json',
-      'Authorization': 'Bearer '+token })
+      'Authorization': 'Bearer '+token,
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Headers': '*',
+      'Accept': 'application/json, text/plain' })
   };
 
 
@@ -76,7 +95,10 @@ tenderDetails(tender_id: string, token: string):Observable<any>{
   const httpHeader = {
     headers: new HttpHeaders({
       'Content-Type': 'application/json',
-      'Authorization': 'Bearer '+token })
+      'Authorization': 'Bearer '+token,
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Headers': '*',
+      'Accept': 'application/json, text/plain' })
   };
 
 
@@ -93,7 +115,10 @@ submitRequest(tender_id: string, user_id: string, token: string):Observable<any>
   const httpHeader = {
     headers: new HttpHeaders({
       'Content-Type': 'application/json',
-      'Authorization': 'Bearer '+token })
+      'Authorization': 'Bearer '+token,
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Headers': '*',
+      'Accept': 'application/json, text/plain' })
   };
 
 
@@ -112,10 +137,10 @@ submitReportData(formData: any, user_id: string, tender_id: string, token: strin
   const httpHeader = {
     headers: new HttpHeaders({
       'Content-Type': 'application/json',
+      'Authorization': 'Bearer '+token,
       'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods': 'POST, GET, OPTIONS, PUT',
-
-      'Authorization': 'Bearer '+token })
+      'Access-Control-Allow-Headers': '*',
+      'Accept': 'application/json, text/plain' })
   };
 
 
@@ -134,10 +159,10 @@ submitMaterialRequest(formData: any, token: string):Observable<any>{
   const httpHeader = {
     headers: new HttpHeaders({
       'Content-Type': 'application/json',
+      'Authorization': 'Bearer '+token,
       'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods': 'POST, GET, OPTIONS, PUT',
-
-      'Authorization': 'Bearer '+token })
+      'Access-Control-Allow-Headers': '*',
+      'Accept': 'application/json, text/plain' })
   };
 
 
@@ -151,7 +176,10 @@ getReportFields(tender_id: string, token: string):Observable<any>{
   const httpHeader = {
     headers: new HttpHeaders({
       'Content-Type': 'application/json',
-      'Authorization': 'Bearer '+token })
+      'Authorization': 'Bearer '+token,
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Headers': '*',
+      'Accept': 'application/json, text/plain' })
   };
 
 
@@ -168,7 +196,10 @@ getMyreports(user_id: string, token: string):Observable<any>{
   const httpHeader = {
     headers: new HttpHeaders({
       'Content-Type': 'application/json',
-      'Authorization': 'Bearer '+token })
+      'Authorization': 'Bearer '+token,
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Headers': '*',
+      'Accept': 'application/json, text/plain' })
   };
 
 
@@ -184,7 +215,10 @@ getMaterialRequests(user_id: string, token: string):Observable<any>{
   const httpHeader = {
     headers: new HttpHeaders({
       'Content-Type': 'application/json',
-      'Authorization': 'Bearer '+token })
+      'Authorization': 'Bearer '+token,
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Headers': '*',
+      'Accept': 'application/json, text/plain' })
   };
 
 
@@ -199,7 +233,10 @@ getMaterialList(tender_id: number, token: string):Observable<any>{
   const httpHeader = {
     headers: new HttpHeaders({
       'Content-Type': 'application/json',
-      'Authorization': 'Bearer '+token })
+      'Authorization': 'Bearer '+token,
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Headers': '*',
+      'Accept': 'application/json, text/plain' })
   };
 
 
@@ -211,6 +248,58 @@ getMaterialList(tender_id: number, token: string):Observable<any>{
 }
 
 
+
+
+uploadImage(blobData, name, ext, fileName, user_id, token) {
+  const formData = new FormData();
+  formData.append('file', blobData, `myimage.${ext}`);
+  formData.append('name', name);
+  formData.append('fileName', fileName);
+  formData.append('user_id', user_id);
+
+
+  const httpHeader = {
+    headers: new HttpHeaders({
+      'Content-Type': 'multipart/formdata',
+
+      'Authorization': 'Bearer '+token,
+
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Headers': '*',
+      'Accept': 'application/json, text/plain'
+     })
+  };
+
+  const url = environment.apiUrl + 'report-image';
+
+  return this.http.post(url, formData, httpHeader);
+
+  // return this.httpService.find('upload-image', formData, token);
+}
+
+uploadImageFile(file: File, token) {
+  const ext = file.name.split('.').pop();
+  const formData = new FormData();
+  formData.append('file', file);
+  formData.append('name', file.name);
+
+
+
+
+  const httpHeader = {
+    headers: new HttpHeaders({
+      'Content-Type': 'multipart/form-data',
+
+      'Authorization': 'Bearer '+token,
+
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Headers': '*' })
+  };
+
+  const url = environment.apiUrl + 'report-image';
+
+  return this.http.post(url, formData, httpHeader);
+}
 
 
   private handleError<T>(operation = 'operation', result?: T) {

@@ -7,6 +7,8 @@ import { IonicModule } from '@ionic/angular';
 import { TendersPageRoutingModule } from './tenders-routing.module';
 
 import { TendersPage } from './tenders.page';
+import { HeaderComponent } from '../shared/header/header.component';
+import { FooterComponent } from '../shared/footer/footer.component';
 
 @NgModule({
   imports: [
@@ -16,6 +18,6 @@ import { TendersPage } from './tenders.page';
     HttpClientModule,
     TendersPageRoutingModule
   ],
-  declarations: [TendersPage]
+  declarations: [TendersPage, HeaderComponent, FooterComponent]
 })
 export class TendersPageModule {}

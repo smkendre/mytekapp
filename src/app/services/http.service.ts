@@ -27,7 +27,10 @@ export class HttpService {
     const httpHeader = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer '+token })
+        'Authorization': 'Bearer '+token,
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Headers': '*',
+        'Accept': 'application/json, text/plain' })
     };
 
     const url = environment.apiUrl + serviceName;
@@ -43,7 +46,10 @@ export class HttpService {
   const httpHeader = {
     headers: new HttpHeaders({
       'Content-Type': 'application/json',
-      'Authorization': 'Bearer '+token })
+      'Authorization': 'Bearer '+token,
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Headers': '*',
+        'Accept': 'application/json, text/plain' })
   };
 
 

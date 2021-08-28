@@ -84,7 +84,7 @@ const routes: Routes = [
 
   {
     path: 'material-request-list',
-    loadChildren: () => import('./material-request/material-list/material-list.module').then( m => m.MaterialListPageModule),
+    loadChildren: () => import('./material-list/material-list.module').then( m => m.MaterialListPageModule),
     // canActivate: [AuthGuard]
 
   },
@@ -113,6 +113,10 @@ const routes: Routes = [
   {
     path: 'about-us',
     loadChildren: () => import('./about-us/about-us.module').then( m => m.AboutUsPageModule)
+  },
+  {
+    path: 'profile',
+    loadChildren: () => import('./profile/profile.module').then( m => m.ProfilePageModule)
   }
 ];
 

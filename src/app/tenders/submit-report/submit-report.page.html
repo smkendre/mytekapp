@@ -1,26 +1,4 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-thumbnail slot="start" class="header-icons">
-      <ion-img src="../../assets/01-04.png"></ion-img>
-    </ion-thumbnail>
-      <ion-img src="../../assets/images/logo.jpg" class="header-logo"></ion-img>
-    <ion-thumbnail slot="primary" class="header-icons">
-      <ion-img src="../../assets/search-icon.png"></ion-img>
-    </ion-thumbnail>
-
-    <ion-thumbnail slot="primary" class="header-icons">
-      <ion-img src="../../assets/bellicon.png"></ion-img>
-    </ion-thumbnail>
-    <ion-thumbnail slot="primary" class="header-icons">
-      <ion-img src="../../assets/01-02.png"></ion-img>
-    </ion-thumbnail>
-    <ion-button slot="primary" class="drawer-menu">
-      <ion-menu-button >
-        <img src="../../assets/01-03.png" >
-      </ion-menu-button>
-    </ion-button>
-  </ion-toolbar>
-</ion-header>
+<app-header></app-header>
 <ion-content >
 
 
@@ -62,6 +40,21 @@
 
         </ion-row>
 
+        <ion-row >
+          <ion-col size="12" class="ion-no-padding">
+              <!-- <input
+                type="file"
+                #fileInput
+                (change)="uploadFile($event)"
+                hidden="true"
+                accept="image/*"
+              /> -->
+              <ion-button (click)="selectImageSource('file')">
+        Upload      </ion-button>
+          </ion-col>
+
+        </ion-row>
+
         <ion-input type="hidden" ngModel name="tender_id" value="{{tender_id}}" ></ion-input>
 
         <ion-button type="submit" class="ion-text-center">Submit</ion-button>
@@ -73,7 +66,4 @@
 
   </ion-grid>
 </ion-content>
-
-<ion-footer>
-  <ion-button expand="block" class="footer-link">Call Us For Assistance</ion-button>
-</ion-footer>
+<app-footer></app-footer>

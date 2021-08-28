@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, NgForm  } from '@angular/forms';
-import { TendersService } from '../tenders.service';
-import { LoadingController, AlertController } from '@ionic/angular';
+import { TendersService, ApiImage } from '../../services/tenders.service';
+import {  AlertController, ActionSheetController, Platform } from '@ionic/angular';
 import { ActivatedRoute, Router } from '@angular/router';
 import { StorageService } from 'src/app/services/storage.service';
 import { AuthConstants } from 'src/app/config/auth-constant';
+import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 
 @Component({
   selector: 'app-submit-report',
@@ -19,12 +20,17 @@ export class SubmitReportPage implements OnInit {
   tender_id: string;
   userId: string;
 
+  images: ApiImage[] = [];
+  @ViewChild('fileInput', { static: false }) fileInput: ElementRef;
+
+
   constructor(private tenderService: TendersService,
     private router: Router,
-    private loadingCtrl: LoadingController,
     private alertCtrl: AlertController,
     private storageService: StorageService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private actionSheetController: ActionSheetController,
+    private platform: Platform
     ) { }
 
   ngOnInit() {
@@ -164,5 +170,95 @@ export class SubmitReportPage implements OnInit {
       })
       .then(alertEl => alertEl.present());
   }
+
+
+
+ async selectImageSource(fileName: string){
+  const buttons = [
+    {
+      text: 'Take Photo',
+      icon: 'Camera',
+      handler: () => {
+        this.addImage(CameraSource.Camera, fileName)
+      }
+    },
+    {
+    text: "Choose from Gallery",
+    icon: 'Image',
+    handler: () => {
+      this.addImage(CameraSource.Photos, fileName)
+    }
+  }
+  ];
+
+  if (!this.platform.is('hybrid')) {
+    buttons.push({
+      text: 'Choose a File',
+      icon: 'attach',
+      handler: () => {
+        this.fileInput.nativeElement.click();
+      }
+    });
+  }
+
+  const actionSheet = await this.actionSheetController.create({
+    header: 'Select Image Source',
+    buttons
+  });
+  await actionSheet.present();
+
+
+}
+
+async addImage(source: CameraSource, fileName: string) {
+  const image = await Camera.getPhoto({
+    quality: 60,
+    allowEditing: true,
+    resultType: CameraResultType.Base64,
+    source
+  });
+
+
+
+  const blobData = this.b64toBlob(image.base64String, `image/${image.format}`);
+  const imageName = 'Give me a name';
+
+  this.tenderService.uploadImage(blobData, imageName, image.format, fileName, this.userId, this.accessToken).subscribe((newImage: ApiImage) => {
+    this.images.push(newImage);
+  });
+}
+
+// Used for browser direct file upload
+uploadFile(event: EventTarget) {
+  const eventObj: MSInputMethodContext = event as MSInputMethodContext;
+  const target: HTMLInputElement = eventObj.target as HTMLInputElement;
+  const file: File = target.files[0];
+
+  console.log(file);
+  this.tenderService.uploadImageFile(file, this.accessToken).subscribe((newImage: ApiImage) => {
+    this.images.push(newImage);
+  });
+}
+
+
+b64toBlob(b64Data, contentType = '', sliceSize = 512) {
+  const byteCharacters = atob(b64Data);
+  const byteArrays = [];
+
+  for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+    const slice = byteCharacters.slice(offset, offset + sliceSize);
+
+    const byteNumbers = new Array(slice.length);
+    for (let i = 0; i < slice.length; i++) {
+      byteNumbers[i] = slice.charCodeAt(i);
+    }
+
+    const byteArray = new Uint8Array(byteNumbers);
+    byteArrays.push(byteArray);
+  }
+
+  const blob = new Blob(byteArrays, { type: contentType });
+  return blob;
+}
 
 }
