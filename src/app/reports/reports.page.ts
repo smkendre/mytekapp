@@ -3,6 +3,9 @@ import {  Router } from '@angular/router';
 import { StorageService } from 'src/app/services/storage.service';
 import { AuthConstants } from 'src/app/config/auth-constant';
 import { TendersService } from '../services/tenders.service';
+import { RegistrationService } from '../services/registration.service';
+import { FilePath } from '@ionic-native/file-path/ngx';
+import { ActionSheetController } from '@ionic/angular';
 
 
 @Component({
@@ -19,6 +22,10 @@ export class ReportsPage implements OnInit {
   constructor(private router: Router,
     private tenderService: TendersService,
     private storageService: StorageService,
+    private registrationService: RegistrationService,
+    private filePath: FilePath,
+    private actionSheetController: ActionSheetController,
+
 
    ) { }
 
@@ -58,10 +65,11 @@ export class ReportsPage implements OnInit {
   this.tenderService.getMyreports(this.userId, this.accessToken).subscribe((response) => {
     this.isLoading = false;
     // this.Tenders = [];
-    if(response.status == 'success')
-    this.Report = response.data;
+    if(response.status === 'success'){
+      this.Report = response.data;
+    }
 
-  })
+  });
 
     // this.tenderService.fetchTenders().subscribe((response) => {
     //   this.isLoading = false;
@@ -72,6 +80,21 @@ export class ReportsPage implements OnInit {
     // });
 
     //  this.tenderService.fetchTenders().subscribe();
+  }
+
+  submitDocument(fileName: string){
+    this.registrationService.selectFile().then(uri => {
+      this.filePath.resolveNativePath(uri)
+        .then(async (filePath) => {
+          this.registrationService.makeFileIntoBlob(filePath,fileName).then((blob) => {
+            const blobFile = blob;
+            this.registrationService.uploadImage(blobFile, fileName, this.userId, this.accessToken).subscribe(res => {
+              console.log('uploaded',res);
+            }, error => console.log('upload error',error));
+          });
+        })
+        .catch(err => console.log(err));
+    });
   }
 
 

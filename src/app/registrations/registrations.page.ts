@@ -7,6 +7,7 @@ import { RegistrationService, ApiImage } from '../services/registration.service'
 import { StorageService } from '../services/storage.service';
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 import { AuthService } from '../services/auth.service';
+import { FilePath } from '@ionic-native/file-path/ngx';
 
 export interface imgFile {
   name: string;
@@ -22,9 +23,14 @@ export interface imgFile {
 })
 export class RegistrationsPage implements OnInit {
   areaOfInterst: any = [];
+  gst_certificate_File: any;
+  pan_card_File: any;
+  reg_certificate_File: any;
+  adhaar_File: any;
+  workLocations = [];
   states: any;
-  districts: [];
-  talukas: [];
+  districts: any[];
+  talukas: any[];
   isLoading = false;
   accessToken: any;
   username: string;
@@ -38,9 +44,9 @@ export class RegistrationsPage implements OnInit {
   cname: string;
   addr: string;
   area_of_interest: [];
-  stateValue: string;
-  districtValue: string;
-  talukaValue: string;
+  stateValue ='';
+  districtValue = '';
+  talukaValue = '';
   gst_num: string;
   reg_num: string;
   pan_num: string;
@@ -48,7 +54,7 @@ export class RegistrationsPage implements OnInit {
   compareWith: any;
   // toggle.contact = false;
   interested = [];
-  iLikeIt={isChecked:false};
+  iLikeIt = { isChecked: false };
   user: any;
   images: ApiImage[] = [];
   @ViewChild('fileInput', { static: false }) fileInput: ElementRef;
@@ -58,25 +64,26 @@ export class RegistrationsPage implements OnInit {
     private actionSheetController: ActionSheetController,
     private platform: Platform,
     private authService: AuthService,
+    private filePath: FilePath
 
-    ) { }
+  ) { }
 
 
-    compareWithFn = (o1, o2) => {
-      return o1 && o2 ? o1.id === o2.id : o1 === o2;
-    };
+  compareWithFn = (o1, o2) => {
+    return o1 && o2 ? o1.id === o2.id : o1 === o2;
+  };
 
 
   ngOnInit() {
     this.storageService.get(AuthConstants.AUTH).then(res => {
       console.log(res);
 
-      if(res){
+      if (res) {
 
         this.accessToken = res.token;
         this.username = res.name;
         this.userId = res.id;
-      }else{
+      } else {
         this.router.navigate(['auth']);
       }
     });
@@ -84,25 +91,38 @@ export class RegistrationsPage implements OnInit {
 
 
   }
-
-  ionViewWillEnter(){
+  addPreferedLocation(){
+    console.log(this.states.find(x => x.id === this.stateValue));
+    const location = {
+      state: this.states.find(x => x.id === this.stateValue).name,
+      district: this.districts.find(x => x.id === this.districtValue).name,
+      taluka: this.talukas.find(x => x.id === this.talukaValue).name,
+    } ;
+    this.workLocations.push(location);
+    this.stateValue = this.districtValue = this.talukaValue = null ;
+  }
+  removeLocation(index){
+    console.log(index);
+    this.workLocations.splice(index,1);
+  }
+  ionViewWillEnter() {
     this.isLoading = true;
 
 
 
     this.registrationService.get_states(this.accessToken).subscribe((response) => {
-      if(response.status == 'success'){
+      if (response.status === 'success') {
         this.isLoading = false;
         this.states = response.data;
-     //   this.storageService.store('categories', response.data);
+        //   this.storageService.store('categories', response.data);
 
       }
     });
 
-    this.authService.user_details({user_id: this.userId}, this.accessToken).subscribe(response => {
+    this.authService.user_details({ user_id: this.userId }, this.accessToken).subscribe(response => {
 
 
-      if(response.status == 'success'){
+      if (response.status == 'success') {
 
 
         this.user = response.data;
@@ -130,12 +150,13 @@ export class RegistrationsPage implements OnInit {
 
 
     this.registrationService.get_categories(this.accessToken).subscribe((response) => {
-      if(response.status == 'success'){
+      if (response.status === 'success') {
         this.isLoading = false;
         this.areaOfInterst = response.data;
+        console.log(this.areaOfInterst);
 
 
-     //   this.storageService.store('categories', response.data);
+        //   this.storageService.store('categories', response.data);
 
       }
     });
@@ -155,66 +176,86 @@ export class RegistrationsPage implements OnInit {
   //   }
   // }
 
-  onStateChange(stateId: any){
-
-   // console.log(stateId);
-    this.registrationService.get_districts(stateId, this.accessToken).subscribe((response) => {
-      if(response.status == 'success'){
+  onStateChange(event: any) {
+    const stateID = event.target.value;
+    console.log('stateID', stateID);
+    this.registrationService.get_districts(stateID, this.accessToken).subscribe((response) => {
+      if (response.status === 'success') {
         this.districts = response.data;
-     //   this.storageService.store('categories', response.data);
-
+        console.log(this.districts);
       }
-    });
+    }, error => console.log(error));
   }
 
-
-  onDistrictChange(districtid: any){
-
-    this.registrationService.get_talukas(districtid, this.accessToken).subscribe((response) => {
-      if(response.status == 'success'){
+  onDistrictChange(event: any) {
+    const districtId = event.target.value;
+    console.log('districtId', districtId);
+    this.registrationService.get_talukas(districtId, this.accessToken).subscribe((response) => {
+      if (response.status === 'success') {
         this.talukas = response.data;
-
-     //   this.storageService.store('categories', response.data);
-
+        console.log(this.talukas);
       }
-    });
+    }, error => console.log(error));
   }
 
-  toggleOtherField(){
+  toggleOtherField() {
     this.toggleDisplay = !this.toggleDisplay;
 
   }
 
-  onSelect(selectedVal: string){
+  onSelect(selectedVal: string) {
     this.interested.push(selectedVal);
 
 
   }
 
- async selectImageSource(fileName: string){
+  async selectImageSource(fileName: string) {
     const buttons = [
       {
         text: 'Take Photo',
         icon: 'Camera',
         handler: () => {
-          this.addImage(CameraSource.Camera, fileName)
+          this.addImage(CameraSource.Camera, fileName);
         }
       },
       {
-      text: "Choose from Gallery",
-      icon: 'Image',
-      handler: () => {
-        this.addImage(CameraSource.Photos, fileName)
+        text: 'Choose from Gallery',
+        icon: 'Image',
+        handler: () => {
+          this.addImage(CameraSource.Photos, fileName);
+        }
       }
-    }
     ];
 
-    if (!this.platform.is('hybrid')) {
+    if (this.platform.is('pwa')) {
       buttons.push({
         text: 'Choose a File',
         icon: 'attach',
         handler: () => {
           this.fileInput.nativeElement.click();
+        }
+      });
+    }
+
+    // for android
+    if (this.platform.is('android')) {
+      buttons.push({
+        text: 'Choose a File',
+        icon: 'attach',
+        handler: () => {
+          this.registrationService.selectFile().then(uri => {
+            this.filePath.resolveNativePath(uri)
+              .then(async (filePath) => {
+                this.updatedocumentLink(fileName, filePath);
+                this.registrationService.makeFileIntoBlob(filePath,fileName).then((blob) => {
+                  const blobFile = blob;
+                  this.registrationService.uploadImage(blobFile, fileName, this.userId, this.accessToken).subscribe(res => {
+                    console.log('uploaded',res);
+                  }, error => console.log('upload error',error));
+                });
+              })
+              .catch(err => console.log(err));
+          });
         }
       });
     }
@@ -228,94 +269,103 @@ export class RegistrationsPage implements OnInit {
 
   }
 
-
+  updateImagePreview(fileName: string, image: any) {
+    if (fileName === 'gst_certificate') {
+      this.imageUrl = image;
+    }
+    if (fileName === 'reg_certificate') {
+      this.RegimageUrl = image;
+    }
+    if (fileName === 'pan_card') {
+      this.PanimageUrl = image;
+    }
+    if (fileName === 'adhaar_file') {
+      this.AdhaarimageUrl = image;
+    }
+  }
+  updatedocumentLink(fileName, url) {
+    if (fileName === 'gst_certificate') {
+      this.gst_certificate_File = url;
+    }
+    if (fileName === 'reg_certificate') {
+      this.reg_certificate_File = url;
+    }
+    if (fileName === 'pan_card') {
+      this.pan_card_File = url;
+    }
+    if (fileName === 'adhaar_file') {
+      this.adhaar_File = url;
+    }
+  }
 
   async addImage(source: CameraSource, fileName: string) {
-     let image = await Camera.getPhoto({
+    const image = await Camera.getPhoto({
       quality: 60,
       allowEditing: true,
       resultType: CameraResultType.Base64,
       source
     });
 
-try{
+    try {
 
-  // console.log(image);
-//  let imgStr = image.base64String.replace('data:image/jpeg;base64', '');
-//  imgStr = image.base64String.replace('data:image/png;base64', '')
-  // const blobData = this.base64toBlob(image.base64String, `image/${image.format}`);
-  // const imageName = 'Give me a name';
-//  const guestPicture = image.base64String;
+      // console.log(image);
+      //  let imgStr = image.base64String.replace('data:image/jpeg;base64', '');
+      //  imgStr = image.base64String.replace('data:image/png;base64', '')
+      // const blobData = this.base64toBlob(image.base64String, `image/${image.format}`);
+      // const imageName = 'Give me a name';
+      //  const guestPicture = image.base64String;
 
-// console.log(blobData);
+      // console.log(blobData);
 
-if(fileName == 'gst_certificate'){
-  this.imageUrl = 'data:image/jpeg;base64,' + image.base64String;
-}
+      const imgUrl = 'data:image/jpeg;base64,' + image.base64String;
+      this.updateImagePreview(fileName, imgUrl);
+      this.registrationService.uploadImage(image.base64String, fileName, this.userId, this.accessToken).subscribe((newImage: ApiImage) => {
+        this.images.push(newImage);
+      });
+    }
+    catch (error) {
 
-
-
-if(fileName == 'reg_certificate'){
-  this.RegimageUrl = 'data:image/jpeg;base64,' + image.base64String;
-}
-
-
-
-if(fileName == 'pan_card'){
-  this.PanimageUrl = 'data:image/jpeg;base64,' + image.base64String;
-}
-
-
-if(fileName == 'adhaar_file'){
-  this.AdhaarimageUrl = 'data:image/jpeg;base64,' + image.base64String;
-}
-  this.registrationService.uploadImage(image.base64String, fileName, this.userId, this.accessToken).subscribe((newImage: ApiImage) => {
-    this.images.push(newImage);
-  });
-}
-catch(error){
-
-}
+    }
 
 
   }
 
   // Used for browser direct file upload
   uploadFile(event: Event, fieldName) {
-   // const eventObj: MSInputMethodContext = event as MSInputMethodContext;
+    // const eventObj: MSInputMethodContext = event as MSInputMethodContext;
     //const target: HTMLInputElement = eventObj.target as HTMLInputElement;
     const file: File = (event.target as HTMLInputElement).files[0];
 
 
     const fr = new FileReader();
-    fr.onload = () =>{
+    fr.onload = () => {
       const dataUrl = fr.result.toString();
 
 
-      if(fieldName == 'gst_certificate'){
+      if (fieldName == 'gst_certificate') {
         this.imageUrl = dataUrl;
       }
 
 
 
-      if(fieldName == 'reg_certificate'){
+      if (fieldName == 'reg_certificate') {
         this.RegimageUrl = dataUrl;
       }
 
 
 
-      if(fieldName == 'pan_card'){
+      if (fieldName == 'pan_card') {
         this.PanimageUrl = dataUrl;
       }
 
 
-      if(fieldName == 'adhaar_file'){
+      if (fieldName == 'adhaar_file') {
         this.AdhaarimageUrl = dataUrl;
       }
 
       this.registrationService.uploadImageFile(this.imageUrl, this.accessToken, fieldName, this.userId).subscribe((newImage: ApiImage) => {
-      this.images.push(newImage);
-    });
+        this.images.push(newImage);
+      });
     };
 
     fr.readAsDataURL(file);
@@ -326,7 +376,7 @@ catch(error){
   }
 
 
- base64toBlob(base64Data, contentType) {
+  base64toBlob(base64Data, contentType) {
     contentType = contentType || '';
     const sliceSize = 1024;
     const byteCharacters = window.atob(base64Data);
@@ -348,7 +398,7 @@ catch(error){
   }
 
 
-  onSubmit(form: NgForm){
+  onSubmit(form: NgForm) {
 
     //  console.log(form.value); return false;
     let postData = {
@@ -378,9 +428,9 @@ catch(error){
 
     this.registrationService.register(postData, this.accessToken).subscribe(response => {
 
-      if(response.status == 'success'){
+      if (response.status == 'success') {
         this.router.navigateByUrl('/registration-thankyou');
-      }else{
+      } else {
         this.showAlert(response.message);
       }
       // console.log(response);
@@ -400,7 +450,10 @@ catch(error){
   //   // POST formData to server using HttpClient
   // }
 
-
+  checkLocationInputs(){
+    if(this.stateValue === null || this.districtValue === null || this.talukaValue === null){return true; }
+    else{ return false; }
+  }
 
 
   private showAlert(message: string) {
@@ -414,7 +467,7 @@ catch(error){
             this.router.navigate(['registration-thankyou']);
           }
         }
-  ]
+        ]
       })
       .then(alertEl => alertEl.present());
   }
