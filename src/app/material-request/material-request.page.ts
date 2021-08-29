@@ -33,6 +33,7 @@ export class MaterialRequestPage implements OnInit {
    }
 
   ngOnInit() {
+    this.isLoading = true;
 
     this.storageService.get(AuthConstants.AUTH).then(res => {
       // console.log(res.name);
@@ -44,6 +45,17 @@ export class MaterialRequestPage implements OnInit {
       if(res){
         this.accessToken = res.token;
         this.userId = res.id;
+
+
+  this.tenderService.getMyTenders(this.userId, this.accessToken).subscribe((response) => {
+
+    if(response.status == 'success')
+    this.Tenders = response.data;
+
+    this.isLoading = false;
+
+
+  });
       }else{
         this.router.navigate(['auth']);
       }
@@ -52,16 +64,8 @@ export class MaterialRequestPage implements OnInit {
 
 
   ionViewWillEnter(){
-    this.isLoading = true;
 
 
-  this.tenderService.getMyTenders(this.userId, this.accessToken).subscribe((response) => {
-    this.isLoading = false;
-
-    if(response.status == 'success')
-    this.Tenders = response.data;
-
-  });
 
   }
 

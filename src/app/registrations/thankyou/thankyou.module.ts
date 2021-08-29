@@ -7,6 +7,8 @@ import { IonicModule } from '@ionic/angular';
 import { ThankyouPageRoutingModule } from './thankyou-routing.module';
 
 import { ThankyouPage } from './thankyou.page';
+import { HeaderComponent } from 'src/app/shared/header/header.component';
+import { FooterComponent } from 'src/app/shared/footer/footer.component';
 
 @NgModule({
   imports: [
@@ -15,6 +17,6 @@ import { ThankyouPage } from './thankyou.page';
     IonicModule,
     ThankyouPageRoutingModule
   ],
-  declarations: [ThankyouPage]
+  declarations: [ThankyouPage, HeaderComponent, FooterComponent]
 })
 export class ThankyouPageModule {}

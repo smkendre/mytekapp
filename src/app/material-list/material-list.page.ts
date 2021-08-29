@@ -21,6 +21,7 @@ export class MaterialListPage implements OnInit {
    ) { }
 
   ngOnInit() {
+    this.isLoading = true;
 
 
     this.storageService.get(AuthConstants.AUTH).then(res => {
@@ -29,15 +30,7 @@ export class MaterialListPage implements OnInit {
       if(res){
         this.accessToken = res.token;
         this.userId = res.id;
-      }else{
-        this.router.navigate(['auth']);
-      }
-    });
-  }
 
-
-  ionViewWillEnter(){
-    this.isLoading = true;
 
 
   this.tenderService.getMaterialRequests(this.userId, this.accessToken).subscribe((response) => {
@@ -47,28 +40,9 @@ export class MaterialListPage implements OnInit {
     this.Requests = response.data;
 
   });
-  //   this.Requests = [
-  //     {
-  //     id: 1,
-  //     name: 'Tender 5',
-  //     material: 'copper wire',
-  //     quantity: '1000 mtr',
-  //     status: 'Approved'
-  //   },{
-  //     id: 2,
-  //     name: 'Tender 6',
-  //     material: 'Cement',
-  //     quantity: '10 KG',
-  //     status: 'Pending'
-  //   }
-  // ];
-
-  // this.isLoading = false;
+      }else{
+        this.router.navigate(['auth']);
+      }
+    });
   }
-
-
-
-  // submitRequest(form: object){
-  //   this.router.navigateByUrl('/home');
-  // }
 }

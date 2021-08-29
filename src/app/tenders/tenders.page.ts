@@ -23,18 +23,32 @@ export class TendersPage implements OnInit {
     ) { }
 
   ngOnInit() {
+    this.isLoading = true;
+
     this.storageService.get(AuthConstants.AUTH).then(res => {
       //console.log(res);
 
       if(res){
 
-        // if(res.status == 2) {
-        //   this.router.navigate(['registration']);
+        if(res.status == 2) {
+          this.router.navigate(['registration']);
 
-        // }
+        }
         this.accessToken = res.token;
         this.userId = res.id;
         this.userStatus = res.status;
+
+        this.tenderService.fetchTenders(this.accessToken).subscribe((response) => {
+          this.isLoading = false;
+
+          //console.log("My res:",response);
+          //alert(JSON.stringify(response));
+
+          if(response.status == 'success')
+          this.Tenders = response.data;
+
+          this.isLoading = false;
+        });
 
       }else{
         this.router.navigate(['auth']);
@@ -42,23 +56,6 @@ export class TendersPage implements OnInit {
     });
   }
 
-  ionViewWillEnter(){
-
-    this.isLoading = true;
-    //console.log('Token: ');
-    //console.log(this.accessToken);
-    this.tenderService.fetchTenders(this.accessToken).subscribe((response) => {
-      this.isLoading = false;
-
-      //console.log("My res:",response);
-      //alert(JSON.stringify(response));
-
-      if(response.status == 'success')
-      this.Tenders = response.data;
-
-      this.isLoading = false;
-    });
-  }
 
   submitRequest(id: string){
     this.isLoading = true;

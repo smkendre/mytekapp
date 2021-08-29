@@ -6,6 +6,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { StorageService } from 'src/app/services/storage.service';
 import { AuthConstants } from 'src/app/config/auth-constant';
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
+import { FilePath } from '@ionic-native/file-path/ngx';
 
 @Component({
   selector: 'app-submit-report',
@@ -19,8 +20,9 @@ export class SubmitReportPage implements OnInit {
   accessToken: string;
   tender_id: string;
   userId: string;
-
+  imageUrl: any;
   images: ApiImage[] = [];
+
   @ViewChild('fileInput', { static: false }) fileInput: ElementRef;
 
 
@@ -30,11 +32,14 @@ export class SubmitReportPage implements OnInit {
     private storageService: StorageService,
     private route: ActivatedRoute,
     private actionSheetController: ActionSheetController,
-    private platform: Platform
+    private platform: Platform,
+    private filePath: FilePath
+
     ) { }
 
   ngOnInit() {
 
+    this.isLoading = true;
 
     this.storageService.get(AuthConstants.AUTH).then(res => {
 
@@ -42,6 +47,15 @@ export class SubmitReportPage implements OnInit {
 
         this.accessToken = res.token;
         this.userId = res.id;
+
+        this.tenderService.getReportFields(this.tender_id, this.accessToken).subscribe((response) => {
+          // this.Tenders = [];
+          if(response.status == 'success')
+          this.Fields = response.data;
+          this.isLoading = false;
+
+        })
+
       }else{
         this.router.navigate(['auth']);
       }
@@ -54,40 +68,7 @@ export class SubmitReportPage implements OnInit {
 
 
   ionViewWillEnter(){
-    this.isLoading = true;
 
-
-  //   this.Fields = [
-  //     {
-  //     id: 1,
-  //     name: 'Vendor Name'
-  //   },
-  //   {
-  //     id: 1,
-  //     name: 'Field 1'
-  //   },
-  //   {
-  //     id: 1,
-  //     name: 'Field12'
-  //   },
-  //   {
-  //     id: 1,
-  //     name: 'Field13'
-  //   },
-  //   {
-  //     id: 1,
-  //     name: 'Field14'
-  //   }
-  // ];
-
-
-    this.tenderService.getReportFields(this.tender_id, this.accessToken).subscribe((response) => {
-      this.isLoading = false;
-      // this.Tenders = [];
-      if(response.status == 'success')
-      this.Fields = response.data;
-
-    })
 
     // this.tenderService.getReportFields().subscribe((response) => {
     //   this.isLoading = false;
@@ -191,7 +172,8 @@ export class SubmitReportPage implements OnInit {
   }
   ];
 
-  if (!this.platform.is('hybrid')) {
+
+  if (this.platform.is('pwa')) {
     buttons.push({
       text: 'Choose a File',
       icon: 'attach',
@@ -200,6 +182,31 @@ export class SubmitReportPage implements OnInit {
       }
     });
   }
+
+ // for android
+ if (this.platform.is('android')) {
+  buttons.push({
+    text: 'Choose a File',
+    icon: 'attach',
+    handler: () => {
+      this.tenderService.selectFile().then(uri => {
+        this.filePath.resolveNativePath(uri)
+          .then(async (filePath) => {
+           // this.updatedocumentLink(fileName, filePath);
+            this.tenderService.makeFileIntoBlob(filePath,fileName).then((blob) => {
+              const blobFile = blob;
+
+              this.imageUrl = blobFile;
+              // this.tenderService.uploadImage(blobFile, fileName, this.userId, this.accessToken).subscribe(res => {
+              //   console.log('uploaded',res);
+              // }, error => console.log('upload error',error));
+            });
+          })
+          .catch(err => console.log(err));
+      });
+    }
+  });
+}
 
   const actionSheet = await this.actionSheetController.create({
     header: 'Select Image Source',
@@ -213,32 +220,83 @@ export class SubmitReportPage implements OnInit {
 async addImage(source: CameraSource, fileName: string) {
   const image = await Camera.getPhoto({
     quality: 60,
-    allowEditing: true,
+    allowEditing: false,
     resultType: CameraResultType.Base64,
     source
   });
 
+  try {
+
+    const imgUrl = 'data:image/jpeg;base64,' + image.base64String;
+
+    this.imageUrl = imgUrl;
+    //this.updateImagePreview(fileName, imgUrl);
+  }
+  catch (error) {
+
+  }
 
 
-  const blobData = this.b64toBlob(image.base64String, `image/${image.format}`);
-  const imageName = 'Give me a name';
-
-  this.tenderService.uploadImage(blobData, imageName, image.format, fileName, this.userId, this.accessToken).subscribe((newImage: ApiImage) => {
-    this.images.push(newImage);
-  });
 }
 
 // Used for browser direct file upload
-uploadFile(event: EventTarget) {
-  const eventObj: MSInputMethodContext = event as MSInputMethodContext;
-  const target: HTMLInputElement = eventObj.target as HTMLInputElement;
-  const file: File = target.files[0];
+uploadFile(event: Event, fieldName) {
 
-  console.log(file);
-  this.tenderService.uploadImageFile(file, this.accessToken).subscribe((newImage: ApiImage) => {
-    this.images.push(newImage);
-  });
+  const file: File = (event.target as HTMLInputElement).files[0];
+
+
+  const fr = new FileReader();
+  fr.onload = () => {
+    const dataUrl = fr.result.toString();
+
+
+    // if (fieldName == 'gst_certificate') {
+  this.imageUrl = dataUrl;
+    // }
+
+
+
+    // if (fieldName == 'reg_certificate') {
+    //   this.RegimageUrl = dataUrl;
+    // }
+
+
+
+    // if (fieldName == 'pan_card') {
+    //   this.PanimageUrl = dataUrl;
+    // }
+
+
+    // if (fieldName == 'adhaar_file') {
+    //   this.AdhaarimageUrl = dataUrl;
+    // }
+
+
+    // this.registrationService.uploadImageFile(this.imageUrl, this.accessToken, fieldName, this.userId).subscribe((newImage: ApiImage) => {
+    //   this.images.push(newImage);
+    // });
+  };
+
+  fr.readAsDataURL(file);
+
 }
+
+
+
+// submitDocument(fileName: string){
+//   this.tenderService.selectFile().then(uri => {
+//     this.filePath.resolveNativePath(uri)
+//       .then(async (filePath) => {
+//         this.tenderService.makeFileIntoBlob(filePath,fileName).then((blob) => {
+//           const blobFile = blob;
+//           this.tenderService.uploadImage(blobFile, fileName, this.userId, this.accessToken).subscribe(res => {
+//             console.log('uploaded',res);
+//           }, error => console.log('upload error',error));
+//         });
+//       })
+//       .catch(err => console.log(err));
+//   });
+// }
 
 
 b64toBlob(b64Data, contentType = '', sliceSize = 512) {

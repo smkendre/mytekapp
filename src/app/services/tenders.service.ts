@@ -2,6 +2,9 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 
+import { FileChooser } from '@ionic-native/file-chooser/ngx';
+import { File } from '@ionic-native/file/ngx';
+
 import { of, Observable } from 'rxjs';
 
 
@@ -19,7 +22,7 @@ export interface ApiImage {
 export class TendersService {
 
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private fileChooser: FileChooser, private file: File) { }
 
 
   fetchTenders(token: string):Observable<any>{
@@ -248,40 +251,43 @@ getMaterialList(tender_id: number, token: string):Observable<any>{
 }
 
 
+selectFile() {
+  const options = { mime: 'application/pdf' };
+  return this.fileChooser.open(options);
+}
 
-
-uploadImage(blobData, name, ext, fileName, user_id, token) {
-  const formData = new FormData();
-  formData.append('file', blobData, `myimage.${ext}`);
-  formData.append('name', name);
-  formData.append('fileName', fileName);
-  formData.append('user_id', user_id);
+uploadImage(blobData, user_id, token) {
+  // const formData = new FormData();
+  // formData.append('file', blobData, `myimage.${ext}`);
+  // formData.append('name', name);
+  // formData.append('fileName', fileName);
+  // formData.append('user_id', user_id);
 
 
   const httpHeader = {
     headers: new HttpHeaders({
-      'Content-Type': 'multipart/formdata',
-
-      'Authorization': 'Bearer '+token,
-
+      'Content-Type': 'application/json',
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Headers': '*',
-      'Accept': 'application/json, text/plain'
+      Authorization: 'Bearer ' + token
      })
   };
 
+  const postData = { image: blobData, tender_id: user_id };
+
+
   const url = environment.apiUrl + 'report-image';
 
-  return this.http.post(url, formData, httpHeader);
+  return this.http.post(url, postData, httpHeader);
 
   // return this.httpService.find('upload-image', formData, token);
 }
 
-uploadImageFile(file: File, token) {
-  const ext = file.name.split('.').pop();
-  const formData = new FormData();
-  formData.append('file', file);
-  formData.append('name', file.name);
+uploadImageFile(file: File,  token) {
+  // const ext = file.name.split('.').pop();
+  // const formData = new FormData();
+  // formData.append('file', file);
+  // formData.append('name', file.name);
 
 
 
@@ -295,10 +301,11 @@ uploadImageFile(file: File, token) {
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Headers': '*' })
   };
+  const postData = { image: file };
 
   const url = environment.apiUrl + 'report-image';
 
-  return this.http.post(url, formData, httpHeader);
+  return this.http.post(url, postData, httpHeader);
 }
 
 
@@ -310,4 +317,36 @@ uploadImageFile(file: File, token) {
     };
   }
 
+  makeFileIntoBlob(_imagePath, fileName) {
+    return new Promise((resolve, reject) => {
+      this.file
+        .resolveLocalFilesystemUrl(_imagePath)
+        .then(fileEntry => {
+          const { name, nativeURL } = fileEntry;
+
+          // get the path..
+          const path = nativeURL.substring(0, nativeURL.lastIndexOf('/'));
+          console.log('path', path);
+          console.log('fileName', name);
+
+          fileName = name;
+
+          // we are provided with name, so now read the file into
+          // a buffer
+          return this.file.readAsArrayBuffer(path, name);
+        })
+        .then(buffer => {
+          // get the buffer and make a blob to be saved
+          const imgBlob = new Blob([buffer], {
+            type: 'image/jpeg'
+          });
+          console.log(imgBlob.type, imgBlob.size);
+          resolve({
+            fileName,
+            imgBlob
+          });
+        })
+        .catch(e => reject(e));
+    });
+  }
 }

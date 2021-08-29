@@ -1,39 +1,51 @@
 import { Injectable } from '@angular/core';
 
-import { Storage } from '@capacitor/storage';
+import { Storage } from '@ionic/storage-angular';
 
 @Injectable({
   providedIn: 'root'
 })
 export class StorageService {
 
-  constructor() { }
+  private _storage: Storage | null = null;
+
+  constructor(private storage: Storage) {
+    this.init();
+  }
+
+
+  async init() {
+    // If using, define drivers here: await this.storage.defineDriver(/*...*/);
+    const storage = await this.storage.create();
+    this._storage = storage;
+  }
+
 
   async store(storageKey: string, value: any){
     const encryptedValue = btoa(escape(JSON.stringify(value)));
 
-    await Storage.set({
-      key: storageKey,
-      value: encryptedValue
-    });
+    await this._storage.set(storageKey,encryptedValue);
 
   }
 
   async get(storageKey: string) {
-    const ret = await Storage.get({ key: storageKey });
+// console.log('storage data: ');
+//     console.log(storageKey);
+
+    const ret = await this._storage.get(storageKey );
 
     // console.log('storage data: ');
-    // console.log(ret.value);
-    return (ret.value == null || ret.value == '') ? '': JSON.parse(unescape(atob(ret.value)));
+    // console.log(ret);
+   return (ret == null || ret == '') ? '': JSON.parse(unescape(atob(ret)));
   }
 
   async removeStorageItem(storageKey: string) {
-    await Storage.remove({ key: storageKey });
+    await this._storage.remove(storageKey );
   }
 
   // Clear storage
   async clear() {
-    await Storage.clear();
+    await this._storage.clear();
   }
 
 }

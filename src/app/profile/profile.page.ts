@@ -33,23 +33,15 @@ export class ProfilePage implements OnInit {
    }
 
   ngOnInit() {
+    this.isLoading = true;
 
     this.storageService.get(AuthConstants.AUTH).then(res => {
 
       if(res){
         this.accessToken = res.token;
         this.userId = res.id;
-      }else{
-        this.router.navigate(['auth']);
-      }
-
-    });
-  }
 
 
-  ionViewWillEnter(){
-
-    this.isLoading = true;
     this.authService.user_details({user_id: this.userId}, this.accessToken).subscribe(response => {
 
 
@@ -67,6 +59,16 @@ export class ProfilePage implements OnInit {
       // console.log(area_of_interest);
 
     });
+      }else{
+        this.router.navigate(['auth']);
+      }
+
+    });
+  }
+
+
+  ionViewWillEnter(){
+
 
   }
 

@@ -11,7 +11,7 @@
 
     </ion-col>
   </ion-row>
-  <ion-grid >
+  <ion-grid  *ngIf="!isLoading && (user | keyvalue)?.length">
 
     <ion-card class="transparent-card">
       <ion-card-content>
@@ -34,7 +34,7 @@ Edit            </ion-button>
 
 
 
-    <ion-card class="transparent-card" *ngIf="!isLoading && (user | keyvalue)?.length">
+    <ion-card class="transparent-card">
 
       <ion-card-content>
 
@@ -76,12 +76,12 @@ Edit            </ion-button>
 
 
   </ion-grid>
-  <img [src]="photo">
+  <!-- <img [src]="photo">
 
   <ion-fab vertical="bottom" horizontal="center" slot="fixed">
     <ion-fab-button (click)="takePicture()">
       <ion-icon name="camera"></ion-icon>
     </ion-fab-button>
-  </ion-fab>
+  </ion-fab> -->
 </ion-content>
 <app-footer></app-footer>

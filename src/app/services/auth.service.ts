@@ -88,7 +88,7 @@ user_details(formData: any, token: string):Observable<any>{
 
 
   logout(){
-    this.storageService.removeStorageItem(AuthConstants.AUTH).then(res => {
+    this.storageService.clear().then(res => {
       this.router.navigateByUrl('/auth');
       // this.userData$.next('');
     });

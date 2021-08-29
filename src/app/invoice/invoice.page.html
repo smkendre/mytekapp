@@ -1,26 +1,4 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-thumbnail slot="start" class="header-icons">
-      <ion-img src="../../assets/01-04.png"></ion-img>
-    </ion-thumbnail>
-      <ion-img src="../../assets/images/logo.jpg" class="header-logo"></ion-img>
-    <ion-thumbnail slot="primary" class="header-icons">
-      <ion-img src="../../assets/search-icon.png"></ion-img>
-    </ion-thumbnail>
-
-    <ion-thumbnail slot="primary" class="header-icons">
-      <ion-img src="../../assets/bellicon.png"></ion-img>
-    </ion-thumbnail>
-    <ion-thumbnail slot="primary" class="header-icons">
-      <ion-img src="../../assets/01-02.png"></ion-img>
-    </ion-thumbnail>
-    <ion-button slot="primary" class="drawer-menu">
-      <ion-menu-button >
-        <img src="../../assets/01-03.png" >
-      </ion-menu-button>
-    </ion-button>
-  </ion-toolbar>
-</ion-header>
+<app-header></app-header>
 <ion-content>
   <div class="ion-text-center"  *ngIf="isLoading">
     <ion-spinner color="primary"></ion-spinner>
@@ -54,7 +32,7 @@
       hidden="true"
       accept="image/*"
     />
-      <ion-button (click)="selectImageSource()">Upload      </ion-button>
+      <ion-button (click)="selectImageSource('invoice')">Upload      </ion-button>
 
       <ion-icon name="attach-outline" slot="primary"></ion-icon>
     </ion-fab>
@@ -117,6 +95,4 @@
 </ion-content>
 
 
-<ion-footer>
-  <ion-button expand="full" class="footer-link">Call Us For Assistance</ion-button>
-</ion-footer>
+<app-footer></app-footer>

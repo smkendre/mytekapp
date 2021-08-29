@@ -53,3 +53,14 @@ ion-input, ion-textarea, ion-select{
 h1{
   font-weight: 700;
 }
+.location-card{
+  border-radius:20px;
+  margin-right:10px;
+  span{
+    font-weight: bold;
+  }
+  #close{
+    float:right;
+    font-size: 1.5em;
+  }
+}

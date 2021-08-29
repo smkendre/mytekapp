@@ -1,23 +1,23 @@
 <app-header></app-header>
-<ion-content >
+<ion-content>
 
   <ion-row>
     <ion-col size="12">
-      <div class="ion-text-center"  *ngIf="isLoading">
+      <div class="ion-text-center" *ngIf="isLoading">
         <ion-spinner color="primary"></ion-spinner>
 
       </div>
       <div class="ion-text-center" *ngIf="!isLoading && Report.length <= 0">
 
-      <p > No Reports Found !</p>
+        <p> No Reports Found !</p>
       </div>
     </ion-col>
   </ion-row>
 
 
-  <ion-grid class="ion-no-padding"  *ngIf="!isLoading && Report.length > 0" >
+  <ion-grid class="ion-no-padding" *ngIf="!isLoading && Report.length > 0">
 
-    <div *ngFor="let row of Report" >
+    <div *ngFor="let row of Report">
       <ion-card class="transparent-card">
         <ion-card-content>
           <ion-row>
@@ -26,39 +26,40 @@
 
               <h1 class="ion-text-left"> Report for - {{row.name}}</h1>
 
-        </ion-col>
-        <ion-col size="2" size-sm="2">
+            </ion-col>
+            <ion-col size="2" size-sm="2">
 
 
-          <ion-button color="success" [routerLink]="['/', 'submit-report', row.id]"   class="ion-text-right">Add</ion-button>
-
-    </ion-col>
-
-        </ion-row>
-        </ion-card-content>
-      </ion-card>
-
-  <div *ngIf=" row.report.length > 0" >
-      <ion-card class="btn-grad"  *ngFor="let report of row.report" >
-
-        <ion-card-content>
-          <ion-row>
-            <ion-col size="12" size-sm="12" >
-                  <h2>{{report.created_at}}</h2>
+              <ion-button color="success" class="ion-text-right" [routerLink]="['/', 'submit-report', row.id]"   >Add
+              </ion-button>
 
             </ion-col>
 
+          </ion-row>
+        </ion-card-content>
+      </ion-card>
 
-        <ion-col size="12" size-sm="12" *ngFor="let field of report.data " >
+      <div *ngIf=" row.report.length > 0">
+        <ion-card class="btn-grad" *ngFor="let report of row.report">
 
-          <h3><strong>{{field.key}}:  </strong>{{field.value}}</h3>
+          <ion-card-content>
+            <ion-row>
+              <ion-col size="12" size-sm="12">
+                <h2>{{report.created_at}}</h2>
 
-    </ion-col>
-    <ion-col size="12" size-sm="12" >
-      <h3> <strong> Comment: </strong>{{report.comment}}</h3>
+              </ion-col>
 
-</ion-col>
-            <!-- <ion-col size="12">
+
+              <ion-col size="12" size-sm="12" *ngFor="let field of report.data ">
+
+                <h3><strong>{{field.key}}: </strong>{{field.value}}</h3>
+
+              </ion-col>
+              <ion-col size="12" size-sm="12">
+                <h3> <strong> Comment: </strong>{{report.comment}}</h3>
+
+              </ion-col>
+              <!-- <ion-col size="12">
               <h3><strong>Field 1: </strong>{{row.field1}}</h3>
 
             </ion-col>
@@ -74,28 +75,29 @@
               <h3><strong>Field 14: </strong>{{row.field4}}</h3>
 
             </ion-col> -->
-          </ion-row>
+            </ion-row>
 
 
-        </ion-card-content>
-      </ion-card>
+          </ion-card-content>
+        </ion-card>
+      </div>
+      <ion-label *ngIf=" row.report.length <= 0">
+        <ion-card class="transparent-card">
+          <ion-card-content>
+            <ion-row>
+              <ion-col size="12" size-sm="12">
+
+
+                <h3> No reports submitted yet</h3>
+
+
+              </ion-col>
+
+            </ion-row>
+          </ion-card-content>
+        </ion-card>
+      </ion-label>
     </div>
-    <ion-label *ngIf=" row.report.length <= 0" >
-      <ion-card class="transparent-card">
-        <ion-card-content>
-          <ion-row>
-            <ion-col size="12" size-sm="12">
-
-
-              <h3> No reports submitted yet</h3>
-
-
-        </ion-col>
-
-        </ion-row>
-        </ion-card-content>
-      </ion-card>    </ion-label>
-  </div>
 
   </ion-grid>
 </ion-content>

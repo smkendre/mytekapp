@@ -28,6 +28,7 @@ export class DetailsPage implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.isLoading = true;
 
     this.storageService.get(AuthConstants.AUTH).then(res => {
 
@@ -35,6 +36,14 @@ export class DetailsPage implements OnInit {
 
         this.accessToken = res.token;
         this.userId = res.id;
+
+
+    this.tenderService.tenderDetails(this.tenderId, this.accessToken).subscribe((response) => {
+      this.isLoading = false;
+      if(response.status == 'success')
+      {this.tender = response.data;}
+
+    });
       }else{
         this.router.navigate(['auth']);
       }
@@ -47,18 +56,6 @@ export class DetailsPage implements OnInit {
   }
 
 
-  ionViewWillEnter(){
-    this.isLoading = true;
-
-
-
-    this.tenderService.tenderDetails(this.tenderId, this.accessToken).subscribe((response) => {
-      this.isLoading = false;
-      if(response.status == 'success')
-      {this.tender = response.data;}
-
-    });
-  }
 
   submitRequest(id: string){
     this.isLoading = true;

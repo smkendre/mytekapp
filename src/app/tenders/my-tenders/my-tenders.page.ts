@@ -19,57 +19,32 @@ export class MyTendersPage implements OnInit {
   constructor(private tenderService: TendersService,private router: Router, private storageService: StorageService) { }
 
   ngOnInit() {
-    this.storageService.get(AuthConstants.AUTH).then(res => {
-      // console.log(res.name);
+    this.isLoading = true;
 
+    this.storageService.get(AuthConstants.AUTH).then(res => {
+
+      if(res){
 
       if(res.status == 2) {
         this.router.navigate(['registration']);
 
       }
 
-      if(res){
         this.accessToken = res.token;
         this.userId = res.id;
+
+
+        this.tenderService.getMyTenders(this.userId, this.accessToken).subscribe((response) => {
+          this.isLoading = false;
+
+          if(response.status == 'success')
+          this.Tenders = response.data;
+
+        });
       }else{
         this.router.navigate(['auth']);
       }
     });
-  }
-
-  ionViewWillEnter(){
-    this.isLoading = true;
-  //   this.Tenders = [
-  //     {
-  //     id: 1,
-  //     name: 'Tender 5',
-  //     category: 'civil',
-  //     location: 'hinjewadi, pune, mh'
-  //   },{
-  //     id: 2,
-  //     name: 'Tender 6',
-  //     category: 'cctv',
-  //     location: 'borivali, mumbai, mh'
-  //   }
-  // ];
-
-  this.tenderService.getMyTenders(this.userId, this.accessToken).subscribe((response) => {
-    this.isLoading = false;
-
-    if(response.status == 'success')
-    this.Tenders = response.data;
-
-  });
-
-    // this.tenderService.getMyTenders().subscribe((response) => {
-    //   this.isLoading = false;
-    //   // this.Tenders = [];
-    //   this.Tenders = response;
-
-    //  // console.log(response);
-    // })
-
-    //  this.tenderService.fetchTenders().subscribe();
   }
 
 

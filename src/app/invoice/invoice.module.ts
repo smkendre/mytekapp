@@ -7,6 +7,8 @@ import { IonicModule } from '@ionic/angular';
 import { InvoicePageRoutingModule } from './invoice-routing.module';
 
 import { InvoicePage } from './invoice.page';
+import { HeaderComponent } from '../shared/header/header.component';
+import { FooterComponent } from '../shared/footer/footer.component';
 
 @NgModule({
   imports: [
@@ -15,6 +17,6 @@ import { InvoicePage } from './invoice.page';
     IonicModule,
     InvoicePageRoutingModule
   ],
-  declarations: [InvoicePage]
+  declarations: [InvoicePage, HeaderComponent, FooterComponent]
 })
 export class InvoicePageModule {}

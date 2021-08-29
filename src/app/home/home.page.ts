@@ -13,7 +13,7 @@ export class HomePage {
   userStatus : string;
   userId: any;
   accessToken: any;
-
+  isLoading = true;
 
   public slideOpts = {
     on: {
@@ -76,16 +76,20 @@ export class HomePage {
   }
 
   @ViewChild('slides', { static: true }) slides: IonSlides;
-  constructor(private router: Router, private storageService: StorageService) {}
+  constructor(private router: Router, private storageService: StorageService) {
+
+  }
 
   ngOnInit() {
-    this.slides.startAutoplay();
+
+    // this.slides.startAutoplay();
 
 
     this.storageService.get(AuthConstants.AUTH).then(res => {
-       console.log(res.status);
+      //  console.log(res.status);
 
       if(res){
+        this.isLoading = false;
         this.userId = res.id;
         this.accessToken = res.token;
         this.userStatus = res.status;
