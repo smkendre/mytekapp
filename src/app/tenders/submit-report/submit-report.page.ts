@@ -123,7 +123,7 @@ export class SubmitReportPage implements OnInit {
 
     const formData = form.value;
 
-    this.tenderService.submitReportData(formData, this.userId, this.tender_id, this.accessToken).subscribe(res => {
+    this.tenderService.submitReportData(formData, this.imageUrl, this.userId, this.tender_id, this.accessToken).subscribe(res => {
       this.isLoading = false;
 
       // if(res.status == 'success'){

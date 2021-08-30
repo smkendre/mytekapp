@@ -134,7 +134,7 @@ submitRequest(tender_id: string, user_id: string, token: string):Observable<any>
 
 
 
-submitReportData(formData: any, user_id: string, tender_id: string, token: string):Observable<any>{
+submitReportData(formData: any, document, user_id: string, tender_id: string, token: string):Observable<any>{
 
 
   const httpHeader = {
@@ -148,7 +148,7 @@ submitReportData(formData: any, user_id: string, tender_id: string, token: strin
 
 
   const url = environment.apiUrl + 'submit-report';
-  const postData = {formData: formData, tender_id: tender_id, user_id: user_id};
+  const postData = {formData: formData, tender_id: tender_id, user_id: user_id, document: document};
 
   return this.http.post(url, postData, httpHeader);
 

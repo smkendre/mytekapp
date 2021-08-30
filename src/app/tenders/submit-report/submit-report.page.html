@@ -41,6 +41,10 @@
         </ion-row>
 
         <ion-row >
+          <ion-col size="12" >
+            <img [src]="imageUrl" height="30px" *ngIf="imageUrl">
+
+          </ion-col>
           <ion-col size="12" class="ion-no-padding">
               <!-- <input
                 type="file"
@@ -49,6 +53,7 @@
                 hidden="true"
                 accept="image/*"
               /> -->
+
               <ion-button (click)="selectImageSource('file')">
         Upload      </ion-button>
           </ion-col>

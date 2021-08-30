@@ -139,9 +139,9 @@ export class InvoicePage implements OnInit {
       source
     });
     this.imageUrl = 'data:image/jpeg;base64,' + image.base64String;
-    this.registrationService.uploadImage(image.base64String, fileName, this.userId, this.accessToken).subscribe((newImage: ApiImage) => {
-      this.imageUrl = newImage.url ;
-    });
+    // this.registrationService.uploadImage(image.base64String, fileName, this.userId, this.accessToken).subscribe((newImage: ApiImage) => {
+    //   this.imageUrl = newImage.url ;
+    // });
   }
   uploadFile(event: Event) {
     // const eventObj: MSInputMethodContext = event as MSInputMethodContext;
