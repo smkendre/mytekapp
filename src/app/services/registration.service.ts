@@ -6,6 +6,9 @@ import { environment } from 'src/environments/environment';
 import { HttpService } from './http.service';
 import { FileChooser } from '@ionic-native/file-chooser/ngx';
 import { File } from '@ionic-native/file/ngx';
+import { FilePath } from '@ionic-native/file-path/ngx';
+import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer/ngx';
+import { Filesystem, Directory, Encoding } from '@capacitor/filesystem';
 export interface ApiImage {
   _id: string;
   name: string;
@@ -18,8 +21,14 @@ export interface ApiImage {
   providedIn: 'root'
 })
 export class RegistrationService {
+  fileTransfer: FileTransferObject = this.transfer.create();
 
-  constructor(private httpService: HttpService, private http: HttpClient, private fileChooser: FileChooser, private file: File) { }
+  constructor(private httpService: HttpService,
+    private http: HttpClient, private fileChooser: FileChooser,
+    private file: File, private filePath: FilePath,
+    private transfer: FileTransfer)
+    {
+     }
 
 
   uploadImage(blobData, fieldName, user_id, token) {
@@ -41,7 +50,7 @@ export class RegistrationService {
   }
   uploadImageFile(file, token, fieldName, user_id) {
 
-    const postData = { image: file, user_id: user_id, field_name: fieldName };
+    const postData = { image: file, user_id, field_name: fieldName };
     const httpHeader = {
       headers: new HttpHeaders({
         // 'Content-Type': 'multipart/form-data',
@@ -90,43 +99,23 @@ export class RegistrationService {
   register(postData: any, token: string): Observable<any> {
     return this.httpService.find('registration', postData, token);
   }
-  makeFileIntoBlob(_imagePath, fileName) {
-    return new Promise((resolve, reject) => {
-      this.file
-        .resolveLocalFilesystemUrl(_imagePath)
-        .then(fileEntry => {
-          const { name, nativeURL } = fileEntry;
-
-          // get the path..
-          const path = nativeURL.substring(0, nativeURL.lastIndexOf('/'));
-          console.log('path', path);
-          console.log('fileName', name);
-
-          fileName = name;
-
-          // we are provided with name, so now read the file into
-          // a buffer
-          return this.file.readAsArrayBuffer(path, name);
-
-
-        })
-        .then(buffer => {
-          // get the buffer and make a blob to be saved
-          const imgBlob = new Blob([buffer], {
-            type: 'image/jpeg'
-          });
-
-          // this.uploadImage(imgBlob, fileName, userId, token).subscribe(res => {
-          //   console.log('uploaded',res);
-          // }, error => console.log('upload error',error));
-          console.log(imgBlob.type, imgBlob.size);
-
-          resolve({
-            fileName,
-            imgBlob
-          });
-        })
-        .catch(e => reject(e));
-    });
+  uploadFile(path,name,token,user_id) {
+    const options: FileUploadOptions = {
+       fileKey: 'file',
+       fileName: name,
+       headers: {Authorization: 'Bearer ' + token},
+       httpMethod: 'POST',
+       mimeType:'file/pdf',
+       params: {user_id}
+    };
+    const endpoint = environment.apiUrl + 'upload-image';
+    this.fileTransfer.upload(path, endpoint, options)
+     .then((data) => {
+       console.log('upload success',data);
+     }, (err) => {
+       console.log('upload error',err);
+     });
   }
+
+
 }

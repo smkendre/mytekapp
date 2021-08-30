@@ -8,6 +8,8 @@ import { StorageService } from '../services/storage.service';
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 import { AuthService } from '../services/auth.service';
 import { FilePath } from '@ionic-native/file-path/ngx';
+import { File } from '@ionic-native/file/ngx';
+import { Filesystem, Directory, Encoding } from '@capacitor/filesystem';
 
 export interface imgFile {
   name: string;
@@ -46,9 +48,9 @@ export class RegistrationsPage implements OnInit {
   cname: string;
   addr: string;
   area_of_interest: [];
-  stateValue ='';
-  districtValue = '';
-  talukaValue = '';
+  stateValue = '';
+  districtValue = [];
+  talukaValue = [];
   gst_num: string;
   reg_num: string;
   pan_num: string;
@@ -66,14 +68,13 @@ export class RegistrationsPage implements OnInit {
     private actionSheetController: ActionSheetController,
     private platform: Platform,
     private authService: AuthService,
-    private filePath: FilePath
+    private filePath: FilePath,
+    private file: File
 
   ) { }
 
 
-  compareWithFn = (o1, o2) => {
-    return o1 && o2 ? o1.id === o2.id : o1 === o2;
-  };
+  compareWithFn = (o1, o2) => o1 && o2 ? o1.id === o2.id : o1 === o2;
 
 
   ngOnInit() {
@@ -98,19 +99,40 @@ export class RegistrationsPage implements OnInit {
 
 
   }
-  addPreferedLocation(){
+  addPreferedLocation() {
     // console.log(this.states.find(x => x.id === this.stateValue));
     const location = {
       state: this.states.find(x => x.id === this.stateValue).name,
-      district: this.districts.find(x => x.id === this.districtValue).name,
-      taluka: this.talukas.find(x => x.id === this.talukaValue).name,
-    } ;
+      district: this.getdistricts(),
+      taluka: this.getTalukas(),
+    };
     this.workLocations.push(location);
-    this.stateValue = this.districtValue = this.talukaValue = null ;
+    this.stateValue = null;
+    this.districtValue = this.talukaValue = [];
   }
-  removeLocation(index){
+  getdistricts() {
+    const districtArray = [];
+    this.districtValue.forEach(dist => {
+      // get district name
+      const name = this.work_districts.find(x => x.id === dist).name;
+      districtArray.push(name);
+    });
+    return districtArray;
+  }
+  getTalukas() {
+    const talukaArray = [];
+    this.talukaValue.forEach(talukaID => {
+      console.log(this.work_talukas);
+      console.log(this.work_talukas.find(x => x.id === talukaID));
+      // get taluka name
+      const name = this.work_talukas.find(x => x.id === talukaID).name;
+      talukaArray.push(name);
+    });
+    return talukaArray;
+  }
+  removeLocation(index) {
     // console.log(index);
-    this.workLocations.splice(index,1);
+    this.workLocations.splice(index, 1);
   }
   loadAllData() {
 
@@ -173,35 +195,32 @@ export class RegistrationsPage implements OnInit {
 
   onStateChange(event: any, field) {
     const stateID = event.target.value;
-    // console.log('stateID', stateID);
+    console.log('stateID', stateID);
     this.registrationService.get_districts(stateID, this.accessToken).subscribe((response) => {
       if (response.status === 'success') {
-
-        if(field == 'address'){
+        if (field == 'address') {
           this.districts = response.data;
-        }else{
+        } else {
           this.work_districts = response.data;
-
+          console.log(this.work_districts);
         }
-        // console.log(this.districts);
+
       }
     }, error => console.log(error));
   }
 
   onDistrictChange(event: any, field) {
     const districtId = event.target.value;
-    // console.log('districtId', districtId);
+    console.log('districtId', districtId);
     this.registrationService.get_talukas(districtId, this.accessToken).subscribe((response) => {
       if (response.status === 'success') {
 
-        if(field == 'address'){
+        if (field === 'address') {
           this.talukas = response.data;
-
-        }else{
+        } else {
           this.work_talukas = response.data;
-
+          console.log('work_talukas', this.work_talukas);
         }
-        // console.log(this.talukas);
       }
     }, error => console.log(error));
   }
@@ -213,8 +232,6 @@ export class RegistrationsPage implements OnInit {
 
   onSelect(selectedVal: string) {
     this.interested.push(selectedVal);
-
-
   }
 
   async selectImageSource(fileName: string) {
@@ -251,18 +268,11 @@ export class RegistrationsPage implements OnInit {
         text: 'Choose a File',
         icon: 'attach',
         handler: () => {
-          this.registrationService.selectFile().then(uri => {
-
-            this.filePath.resolveNativePath(uri)
-              .then(async (filePath) => {
-                this.updatedocumentLink(fileName, filePath);
-                this.registrationService.makeFileIntoBlob(filePath,fileName).then((blob) => {
-                  const blobFile = blob;
-                  console.log(blobFile);
-                });
-              })
-              .catch(err => console.log(err));
-          });
+          this.registrationService.selectFile()
+            .then(uri => {
+              this.makeBlobFromURI(uri, fileName);
+            })
+            .catch(err => console.log(err));
         }
       });
     }
@@ -330,33 +340,30 @@ export class RegistrationsPage implements OnInit {
 
   // Used for browser direct file upload
   uploadFile(event: Event, fieldName) {
-
-    const file: File = (event.target as HTMLInputElement).files[0];
-
-
+    const file = (event.target as HTMLInputElement).files[0];
     const fr = new FileReader();
     fr.onload = () => {
       const dataUrl = fr.result.toString();
 
 
-      if (fieldName == 'gst_certificate') {
+      if (fieldName === 'gst_certificate') {
         this.imageUrl = dataUrl;
       }
 
 
 
-      if (fieldName == 'reg_certificate') {
+      if (fieldName === 'reg_certificate') {
         this.RegimageUrl = dataUrl;
       }
 
 
 
-      if (fieldName == 'pan_card') {
+      if (fieldName === 'pan_card') {
         this.PanimageUrl = dataUrl;
       }
 
 
-      if (fieldName == 'adhaar_file') {
+      if (fieldName === 'adhaar_file') {
         this.AdhaarimageUrl = dataUrl;
       }
 
@@ -365,7 +372,7 @@ export class RegistrationsPage implements OnInit {
       });
     };
 
-    fr.readAsDataURL(file);
+    // fr.readAsDataURL(file);
 
   }
 
@@ -395,19 +402,19 @@ export class RegistrationsPage implements OnInit {
   onSubmit(form: NgForm) {
 
     //  console.log(form.value); return false;
-    let postData = {
-      'name': form.value.uname,
-      'company': form.value.company,
-      'area_of_interest': this.interested,
-      'address': form.value.address,
-      'state': form.value.state,
-      'district': form.value.district,
-      'taluka': form.value.taluka,
-      'gst_num': form.value.gst_num,
-      'reg_num': form.value.reg_num,
-      'pan_num': form.value.pan_num,
-      'adhaar_num': form.value.adhaar_num,
-      'user_id': this.userId,
+    const postData = {
+      name: form.value.uname,
+      company: form.value.company,
+      area_of_interest: this.interested,
+      address: form.value.address,
+      state: form.value.state,
+      district: form.value.district,
+      taluka: form.value.taluka,
+      gst_num: form.value.gst_num,
+      reg_num: form.value.reg_num,
+      pan_num: form.value.pan_num,
+      adhaar_num: form.value.adhaar_num,
+      user_id: this.userId,
 
     };
 
@@ -444,17 +451,49 @@ export class RegistrationsPage implements OnInit {
   //   // POST formData to server using HttpClient
   // }
 
-  checkLocationInputs(){
-    if(this.stateValue === null || this.districtValue === null || this.talukaValue === null){return true; }
-    else{ return false; }
+  checkLocationInputs() {
+    if (this.stateValue === null || this.districtValue === null || this.talukaValue === null) {
+      return true;
+    }
+    else if (this.districtValue.length === 0 || this.talukaValue.length === 0) { return true; }
+    else { return false; }
   }
-
+  makeBlobFromURI(uri, fieldName) {
+    let fileName;
+    // resolve path, get buffer, create blob
+    this.filePath
+      .resolveNativePath(uri)
+      .then(async (resolvedPath) => {
+        console.log('path', resolvedPath);
+        const pathSplit = resolvedPath.split('/');
+        fileName = pathSplit[pathSplit.length - 1];
+        const dirPath = 'file:///storage/emulated/0/' + pathSplit.splice(pathSplit.length - 2, 1) + '/';
+        console.log('fileName', fileName);
+        console.log('dirPath', dirPath);
+        this.updatedocumentLink(fieldName, fileName);
+        const readDocument = async () => {
+          const contents = await Filesystem.readFile({
+            path: resolvedPath,
+            encoding: Encoding.UTF8,
+          });
+          console.log('File read results', contents);
+          const imgblob = new Blob([contents.data]); //create blob
+          console.log(imgblob);
+          // upload blob
+          this.registrationService.uploadImage(imgblob, fieldName, this.userId, this.accessToken)
+            .subscribe(data => {
+              console.log('uploaded',data);
+            }, error => console.log('upload error', error));
+        };
+        readDocument().catch(error => console.log('File read error', error));
+      }).catch(error => console.log('path resolve error', error));
+  }
 
   private showAlert(message: string) {
     this.alertCtrl
       .create({
         header: 'Alert Message',
-        message: message,
+        message,
         buttons: [{
           text: 'Okey',
           handler: () => {
@@ -465,18 +504,4 @@ export class RegistrationsPage implements OnInit {
       })
       .then(alertEl => alertEl.present());
   }
-
-
-  // async showPreview(iamge: string){
-  //   const modal = await this.modalController.create({
-  //     component: ImageModalPage,
-  //     cssClass: 'transparent-modal',
-  //     componentProps: {
-  //       img
-  //     }
-  //   });
-  //   modal.present();
-
-  // }
-
 }
