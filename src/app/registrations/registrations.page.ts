@@ -9,6 +9,7 @@ import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 import { AuthService } from '../services/auth.service';
 import { FilePath } from '@ionic-native/file-path/ngx';
 import { File } from '@ionic-native/file/ngx';
+import { Filesystem, Directory, Encoding } from '@capacitor/filesystem';
 
 export interface imgFile {
   name: string;
@@ -73,9 +74,7 @@ export class RegistrationsPage implements OnInit {
   ) { }
 
 
-  compareWithFn = (o1, o2) => {
-    return o1 && o2 ? o1.id === o2.id : o1 === o2;
-  };
+  compareWithFn = (o1, o2) => o1 && o2 ? o1.id === o2.id : o1 === o2;
 
 
   ngOnInit() {
@@ -269,10 +268,11 @@ export class RegistrationsPage implements OnInit {
         text: 'Choose a File',
         icon: 'attach',
         handler: () => {
-          this.registrationService.selectFile().then(uri => {
-            this.makeBlobFromURI(uri,fileName);
-          })
-          .catch(err => console.log(err));
+          this.registrationService.selectFile()
+            .then(uri => {
+              this.makeBlobFromURI(uri, fileName);
+            })
+            .catch(err => console.log(err));
         }
       });
     }
@@ -402,19 +402,19 @@ export class RegistrationsPage implements OnInit {
   onSubmit(form: NgForm) {
 
     //  console.log(form.value); return false;
-    let postData = {
-      'name': form.value.uname,
-      'company': form.value.company,
-      'area_of_interest': this.interested,
-      'address': form.value.address,
-      'state': form.value.state,
-      'district': form.value.district,
-      'taluka': form.value.taluka,
-      'gst_num': form.value.gst_num,
-      'reg_num': form.value.reg_num,
-      'pan_num': form.value.pan_num,
-      'adhaar_num': form.value.adhaar_num,
-      'user_id': this.userId,
+    const postData = {
+      name: form.value.uname,
+      company: form.value.company,
+      area_of_interest: this.interested,
+      address: form.value.address,
+      state: form.value.state,
+      district: form.value.district,
+      taluka: form.value.taluka,
+      gst_num: form.value.gst_num,
+      reg_num: form.value.reg_num,
+      pan_num: form.value.pan_num,
+      adhaar_num: form.value.adhaar_num,
+      user_id: this.userId,
 
     };
 
@@ -458,7 +458,7 @@ export class RegistrationsPage implements OnInit {
     else if (this.districtValue.length === 0 || this.talukaValue.length === 0) { return true; }
     else { return false; }
   }
-  makeBlobFromURI(uri,fieldName){
+  makeBlobFromURI(uri, fieldName) {
     let fileName;
     // resolve path, get buffer, create blob
     this.filePath
@@ -470,20 +470,22 @@ export class RegistrationsPage implements OnInit {
         const dirPath = 'file:///storage/emulated/0/' + pathSplit.splice(pathSplit.length - 2, 1) + '/';
         console.log('fileName', fileName);
         console.log('dirPath', dirPath);
-        this.updatedocumentLink(fieldName,fileName);
-       await this.file.readAsArrayBuffer(dirPath, fileName)
-        .then((buffer) => {
-          console.log('buffer', buffer);
-          const imgBlob = new Blob([buffer], {
-            type: 'image/jpeg'
+        this.updatedocumentLink(fieldName, fileName);
+        const readDocument = async () => {
+          const contents = await Filesystem.readFile({
+            path: resolvedPath,
+            encoding: Encoding.UTF8,
           });
-          console.log(imgBlob);
+          console.log('File read results', contents);
+          const imgblob = new Blob([contents.data]); //create blob
+          console.log(imgblob);
           // upload blob
-          this.registrationService.uploadImage(imgBlob,fieldName,this.userId, this.accessToken)
-          .subscribe(data => {
-            console.log(data);
-          }, error => console.log('upload error', error));
-        }).catch(error => console.log('file read error', error));
+          this.registrationService.uploadImage(imgblob, fieldName, this.userId, this.accessToken)
+            .subscribe(data => {
+              console.log('uploaded',data);
+            }, error => console.log('upload error', error));
+        };
+        readDocument().catch(error => console.log('File read error', error));
       }).catch(error => console.log('path resolve error', error));
   }
 
@@ -491,7 +493,7 @@ export class RegistrationsPage implements OnInit {
     this.alertCtrl
       .create({
         header: 'Alert Message',
-        message: message,
+        message,
         buttons: [{
           text: 'Okey',
           handler: () => {

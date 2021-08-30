@@ -10,7 +10,7 @@ import { InvoiceService } from '../services/invoice.service';
 import { RegistrationService } from '../services/registration.service';
 import { StorageService } from '../services/storage.service';
 import { ApiImage, TendersService } from '../services/tenders.service';
-
+import { Filesystem, Encoding } from '@capacitor/filesystem';
 @Component({
   selector: 'app-invoice',
   templateUrl: './invoice.page.html',
@@ -174,7 +174,7 @@ export class InvoicePage implements OnInit {
     });
   }
 
-  makeBlobFromURI(uri,fieldName){
+  makeBlobFromURI(uri, fieldName) {
     let fileName;
     // resolve path, get buffer, create blob
     this.filePath
@@ -186,20 +186,22 @@ export class InvoicePage implements OnInit {
         const dirPath = 'file:///storage/emulated/0/' + pathSplit.splice(pathSplit.length - 2, 1) + '/';
         console.log('fileName', fileName);
         console.log('dirPath', dirPath);
-       await this.file.readAsArrayBuffer(dirPath, fileName)
-        .then((buffer) => {
-          console.log('buffer', buffer);
-          const imgBlob = new Blob([buffer], {
-            type: 'image/jpeg'
+        const readDocument = async () => {
+          const contents = await Filesystem.readFile({
+            path: resolvedPath,
+            encoding: Encoding.UTF8,
           });
-          console.log(imgBlob);
+          console.log('File read results', contents);
+          const imgblob = new Blob([contents.data]); //create blob
+          console.log(imgblob);
           // upload blob
-          this.registrationService.uploadImage(imgBlob,fieldName,this.userId, this.accessToken)
-          .subscribe(data => {
-            console.log(data);
-          }, error => console.log('upload error', error));
-        }).catch(error => console.log('file read error', error));
-      }).catch(error => console.log('pathh resolve error', error));
+          this.registrationService.uploadImage(imgblob, fieldName, this.userId, this.accessToken)
+            .subscribe(data => {
+              console.log('uploaded',data);
+            }, error => console.log('upload error', error));
+        };
+        readDocument().catch(error => console.log('File read error', error));
+      }).catch(error => console.log('path resolve error', error));
   }
 
 
