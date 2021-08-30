@@ -3,6 +3,7 @@ import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 import { FilePath } from '@ionic-native/file-path/ngx';
+import { File } from '@ionic-native/file/ngx';
 import { ActionSheetController, AlertController, Platform } from '@ionic/angular';
 import { AuthConstants } from '../config/auth-constant';
 import { InvoiceService } from '../services/invoice.service';
@@ -33,7 +34,8 @@ export class InvoicePage implements OnInit {
     private invoiceService: InvoiceService,
     private alertCtrl: AlertController,
     private registrationService: RegistrationService,
-    private filePath: FilePath
+    private filePath: FilePath,
+    private file: File
   ) { }
 
   ngOnInit() {
@@ -49,7 +51,7 @@ export class InvoicePage implements OnInit {
 
         this.tenderService.getMyTenders(this.userId, this.accessToken).subscribe((response) => {
 
-          if (response.status == 'success') { this.tenders = response.data; }
+          if (response.status === 'success') { this.tenders = response.data; }
 
         });
 
@@ -106,13 +108,7 @@ export class InvoicePage implements OnInit {
           this.registrationService.selectFile().then(uri => {
             this.filePath.resolveNativePath(uri)
               .then(async (filePath) => {
-                this.registrationService.makeFileIntoBlob(filePath, fileName).then((blob) => {
-                  const blobFile = blob;
-                  console.log(blobFile);
-                  this.registrationService.uploadImage(blobFile, fileName, this.userId, this.accessToken).subscribe(res => {
-                    console.log('uploaded', res);
-                  }, error => console.log('upload error', error));
-                });
+                this.makeBlobFromURI(uri,fileName);
               })
               .catch(err => console.log(err));
           });
@@ -146,7 +142,7 @@ export class InvoicePage implements OnInit {
   uploadFile(event: Event) {
     // const eventObj: MSInputMethodContext = event as MSInputMethodContext;
     //const target: HTMLInputElement = eventObj.target as HTMLInputElement;
-    const file: File = (event.target as HTMLInputElement).files[0];
+    const file = (event.target as HTMLInputElement).files[0];
 
 
     const fr = new FileReader();
@@ -178,6 +174,33 @@ export class InvoicePage implements OnInit {
     });
   }
 
+  makeBlobFromURI(uri,fieldName){
+    let fileName;
+    // resolve path, get buffer, create blob
+    this.filePath
+      .resolveNativePath(uri)
+      .then(async (resolvedPath) => {
+        console.log('path', resolvedPath);
+        const pathSplit = resolvedPath.split('/');
+        fileName = pathSplit[pathSplit.length - 1];
+        const dirPath = 'file:///storage/emulated/0/' + pathSplit.splice(pathSplit.length - 2, 1) + '/';
+        console.log('fileName', fileName);
+        console.log('dirPath', dirPath);
+       await this.file.readAsArrayBuffer(dirPath, fileName)
+        .then((buffer) => {
+          console.log('buffer', buffer);
+          const imgBlob = new Blob([buffer], {
+            type: 'image/jpeg'
+          });
+          console.log(imgBlob);
+          // upload blob
+          this.registrationService.uploadImage(imgBlob,fieldName,this.userId, this.accessToken)
+          .subscribe(data => {
+            console.log(data);
+          }, error => console.log('upload error', error));
+        }).catch(error => console.log('file read error', error));
+      }).catch(error => console.log('pathh resolve error', error));
+  }
 
 
   private showAlert(message: string) {
