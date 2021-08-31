@@ -34,6 +34,10 @@ export class ReportsPage implements OnInit {
 
       if(res){
 
+        if(res.status == 2 ) {
+          this.router.navigate(['registration']);
+
+        }
         this.accessToken = res.token;
         this.userId = res.id;
 

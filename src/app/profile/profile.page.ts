@@ -18,6 +18,7 @@ export class ProfilePage implements OnInit {
   user : any;
   isLoading = false;
   area_of_interest: string;
+  work_location: any;
 
   photo: SafeResourceUrl;
   constructor(
@@ -52,11 +53,12 @@ export class ProfilePage implements OnInit {
       }
 
        this.area_of_interest = JSON.parse(this.user.area_of_interest).join(', ');
+       this.work_location = JSON.parse(this.user.preferred_location);
 
 
 
 
-      // console.log(area_of_interest);
+      //  console.log(this.work_location);
 
     });
       }else{

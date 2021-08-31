@@ -26,11 +26,11 @@ export class TendersPage implements OnInit {
     this.isLoading = true;
 
     this.storageService.get(AuthConstants.AUTH).then(res => {
-      //console.log(res);
-
+      // console.log(res);
       if(res){
+        // console.log(res.status);
 
-        if(res.status == 2) {
+        if(res.status == 2 ) {
           this.router.navigate(['registration']);
 
         }

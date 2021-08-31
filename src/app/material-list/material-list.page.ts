@@ -28,6 +28,12 @@ export class MaterialListPage implements OnInit {
       // console.log(res.name);
 
       if(res){
+
+        if(res.status == 2) {
+          this.router.navigate(['registration']);
+  
+        }
+        
         this.accessToken = res.token;
         this.userId = res.id;
 

@@ -24,20 +24,20 @@ export class AuthPage implements OnInit {
 
 
   ngOnInit() {
-  }
-
-    ionViewWillEnter() {
+    this.isLoading = true;
 
     this.storageService.get(AuthConstants.AUTH).then(res => {
       // console.log(res.name);
 
       if(res){
-
         this.router.navigate(['home']);
       }else{
       }
+      this.isLoading = false;
+
     });
   }
+
 
 
   authenticate(email: string, password: string) {

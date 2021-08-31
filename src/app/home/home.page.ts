@@ -15,6 +15,12 @@ export class HomePage {
   accessToken: any;
   isLoading = true;
 
+  tenderPath: string = 'tenders';
+  myTenderPath: string = 'my-tenders';
+  reportsPath: string = 'reports';
+  requestPath: string = 'material-request-list';
+  invoicePath: string = 'invoice';
+
   public slideOpts = {
     on: {
       beforeInit() {
@@ -83,19 +89,24 @@ export class HomePage {
   ngOnInit() {
 
     // this.slides.startAutoplay();
-
+    this.isLoading = true;
 
     this.storageService.get(AuthConstants.AUTH).then(res => {
       //  console.log(res.status);
 
       if(res){
-        this.isLoading = false;
         this.userId = res.id;
         this.accessToken = res.token;
         this.userStatus = res.status;
+
+        if(res.status == 2){
+          this.tenderPath = this.myTenderPath = this.invoicePath = this.reportsPath = this.requestPath = 'registration';
+        }
       }else{
         this.router.navigate(['auth']);
       }
+
+      this.isLoading = false;
     });
   }
 

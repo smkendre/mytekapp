@@ -49,6 +49,9 @@ export class RegistrationsPage implements OnInit {
   addr: string;
   area_of_interest: [];
   stateValue = '';
+  addstateValue = '';
+  adddistrictValue = [];
+  addtalukaValue = [];
   districtValue = [];
   talukaValue = [];
   gst_num: string;
@@ -157,18 +160,26 @@ export class RegistrationsPage implements OnInit {
         this.uname = response.data.name;
         this.cname = response.data.cname;
         this.addr = response.data.addr;
-        this.area_of_interest = this.interested = JSON.parse(response.data.area_of_interest);
-        this.stateValue = response.data.state;
+        this.area_of_interest = JSON.parse(response.data.area_of_interest);
+        // console.log('area of interest: ' + this.area_of_interest);
 
-        this.districtValue = response.data.district;
-        this.talukaValue = response.data.taluka;
+        if(Array.isArray(this.area_of_interest)){
+        //  console.log('area of interest: ' + this.area_of_interest);
+          this.interested = JSON.parse(response.data.area_of_interest);
+        }
+        this.addstateValue = this.stateValue = response.data.state;
+
+        this.adddistrictValue = response.data.district;
+        this.addtalukaValue = response.data.taluka;
         this.gst_num = response.data.gst_num;
         this.reg_num = response.data.reg_num;
         this.pan_num = response.data.pan_num;
         this.adhaar_num = response.data.adhaar_num;
 
-        this.workLocations = response.data.locations;
+        if(Array.isArray(this.area_of_interest)){
 
+        this.workLocations = JSON.parse(response.data.preferred_location);
+        }
 
       }
 
@@ -202,7 +213,7 @@ export class RegistrationsPage implements OnInit {
           this.districts = response.data;
         } else {
           this.work_districts = response.data;
-          console.log(this.work_districts);
+      //    console.log(this.work_districts);
         }
 
       }
@@ -219,7 +230,7 @@ export class RegistrationsPage implements OnInit {
           this.talukas = response.data;
         } else {
           this.work_talukas = response.data;
-          console.log('work_talukas', this.work_talukas);
+         // console.log('work_talukas', this.work_talukas);
         }
       }
     }, error => console.log(error));
@@ -231,6 +242,7 @@ export class RegistrationsPage implements OnInit {
   }
 
   onSelect(selectedVal: string) {
+    console.log(selectedVal);
     this.interested.push(selectedVal);
   }
 
@@ -411,6 +423,7 @@ export class RegistrationsPage implements OnInit {
       district: form.value.district,
       taluka: form.value.taluka,
       gst_num: form.value.gst_num,
+      work_locations: this.workLocations,
       reg_num: form.value.reg_num,
       pan_num: form.value.pan_num,
       adhaar_num: form.value.adhaar_num,

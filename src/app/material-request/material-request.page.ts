@@ -36,13 +36,17 @@ export class MaterialRequestPage implements OnInit {
     this.isLoading = true;
 
     this.storageService.get(AuthConstants.AUTH).then(res => {
-      // console.log(res.name);
+      console.log(res);
 
-      if(res.status == 2) {
-        this.router.navigate(['registration']);
-
-      }
+    
       if(res){
+
+        if(res.status == 2) {
+          this.router.navigate(['registration']);
+  
+        }
+
+        
         this.accessToken = res.token;
         this.userId = res.id;
 

@@ -44,16 +44,25 @@ Edit            </ion-button>
             <ion-label>Name: </ion-label>{{user.name}}
           </ion-col>
           <ion-col size="12" class="ion-no-padding">
+            <ion-label>Email Address: </ion-label>{{user.email}}
+          </ion-col>
+          <ion-col size="12" class="ion-no-padding">
+            <ion-label>Phone Number: </ion-label>{{user.phone}}
+          </ion-col>
+          <ion-col size="12" class="ion-no-padding">
             <ion-label>Company Name: </ion-label>{{user.cname}}
           </ion-col>
           <ion-col size="12" class="ion-no-padding">
             <ion-label>Address: </ion-label>{{user.addr}}
           </ion-col>
           <ion-col size="12" class="ion-no-padding">
-            <ion-label>Area of Interest: </ion-label>{{this.area_of_interest}}
+            <ion-label>Location: </ion-label>{{user.state_title}} {{user.district_title}}, {{user.city}} {{user.pincode}}
           </ion-col>
           <ion-col size="12" class="ion-no-padding">
-            <ion-label>Location: </ion-label>{{user.state_title}} {{user.district_title}}, {{user.city}}
+            <ion-label>Area of Interest: </ion-label>{{area_of_interest}}
+          </ion-col>
+          <ion-col size="12" class="ion-no-padding">
+            <ion-label>Preferred Work Location: </ion-label>{{work_location}}
           </ion-col>
           <ion-col size="12" class="ion-no-padding">
             <ion-label>GST No.: </ion-label>{{user.gst_num}}

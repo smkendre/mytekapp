@@ -49,20 +49,20 @@
               </ion-col>
 
               <ion-col size="12" class="ion-no-padding">
-                <ion-select [(ngModel)]="stateValue" name="state" (ionChange)="onStateChange($event, 'address')">
+                <ion-select [(ngModel)]="addstateValue" name="state" (ionChange)="onStateChange($event, 'address')">
                   <ion-select-option value="">Select State</ion-select-option>
                   <ion-select-option *ngFor="let state of states" [value]="state.id">{{state.name}}</ion-select-option>
                 </ion-select>
               </ion-col>
               <ion-col size="12" class="ion-no-padding">
-                <ion-select [(ngModel)]="districtValue" name="district" (ionChange)="onDistrictChange($event, 'address')">
+                <ion-select [(ngModel)]="adddistrictValue" name="district" (ionChange)="onDistrictChange($event, 'address')">
                   <ion-select-option value="">Select District</ion-select-option>
                   <ion-select-option *ngFor="let dis of districts" [value]="dis.id">{{dis.name}}</ion-select-option>
 
                 </ion-select>
               </ion-col>
               <ion-col size="12" class="ion-no-padding">
-                <ion-select [(ngModel)]="talukaValue" name="taluka">
+                <ion-select [(ngModel)]="addtalukaValue" name="taluka">
                   <ion-select-option value="">Select Taluka</ion-select-option>
                   <ion-select-option *ngFor="let city of talukas" [value]="city.id">{{city.name}}</ion-select-option>
                 </ion-select>
@@ -80,7 +80,7 @@
             <ion-row>
               <ion-col size="6" *ngFor="let item of areaOfInterst ">
                 <ion-checkbox name="area_of_interst[]"
-                  value="{{item.name}}" (click)="onSelect(item.name)"></ion-checkbox>
+                  value="{{item.name}}" [checked]="area_of_interest != null && area_of_interest.indexOf(item.name) >= 0"  (click)="onSelect(item.name)"></ion-checkbox>
                 <ion-label> {{item.name}}</ion-label>
 
               </ion-col>
@@ -103,7 +103,7 @@
           </div>
           <h2>Preferred work location</h2>
           <br>
-          <ion-row *ngIf="workLocations.length > 0">
+          <ion-row *ngIf="workLocations != null && workLocations.length > 0">
             <ion-card *ngFor="let item of workLocations;let i=index" class="location-card">
               <ion-card-header>
                 <ion-icon color="primary" name="location-outline"></ion-icon>&nbsp;

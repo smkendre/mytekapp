@@ -147,3 +147,10 @@ ion-footer::before{
 ion-footer ion-button{
   margin: 0;
 }
+.spinnerWrapper{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+
+}
