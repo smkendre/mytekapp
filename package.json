@@ -42,6 +42,7 @@
     "@ionic-native/file-opener": "^5.36.0",
     "@ionic-native/file-path": "^5.36.0",
     "@ionic-native/file-transfer": "^5.36.0",
+    "@ionic-native/preview-any-file": "^5.36.0",
     "@ionic/angular": "^5.5.2",
     "@ionic/pwa-elements": "^3.0.2",
     "@ionic/storage-angular": "^3.0.6",

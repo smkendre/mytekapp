@@ -5,7 +5,8 @@
 export const environment = {
   production: false,
  // apiUrl: 'http://localhost:8888/mytek/php-api/public/api/'
-   apiUrl: 'https://api.mytekinnovations.com/api/'
+   apiUrl: 'https://api.mytekinnovations.com/api/',
+   liveUrl: 'https://admin.mytekinnovations.com/'
 
 };
 

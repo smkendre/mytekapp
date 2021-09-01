@@ -67,6 +67,9 @@
                   <ion-select-option *ngFor="let city of talukas" [value]="city.id">{{city.name}}</ion-select-option>
                 </ion-select>
               </ion-col>
+              <ion-col size="12" class="ion-no-padding">
+                <ion-input type="text" [(ngModel)]="pincode" name="pincode" placeholder="Pincode Number"></ion-input>
+              </ion-col>
 
 
             </ion-row>

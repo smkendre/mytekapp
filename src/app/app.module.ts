@@ -20,13 +20,14 @@ import { FilePath } from '@ionic-native/file-path/ngx';
 import { File } from '@ionic-native/file/ngx';
 import { IonicStorageModule } from '@ionic/storage-angular';
 import { FileTransfer } from '@ionic-native/file-transfer/ngx';
+import { FileOpener } from '@ionic-native/file-opener/ngx';
 
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
   imports: [BrowserModule, IonicModule.forRoot(), IonicStorageModule.forRoot(),    AppRoutingModule, FontAwesomeModule, HttpClientModule,
   FormsModule, ReactiveFormsModule],
-  providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }, CallNumber , FileChooser, FilePath, File , FileTransfer
+  providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }, CallNumber , FileChooser, FilePath, File , FileTransfer, FileOpener
 ],
   bootstrap: [AppComponent],
 })

@@ -10,6 +10,7 @@ import { AuthService } from '../services/auth.service';
 import { FilePath } from '@ionic-native/file-path/ngx';
 import { File } from '@ionic-native/file/ngx';
 import { Filesystem, Directory, Encoding } from '@capacitor/filesystem';
+import { environment } from 'src/environments/environment';
 
 export interface imgFile {
   name: string;
@@ -57,6 +58,7 @@ export class RegistrationsPage implements OnInit {
   gst_num: string;
   reg_num: string;
   pan_num: string;
+  pincode: string;
   adhaar_num: string;
   compareWith: any;
   // toggle.contact = false;
@@ -159,6 +161,7 @@ export class RegistrationsPage implements OnInit {
 
         this.uname = response.data.name;
         this.cname = response.data.cname;
+        this.pincode = response.data.pincode;
         this.addr = response.data.addr;
         this.area_of_interest = JSON.parse(response.data.area_of_interest);
         // console.log('area of interest: ' + this.area_of_interest);
@@ -176,10 +179,28 @@ export class RegistrationsPage implements OnInit {
         this.pan_num = response.data.pan_num;
         this.adhaar_num = response.data.adhaar_num;
 
-        if(Array.isArray(this.area_of_interest)){
+        if(Array.isArray(this.workLocations)){
 
         this.workLocations = JSON.parse(response.data.preferred_location);
         }
+
+        if (this.user.gst_certificate &&  this.user.gst_certificate.length > 0) {
+          this.imageUrl = this.getImageUrl(this.user.gst_certificate);
+        }
+
+        if (this.user.reg_certificate &&  this.user.reg_certificate.length > 0) {
+          this.RegimageUrl = this.getImageUrl(this.user.reg_certificate);
+        }
+
+
+        if (this.user.pan_card &&  this.user.pan_card.length > 0) {
+          this.PanimageUrl = this.getImageUrl(this.user.pan_card);
+        }
+
+        if (this.user.adhaar_file &&  this.user.adhaar_file.length > 0) {
+          this.AdhaarimageUrl = this.getImageUrl(this.user.adhaar_file);
+        }
+
 
       }
 
@@ -203,6 +224,13 @@ export class RegistrationsPage implements OnInit {
   }
 
 
+  getImageUrl(url: string){
+    if(url.indexOf('documents') >=  0 ){
+      return environment.liveUrl+url;;
+    } else {
+      return 'data:image/jpg;base64,'+ url;
+    }
+  }
 
   onStateChange(event: any, field) {
     const stateID = event.target.value;
@@ -427,6 +455,7 @@ export class RegistrationsPage implements OnInit {
       reg_num: form.value.reg_num,
       pan_num: form.value.pan_num,
       adhaar_num: form.value.adhaar_num,
+      pincode: form.value.pincode,
       user_id: this.userId,
 
     };

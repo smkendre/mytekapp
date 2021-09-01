@@ -11,13 +11,14 @@
 
     </ion-col>
   </ion-row>
+
   <ion-grid  *ngIf="!isLoading && (user | keyvalue)?.length">
 
     <ion-card class="transparent-card">
       <ion-card-content>
         <ion-row class="ion-text-center">
           <ion-col size="10" size-sm="10">
-            <h1>Profile</h1>
+            <!-- <h1>Profile</h1> -->
         </ion-col>
         <ion-col size="2" size-sm="2">
             <ion-button
@@ -62,19 +63,54 @@ Edit            </ion-button>
             <ion-label>Area of Interest: </ion-label>{{area_of_interest}}
           </ion-col>
           <ion-col size="12" class="ion-no-padding">
-            <ion-label>Preferred Work Location: </ion-label>{{work_location}}
+            <ion-label>Preferred Work Location: </ion-label>
+            <ion-row *ngIf="work_location != null && work_location.length > 0">
+              <ion-card *ngFor="let item of work_location;let i=index" class="location-card">
+                <ion-card-header>
+                  <ion-icon color="primary" name="location-outline"></ion-icon>&nbsp;
+                  <ion-label>{{item.state}}</ion-label>
+                </ion-card-header>
+                <ion-card-content>
+                  <span>Districts:&nbsp;</span>
+                  <ion-label *ngFor="let dist of item.district"> {{dist}},&nbsp;</ion-label><br>
+                  <span>Talukas:&nbsp;</span>
+                  <ion-label *ngFor="let tal of item.taluka">{{tal}},&nbsp;</ion-label><br>
+                </ion-card-content>
+              </ion-card>
+            </ion-row>
           </ion-col>
           <ion-col size="12" class="ion-no-padding">
             <ion-label>GST No.: </ion-label>{{user.gst_num}}
+
+            <div *ngIf="user.gst_certificate  && user.gst_certificate.length > 0">
+              <img [src]="getImageUrl(user.gst_certificate)" height="30px" alt="" />
+
+              <!-- <ion-button color="primary" (click)="previewFile(user.gst_certificate)">Preview</ion-button> -->
+            </div>
           </ion-col>
           <ion-col size="12" class="ion-no-padding">
             <ion-label>Company Registration Number: </ion-label>{{user.reg_num}}
+            <div *ngIf="user.reg_certificate && user.reg_certificate.length > 0">
+              <!-- <ion-button color="primary" (click)="previewFile(user.reg_certificate)">Preview</ion-button> -->
+              <img [src]="getImageUrl(user.reg_certificate)" height="30px" alt="" />
+
+            </div>
           </ion-col>
           <ion-col size="12" class="ion-no-padding">
             <ion-label>Pan Card Number: </ion-label>{{user.pan_num}}
+            <div *ngIf="user.pan_card && user.pan_card.length > 0">
+              <!-- <ion-button color="primary" (click)="previewFile(user.pan_card)">Preview</ion-button> -->
+
+              <img [src]="getImageUrl(user.pan_card)" height="30px" alt="" />
+            </div>
           </ion-col>
           <ion-col size="12" class="ion-no-padding">
             <ion-label>Adhaar Card Number: </ion-label>{{user.adhaar_num}}
+            <div *ngIf="user.adhaar_file  && user.adhaar_file.length > 0">
+              <img [src]="getImageUrl(user.adhaar_file)" height="30px" alt="" />
+
+              <!-- <ion-button color="primary" (click)="previewFile(user.adhaar_file)">Preview</ion-button> -->
+            </div>
           </ion-col>
         </ion-row>
 
@@ -85,12 +121,16 @@ Edit            </ion-button>
 
 
   </ion-grid>
-  <!-- <img [src]="photo">
 
-  <ion-fab vertical="bottom" horizontal="center" slot="fixed">
-    <ion-fab-button (click)="takePicture()">
-      <ion-icon name="camera"></ion-icon>
+  <ion-fab vertical="top" horizontal="center" slot="fixed" >
+    <input type="file" #fileInput (change)="uploadFile($event, 'profile_img')" hidden="true"
+    accept="image/*" />
+    <ion-fab-button (click)="selectImageSource('profile_img')">
+
+      <ion-icon name="camera" *ngIf="!profileImg"></ion-icon>
+      <img [src]="profileImg"  *ngIf="profileImg">
+
     </ion-fab-button>
-  </ion-fab> -->
+  </ion-fab>
 </ion-content>
 <app-footer></app-footer>
