@@ -1,7 +1,7 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
-import { ActionSheetController, AlertController, Platform } from '@ionic/angular';
+import { ActionSheetController, AlertController, Platform, ToastController } from '@ionic/angular';
 import { AuthConstants } from '../config/auth-constant';
 import { RegistrationService, ApiImage } from '../services/registration.service';
 import { StorageService } from '../services/storage.service';
@@ -74,7 +74,7 @@ export class RegistrationsPage implements OnInit {
     private platform: Platform,
     private authService: AuthService,
     private filePath: FilePath,
-    private file: File
+    private toaster: ToastController
 
   ) { }
 
@@ -521,14 +521,51 @@ export class RegistrationsPage implements OnInit {
           console.log('File read results', contents);
           const imgblob = new Blob([contents.data]); //create blob
           console.log(imgblob);
-          // upload blob
-          this.registrationService.uploadImage(imgblob, fieldName, this.userId, this.accessToken)
-            .subscribe(data => {
-              console.log('uploaded',data);
-            }, error => console.log('upload error', error));
+          // check blob size
+          if(imgblob.size > 5242880){
+            return this.toastMessage('Document should not exeed 5MB in sze');
+          };
+          const reader = new FileReader();
+          reader.readAsDataURL(imgblob);
+          reader.onloadend = () => {
+            console.log(reader.result);
+            console.log('b64 document', reader.result);
+            // upload blob
+            this.registrationService.uploadImage(reader.result, fieldName, this.userId, this.accessToken)
+              .subscribe(res => {
+                console.log('uploaded', res);
+              }, error => console.log('upload error', error));
+          };
+          // this.blobToBase64(imgblob).then(
+          //   data => {
+          //     console.log('b64 document', data);
+          //     // upload blob
+          //     this.registrationService.uploadImage(data, fieldName, this.userId, this.accessToken)
+          //       .subscribe(res => {
+          //         console.log('uploaded', res);
+          //       }, error => console.log('upload error', error));
+          //   }).catch(error => console.log('b4 error', error));
         };
         readDocument().catch(error => console.log('File read error', error));
       }).catch(error => console.log('path resolve error', error));
+  }
+  blobToBase64(blob) {
+    const reader = new FileReader();
+    reader.readAsDataURL(blob);
+    return new Promise(resolve => {
+      reader.onloadend = () => {
+        resolve(reader.result);
+        console.log(reader.result);
+      };
+    });
+  }
+  async toastMessage(msg: string){
+    const toast = await this.toaster.create({
+      message: msg,
+      duration: 3000,
+      position:'top'
+    });
+    await toast.present();
   }
 
   private showAlert(message: string) {
