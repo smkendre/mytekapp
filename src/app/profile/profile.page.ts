@@ -59,9 +59,9 @@ export class ProfilePage implements OnInit {
 
 
     this.authService.user_details({user_id: this.userId}, this.accessToken).subscribe(response => {
+      console.log(response);
 
-
-      if(response.status == 'success'){
+      if(response.status === 'success'){
         this.isLoading = false;
 
         this.user = response.data;

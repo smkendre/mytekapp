@@ -10,7 +10,6 @@ import { AuthService } from '../services/auth.service';
 import { FilePath } from '@ionic-native/file-path/ngx';
 import { File } from '@ionic-native/file/ngx';
 import { Filesystem, Directory, Encoding } from '@capacitor/filesystem';
-import { environment } from 'src/environments/environment';
 
 export interface imgFile {
   name: string;
@@ -50,15 +49,11 @@ export class RegistrationsPage implements OnInit {
   addr: string;
   area_of_interest: [];
   stateValue = '';
-  addstateValue = '';
-  adddistrictValue = [];
-  addtalukaValue = [];
   districtValue = [];
   talukaValue = [];
   gst_num: string;
   reg_num: string;
   pan_num: string;
-  pincode: string;
   adhaar_num: string;
   compareWith: any;
   // toggle.contact = false;
@@ -83,7 +78,6 @@ export class RegistrationsPage implements OnInit {
 
 
   ngOnInit() {
-
     this.isLoading = true;
 
     this.storageService.get(AuthConstants.AUTH).then(res => {
@@ -161,45 +155,18 @@ export class RegistrationsPage implements OnInit {
 
         this.uname = response.data.name;
         this.cname = response.data.cname;
-        this.pincode = response.data.pincode;
         this.addr = response.data.addr;
-        this.area_of_interest = JSON.parse(response.data.area_of_interest);
-        // console.log('area of interest: ' + this.area_of_interest);
+        this.area_of_interest = this.interested = JSON.parse(response.data.area_of_interest);
+        this.stateValue = response.data.state;
 
-        if(Array.isArray(this.area_of_interest)){
-        //  console.log('area of interest: ' + this.area_of_interest);
-          this.interested = JSON.parse(response.data.area_of_interest);
-        }
-        this.addstateValue = this.stateValue = response.data.state;
-
-        this.adddistrictValue = response.data.district;
-        this.addtalukaValue = response.data.taluka;
+        this.districtValue = response.data.district;
+        this.talukaValue = response.data.taluka;
         this.gst_num = response.data.gst_num;
         this.reg_num = response.data.reg_num;
         this.pan_num = response.data.pan_num;
         this.adhaar_num = response.data.adhaar_num;
 
-        if(Array.isArray(this.workLocations)){
-
-        this.workLocations = JSON.parse(response.data.preferred_location);
-        }
-
-        if (this.user.gst_certificate &&  this.user.gst_certificate.length > 0) {
-          this.imageUrl = this.getImageUrl(this.user.gst_certificate);
-        }
-
-        if (this.user.reg_certificate &&  this.user.reg_certificate.length > 0) {
-          this.RegimageUrl = this.getImageUrl(this.user.reg_certificate);
-        }
-
-
-        if (this.user.pan_card &&  this.user.pan_card.length > 0) {
-          this.PanimageUrl = this.getImageUrl(this.user.pan_card);
-        }
-
-        if (this.user.adhaar_file &&  this.user.adhaar_file.length > 0) {
-          this.AdhaarimageUrl = this.getImageUrl(this.user.adhaar_file);
-        }
+        this.workLocations = response.data.locations;
 
 
       }
@@ -224,13 +191,6 @@ export class RegistrationsPage implements OnInit {
   }
 
 
-  getImageUrl(url: string){
-    if(url.indexOf('documents') >=  0 ){
-      return environment.liveUrl+url;;
-    } else {
-      return 'data:image/jpg;base64,'+ url;
-    }
-  }
 
   onStateChange(event: any, field) {
     const stateID = event.target.value;
@@ -241,7 +201,7 @@ export class RegistrationsPage implements OnInit {
           this.districts = response.data;
         } else {
           this.work_districts = response.data;
-      //    console.log(this.work_districts);
+          console.log(this.work_districts);
         }
 
       }
@@ -258,7 +218,7 @@ export class RegistrationsPage implements OnInit {
           this.talukas = response.data;
         } else {
           this.work_talukas = response.data;
-         // console.log('work_talukas', this.work_talukas);
+          console.log('work_talukas', this.work_talukas);
         }
       }
     }, error => console.log(error));
@@ -270,7 +230,6 @@ export class RegistrationsPage implements OnInit {
   }
 
   onSelect(selectedVal: string) {
-    console.log(selectedVal);
     this.interested.push(selectedVal);
   }
 
@@ -451,11 +410,9 @@ export class RegistrationsPage implements OnInit {
       district: form.value.district,
       taluka: form.value.taluka,
       gst_num: form.value.gst_num,
-      work_locations: this.workLocations,
       reg_num: form.value.reg_num,
       pan_num: form.value.pan_num,
       adhaar_num: form.value.adhaar_num,
-      pincode: form.value.pincode,
       user_id: this.userId,
 
     };
@@ -516,48 +473,29 @@ export class RegistrationsPage implements OnInit {
         const readDocument = async () => {
           const contents = await Filesystem.readFile({
             path: resolvedPath,
-            encoding: Encoding.UTF8,
           });
-          console.log('File read results', contents);
+          console.log('File read results in base64String', contents);
           const imgblob = new Blob([contents.data]); //create blob
           console.log(imgblob);
-          // check blob size
+          // check blob size if larger than 5MB (5242880 Bytes == 5MB)
           if(imgblob.size > 5242880){
-            return this.toastMessage('Document should not exeed 5MB in sze');
+            this.toastMessage('Document should not exceed 5MB in size');
+            this.updatedocumentLink(fieldName, '');
+            return;
           };
-          const reader = new FileReader();
-          reader.readAsDataURL(imgblob);
-          reader.onloadend = () => {
-            console.log(reader.result);
-            console.log('b64 document', reader.result);
-            // upload blob
-            this.registrationService.uploadImage(reader.result, fieldName, this.userId, this.accessToken)
-              .subscribe(res => {
-                console.log('uploaded', res);
-              }, error => console.log('upload error', error));
-          };
-          // this.blobToBase64(imgblob).then(
-          //   data => {
-          //     console.log('b64 document', data);
-          //     // upload blob
-          //     this.registrationService.uploadImage(data, fieldName, this.userId, this.accessToken)
-          //       .subscribe(res => {
-          //         console.log('uploaded', res);
-          //       }, error => console.log('upload error', error));
-          //   }).catch(error => console.log('b4 error', error));
+          // upload base64String of the file read to server
+          // timer to check uploadtime ---( REMOVE IN PRODUCTION )
+          const t1 = performance.now();
+          console.warn('uploading document ---');
+          this.registrationService.uploadImage(contents, fieldName, this.userId, this.accessToken)
+          .subscribe(res => {
+            const t2 = performance.now();
+            console.warn(`Time taken to upload ${fieldName} document `,t2- t1 +' milliseconds');
+            console.log('uploaded', res);
+          }, error => console.log('upload error', error));
         };
         readDocument().catch(error => console.log('File read error', error));
       }).catch(error => console.log('path resolve error', error));
-  }
-  blobToBase64(blob) {
-    const reader = new FileReader();
-    reader.readAsDataURL(blob);
-    return new Promise(resolve => {
-      reader.onloadend = () => {
-        resolve(reader.result);
-        console.log(reader.result);
-      };
-    });
   }
   async toastMessage(msg: string){
     const toast = await this.toaster.create({

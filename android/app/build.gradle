@@ -5,7 +5,7 @@ android {
     defaultConfig {
         applicationId "mytekinnovations.app"
         minSdkVersion rootProject.ext.minSdkVersion
-        targetSdkVersion rootProject.ext.targetSdkVersion
+        targetSdkVersion targetSdkVersion
         versionCode 3
         versionName '1.0.2'
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
