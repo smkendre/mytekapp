@@ -15,6 +15,9 @@ export class HomePage {
   accessToken: any;
   isLoading = true;
 
+  userRole: any;
+
+
   tenderPath: string = 'tenders';
   myTenderPath: string = 'my-tenders';
   reportsPath: string = 'reports';
@@ -98,10 +101,13 @@ export class HomePage {
         this.userId = res.id;
         this.accessToken = res.token;
         this.userStatus = res.status;
+        this.userRole = res.role;
 
+        // console.log(this.userRole);
         if(res.status == 2){
           this.tenderPath = this.myTenderPath = this.invoicePath = this.reportsPath = this.requestPath = 'registration';
         }
+
       }else{
         this.router.navigate(['auth']);
       }

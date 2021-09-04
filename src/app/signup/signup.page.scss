@@ -44,13 +44,18 @@ ion-item{
   font-weight: 700;
 
 }
+
 .errorMsg{
   border: none;
   border-radius: 0;
   --background: transparent;
   font-size: 14px;
   color: red;
-  word-space: normal;
+}
+
+.errorMsg ion-label{
+  white-space: normal;
+
 }
 
 ion-grid{

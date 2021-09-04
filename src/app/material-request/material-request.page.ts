@@ -38,20 +38,20 @@ export class MaterialRequestPage implements OnInit {
     this.storageService.get(AuthConstants.AUTH).then(res => {
       console.log(res);
 
-    
+
       if(res){
 
         if(res.status == 2) {
           this.router.navigate(['registration']);
-  
+
         }
 
-        
+
         this.accessToken = res.token;
         this.userId = res.id;
 
 
-  this.tenderService.getMyTenders(this.userId, this.accessToken).subscribe((response) => {
+  this.tenderService.getMyTenders(this.userId, res.role, this.accessToken).subscribe((response) => {
 
     if(response.status == 'success')
     this.Tenders = response.data;
@@ -106,21 +106,21 @@ export class MaterialRequestPage implements OnInit {
   }
 
 
-  private showAlert(message: string) {
-    this.alertCtrl
-      .create({
-        header: 'Alert Message',
-        message: message,
-        buttons: [{
-          text: 'Okey',
-          handler: () => {
-            this.router.navigate(['material-request-list']);
+    private showAlert(message: string) {
+      this.alertCtrl
+        .create({
+          header: 'Alert Message',
+          message: message,
+          buttons: [{
+            text: 'Okey',
+            handler: () => {
+              this.router.navigate(['material-request-list']);
+            }
           }
-        }
-  ]
-      })
-      .then(alertEl => alertEl.present());
-  }
+    ]
+        })
+        .then(alertEl => alertEl.present());
+    }
 
 
 }

@@ -7,16 +7,16 @@ import { IonicModule } from '@ionic/angular';
 import { MilestonesPageRoutingModule } from './milestones-routing.module';
 
 import { MilestonesPage } from './milestones.page';
-import { HeaderComponent } from 'src/app/shared/header/header.component';
-import { FooterComponent } from 'src/app/shared/footer/footer.component';
+import { SharedModule } from 'src/app/shared/shared.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    MilestonesPageRoutingModule
+    MilestonesPageRoutingModule,
+    SharedModule
   ],
-  declarations: [MilestonesPage, HeaderComponent, FooterComponent]
+  declarations: [MilestonesPage]
 })
 export class MilestonesPageModule {}

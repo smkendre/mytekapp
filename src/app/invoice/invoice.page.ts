@@ -11,6 +11,7 @@ import { RegistrationService } from '../services/registration.service';
 import { StorageService } from '../services/storage.service';
 import { ApiImage, TendersService } from '../services/tenders.service';
 import { Filesystem, Encoding } from '@capacitor/filesystem';
+import { environment } from 'src/environments/environment';
 @Component({
   selector: 'app-invoice',
   templateUrl: './invoice.page.html',
@@ -23,6 +24,7 @@ export class InvoicePage implements OnInit {
   tenders: any;
   invoices: [];
   isLoading = true;
+  livePath: string = environment.liveUrl;
 
   @ViewChild('fileInput', { static: false }) fileInput: ElementRef;
   constructor(
@@ -54,7 +56,7 @@ export class InvoicePage implements OnInit {
         this.accessToken = res.token;
         this.userId = res.id;
 
-        this.tenderService.getMyTenders(this.userId, this.accessToken).subscribe((response) => {
+        this.tenderService.getMyTenders(this.userId, res.role, this.accessToken).subscribe((response) => {
 
           if (response.status === 'success') { this.tenders = response.data; }
 
@@ -209,6 +211,14 @@ export class InvoicePage implements OnInit {
       }).catch(error => console.log('path resolve error', error));
   }
 
+
+  getImageUrl(url: string){
+    if(url.indexOf('documents') >=  0 ){
+      return this.livePath+url;;
+    } else {
+      return  url;
+    }
+  }
 
   private showAlert(message: string) {
     this.alertCtrl

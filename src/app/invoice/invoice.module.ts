@@ -7,16 +7,16 @@ import { IonicModule } from '@ionic/angular';
 import { InvoicePageRoutingModule } from './invoice-routing.module';
 
 import { InvoicePage } from './invoice.page';
-import { HeaderComponent } from '../shared/header/header.component';
-import { FooterComponent } from '../shared/footer/footer.component';
+import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    InvoicePageRoutingModule
+    InvoicePageRoutingModule,
+    SharedModule
   ],
-  declarations: [InvoicePage, HeaderComponent, FooterComponent]
+  declarations: [InvoicePage]
 })
 export class InvoicePageModule {}

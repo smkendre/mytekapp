@@ -9,7 +9,7 @@
       <ion-col size="12" size-sm="12">
         <ion-card class="curve-borders">
           <ion-card-header >
-              <div ><ion-img src="../../assets/images/logo.jpg"></ion-img></div>
+              <div ><ion-img src="../assets/images/logo.jpeg"></ion-img></div>
           </ion-card-header>
 
         </ion-card>
@@ -19,7 +19,7 @@
             <ion-item>
               <ion-label position="floating"><ion-icon name="mail-outline" slot="start"></ion-icon>
                 Name</ion-label>
-              <ion-input type="text" ngModel name="uname" id="uname" placeholder="Name" required  #nameCtrl="ngModel"></ion-input>
+              <ion-input type="text" ngModel name="uname" id="uname" placeholder="Name" required  #nameCtrl="ngModel" autocomplete="off"></ion-input>
             </ion-item>
             <ion-item *ngIf="!nameCtrl.valid && nameCtrl.touched" lines="none" class="errorMsg">
               <ion-label>Please enter name</ion-label>
@@ -27,21 +27,21 @@
             <ion-item>
               <ion-label position="floating"><ion-icon name="mail-outline" slot="start"></ion-icon>
                 Email Address</ion-label>
-              <ion-input type="email" ngModel name="email" id="email" placeholder="Email Address" required email #emailCtrl="ngModel"></ion-input>
+              <ion-input type="email" ngModel name="email" id="email" placeholder="Email Address" required email #emailCtrl="ngModel" autocomplete="off"></ion-input>
             </ion-item>
             <ion-item *ngIf="!emailCtrl.valid && emailCtrl.touched" lines="none" class="errorMsg">
               <ion-label>Please enter valid email address</ion-label>
             </ion-item>
             <ion-item>
               <ion-label position="floating"><ion-icon name="lock-closed-outline" slot="start"></ion-icon> Password</ion-label>
-              <ion-input type="password" ngModel name="pwd" id="pwd" placeholder="Password" required minlength="8" #pwdCtrl="ngModel"></ion-input>
+              <ion-input type="password" ngModel name="pwd" id="pwd" placeholder="Password" required minlength="8" #pwdCtrl="ngModel" autocomplete="off"></ion-input>
             </ion-item>
             <ion-item *ngIf="!pwdCtrl.valid && pwdCtrl.touched" lines="none" class="errorMsg">
               <ion-label>Password should be 8 character long</ion-label>
             </ion-item>
             <ion-item>
               <ion-label position="floating"><ion-icon name="lock-closed-outline" slot="start"></ion-icon>Confirm Password</ion-label>
-              <ion-input type="password" ngModel name="cpwd" id="cpwd" placeholder="Confirm Password" required minlength="8" #cpwdCtrl="ngModel"></ion-input>
+              <ion-input type="password" ngModel name="cpwd" id="cpwd" placeholder="Confirm Password" required minlength="8" #cpwdCtrl="ngModel" autocomplete="off"></ion-input>
             </ion-item>
             <ion-item *ngIf="!cpwdCtrl.valid && cpwdCtrl.touched" lines="none" class="errorMsg">
               <ion-label>Password and confirm password do not match</ion-label>

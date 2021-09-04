@@ -49,7 +49,7 @@ export class TendersService {
   }
 
 
-  getMyTenders(user_id: string, token: string):Observable<any>{
+  getMyTenders(user_id: string,  userRole: string,  token: string):Observable<any>{
 
 
     const httpHeader = {
@@ -63,7 +63,7 @@ export class TendersService {
 
 
     const url = environment.apiUrl + 'my-tenders';
-    const postData = {user_id: user_id};
+    const postData = {user_id: user_id, userRole: userRole};
 
     return this.http.post(url, postData, httpHeader);
 
@@ -194,7 +194,7 @@ getReportFields(tender_id: string, token: string):Observable<any>{
 }
 
 
-getMyreports(user_id: string, token: string):Observable<any>{
+getMyreports(user_id: string, userRole: string, token: string):Observable<any>{
 
   const httpHeader = {
     headers: new HttpHeaders({
@@ -207,13 +207,13 @@ getMyreports(user_id: string, token: string):Observable<any>{
 
 
   const url = environment.apiUrl + 'my-reports';
-  const postData = {user_id: user_id};
+  const postData = {user_id: user_id, userRole: userRole};
 
   return this.http.post(url, postData, httpHeader);
 
 }
 
-getMaterialRequests(user_id: string, token: string):Observable<any>{
+getMaterialRequests(user_id: string, userRole, token: string):Observable<any>{
 
   const httpHeader = {
     headers: new HttpHeaders({
@@ -226,7 +226,7 @@ getMaterialRequests(user_id: string, token: string):Observable<any>{
 
 
   const url = environment.apiUrl + 'get-material-requests';
-  const postData = {user_id: user_id};
+  const postData = {user_id: user_id, userRole: userRole};
 
   return this.http.post(url, postData, httpHeader);
 }
@@ -277,6 +277,29 @@ uploadImage(blobData, user_id, token) {
 
 
   const url = environment.apiUrl + 'report-image';
+
+  return this.http.post(url, postData, httpHeader);
+
+  // return this.httpService.find('upload-image', formData, token);
+}
+
+
+
+updateReportStatus(postData: any, token: string): Observable<any>  {
+
+
+  const httpHeader = {
+    headers: new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Headers': '*',
+      Authorization: 'Bearer ' + token
+     })
+  };
+
+
+
+  const url = environment.apiUrl + 'update-report-status';
 
   return this.http.post(url, postData, httpHeader);
 

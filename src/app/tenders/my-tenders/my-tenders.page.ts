@@ -14,7 +14,7 @@ export class MyTendersPage implements OnInit {
   Tenders : any = [];
   accessToken: any;
   userId: string;
-
+  userRole: any;
   isLoading = false;
   constructor(private tenderService: TendersService,private router: Router, private storageService: StorageService) { }
 
@@ -32,9 +32,9 @@ export class MyTendersPage implements OnInit {
 
         this.accessToken = res.token;
         this.userId = res.id;
+        this.userRole = res.role;
 
-
-        this.tenderService.getMyTenders(this.userId, this.accessToken).subscribe((response) => {
+        this.tenderService.getMyTenders(this.userId, this.userRole, this.accessToken).subscribe((response) => {
           this.isLoading = false;
 
           if(response.status == 'success')

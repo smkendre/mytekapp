@@ -7,16 +7,16 @@ import { IonicModule } from '@ionic/angular';
 import { MyTendersPageRoutingModule } from './my-tenders-routing.module';
 
 import { MyTendersPage } from './my-tenders.page';
-import { HeaderComponent } from 'src/app/shared/header/header.component';
-import { FooterComponent } from 'src/app/shared/footer/footer.component';
+import { SharedModule } from 'src/app/shared/shared.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    MyTendersPageRoutingModule
+    MyTendersPageRoutingModule,
+    SharedModule
   ],
-  declarations: [MyTendersPage, HeaderComponent, FooterComponent]
+  declarations: [MyTendersPage]
 })
 export class MyTendersPageModule {}

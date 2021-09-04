@@ -12,6 +12,8 @@ import { AuthConstants } from '../../config/auth-constant';
 })
 export class MilestonesPage implements OnInit {
   Milestones : any = [];
+  tender : any = [];
+  workLocation : any = [];
   isLoading = false;
   accessToken: any;
 
@@ -39,7 +41,9 @@ export class MilestonesPage implements OnInit {
           // this.Milestones = response;
 
           if(response.status == 'success')
-          this.Milestones = response.data;
+          this.tender = response.data;
+          this.workLocation = response.data.work_location;
+          this.Milestones = response.data.milestones;
 
          // console.log(response);
         });

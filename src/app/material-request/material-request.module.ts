@@ -6,17 +6,17 @@ import { IonicModule } from '@ionic/angular';
 
 import { MaterialRequestPageRoutingModule } from './material-request-routing.module';
 
-import { MaterialRequestPage } from './material-request.page';
-import { HeaderComponent } from '../shared/header/header.component';
-import { FooterComponent } from '../shared/footer/footer.component';
+import { MaterialRequestPage } from './material-request.page';import { SharedModule } from '../shared/shared.module';
+
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    MaterialRequestPageRoutingModule
+    MaterialRequestPageRoutingModule,
+    SharedModule
   ],
-  declarations: [MaterialRequestPage, HeaderComponent, FooterComponent]
+  declarations: [MaterialRequestPage]
 })
 export class MaterialRequestPageModule {}

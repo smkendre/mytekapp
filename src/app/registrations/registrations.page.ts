@@ -474,7 +474,7 @@ export class RegistrationsPage implements OnInit {
       if (response.status == 'success') {
         this.router.navigateByUrl('/registration-thankyou');
       } else {
-        this.showAlert(response.message);
+        this.showAlert("Some error occurred, please try again after sometime");
       }
       // console.log(response);
     });
