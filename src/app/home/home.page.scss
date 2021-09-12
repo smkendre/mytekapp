@@ -4,6 +4,9 @@ ion-card{
   border-radius: 0;
 }
 
+ion-content{
+  --background: #eef1f4;
+}
 .drawer-menu{
   // --ion-color-light: #f4f5f8;
   --background: transparent;
@@ -153,4 +156,10 @@ ion-footer ion-button{
   justify-content: center;
   height: 100%;
 
+}
+ion-icon{
+background: #ccc;
+border-radius: 50%;
+font-size: 12px;
+padding: 5px;
 }

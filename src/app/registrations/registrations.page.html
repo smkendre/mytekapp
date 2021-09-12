@@ -23,7 +23,7 @@
     </ion-card>
 
 
-    <form #form="ngForm" (ngSubmit)="onSubmit(form)" enctype="multipart/form-data">
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" enctype="multipart/form-data">
 
       <ion-card class="transparent-card">
 
@@ -31,10 +31,25 @@
           <ion-row>
 
             <ion-col size="12" class="ion-no-padding">
-              <ion-input type="text" name="uname" [(ngModel)]="uname" placeholder="Name *"></ion-input>
+              <ion-input type="text" formControlName="uname" value="{{uname}}" [readonly]="userStatus == 1" placeholder="Name *"></ion-input>
+
+              <div class="errorMsg">
+                <ng-container *ngFor="let error of error_messages.uname">
+                  <div class="errorMsg" *ngIf="form.get('uname').hasError(error.type) && (form.get('uname').dirty || form.get('uname').touched)">
+                    {{ error.message }}
+                  </div>
+                </ng-container>
+              </div>
             </ion-col>
             <ion-col size="12" class="ion-no-padding">
-              <ion-input type="text" [(ngModel)]="cname" name="company" placeholder="Company Name *"></ion-input>
+              <ion-input type="text" formControlName="company" [readonly]="userStatus == 1"  placeholder="Company Name *" value="{{cname}}"></ion-input>
+              <div class="errorMsg">
+                <ng-container *ngFor="let error of error_messages.company">
+                  <div class="errorMsg" *ngIf="form.get('company').hasError(error.type) && (form.get('company').dirty || form.get('company').touched)">
+                    {{ error.message }}
+                  </div>
+                </ng-container>
+              </div>
             </ion-col>
 
 
@@ -45,30 +60,58 @@
 
             <ion-row>
               <ion-col size="12" class="ion-no-padding">
-                <ion-textarea col="6" [(ngModel)]="addr" name="address" placeholder="Address *"></ion-textarea>
+                <ion-textarea col="6" formControlName="address" placeholder="Address *"></ion-textarea>
+                <div class="errorMsg">
+                  <ng-container *ngFor="let error of error_messages.address">
+                    <div class="errorMsg" *ngIf="form.get('address').hasError(error.type) && (form.get('address').dirty || form.get('address').touched)">
+                      {{ error.message }}
+                    </div>
+                  </ng-container>
+                </div>
               </ion-col>
 
               <ion-col size="12" class="ion-no-padding">
-                <ion-select [(ngModel)]="addstateValue" name="state" (ionChange)="onStateChange($event, 'address')">
+                <ion-select [(ngModel)]="addstateValue"  formControlName="state" (ionChange)="onStateChange($event, 'address')">
                   <ion-select-option value="">Select State</ion-select-option>
                   <ion-select-option *ngFor="let state of states" [value]="state.id">{{state.name}}</ion-select-option>
                 </ion-select>
+                <div class="errorMsg">
+                  <ng-container *ngFor="let error of error_messages.state">
+                    <div class="errorMsg" *ngIf="form.get('state').hasError(error.type) && (form.get('state').dirty || form.get('state').touched)">
+                      {{ error.message }}
+                    </div>
+                  </ng-container>
+                </div>
               </ion-col>
               <ion-col size="12" class="ion-no-padding">
-                <ion-select [(ngModel)]="adddistrictValue" name="district" (ionChange)="onDistrictChange($event, 'address')">
+                <ion-select [(ngModel)]="adddistrictValue" formControlName="district" (ionChange)="onDistrictChange($event, 'address')">
                   <ion-select-option value="">Select District</ion-select-option>
                   <ion-select-option *ngFor="let dis of districts" [value]="dis.id">{{dis.name}}</ion-select-option>
 
                 </ion-select>
+                <div class="errorMsg">
+                  <ng-container *ngFor="let error of error_messages.district">
+                    <div class="errorMsg" *ngIf="form.get('district').hasError(error.type) && (form.get('district').dirty || form.get('district').touched)">
+                      {{ error.message }}
+                    </div>
+                  </ng-container>
+                </div>
               </ion-col>
               <ion-col size="12" class="ion-no-padding">
-                <ion-select [(ngModel)]="addtalukaValue" name="taluka">
+                <ion-select [(ngModel)]="addtalukaValue" formControlName="taluka">
                   <ion-select-option value="">Select Taluka</ion-select-option>
                   <ion-select-option *ngFor="let city of talukas" [value]="city.id">{{city.name}}</ion-select-option>
                 </ion-select>
+                <div class="errorMsg">
+                  <ng-container *ngFor="let error of error_messages.taluka">
+                    <div class="errorMsg" *ngIf="form.get('taluka').hasError(error.type) && (form.get('taluka').dirty || form.get('taluka').touched)">
+                      {{ error.message }}
+                    </div>
+                  </ng-container>
+                </div>
               </ion-col>
               <ion-col size="12" class="ion-no-padding">
-                <ion-input type="text" [(ngModel)]="pincode" name="pincode" placeholder="Pincode Number"></ion-input>
+                <ion-input type="text" formControlName="pincode"  value="{{pincode}}" placeholder="Pincode Number"></ion-input>
               </ion-col>
 
 
@@ -123,26 +166,31 @@
           </ion-row>
           <ion-row>
             <ion-col size="12" class="ion-no-padding">
-              <ion-select [(ngModel)]="stateValue" name="work_state[]" (ionChange)="onStateChange($event, 'work_location')">
+              <ion-select  name="work_state[]" (ionChange)="onStateChange($event, 'work_location')" placeholder="Select State">
                 <ion-select-option value="">Select State</ion-select-option>
                 <ion-select-option *ngFor="let state of states" [value]="state.id">{{state.name}}</ion-select-option>
               </ion-select>
             </ion-col>
             <ion-col size="12" class="ion-no-padding">
-              <ion-select [(ngModel)]="districtValue" multiple name="work_district[]" (ionChange)="onDistrictChange($event, 'work_location')" placeholder="Select District">
+              <ion-select multiple name="work_district[]" (ionChange)="onDistrictChange($event, 'work_location')" placeholder="Select District">
                 <ion-select-option *ngFor="let dis of work_districts" [value]="dis.id">{{dis.name}}</ion-select-option>
               </ion-select>
             </ion-col>
             <ion-col size="12" class="ion-no-padding">
-              <ion-select [(ngModel)]="talukaValue" multiple name="work_taluka[]" placeholder="Select Taluka">
+              <ion-select multiple name="work_taluka[]" placeholder="Select Taluka" (ionChange)="onTalukaChange($event, 'work_location')" >
                 <ion-select-option *ngFor="let city of work_talukas" [value]="city.id">{{city.name}}</ion-select-option>
               </ion-select>
             </ion-col>
             <ion-col>
-              <ion-button shape="round" expand="full" [disabled]="checkLocationInputs()" (click)="addPreferedLocation()">add</ion-button>
+              <ion-button shape="round" expand="full" (click)="addPreferedLocation()">add</ion-button>
+              <ng-container *ngIf="workLocationErr" class="errorMsg">
+
+                Please select Altlest one work location
+              </ng-container>
             </ion-col>
           </ion-row>
           <br>
+          <div *ngIf="userStatus == 2">
           <ion-row>
             <h2>Documents</h2>
             <br>
@@ -164,9 +212,20 @@
 
           <ion-row>
             <ion-col size="8">
-              <ion-input type="text" [(ngModel)]="gst_num" name="gst_num" value="" placeholder="Enter GST Number">
+              <ion-input type="text" formControlName="gst_num" value="{{gst_num}}" placeholder="Enter GST Number">
               </ion-input>
+              <div class="errorMsg">
+                <ng-container *ngFor="let error of error_messages.gst_num">
+                  <div class="errorMsg" *ngIf="form.get('gst_num').hasError(error.type) && (form.get('gst_num').dirty || form.get('gst_num').touched)">
+                    {{ error.message }}
+                  </div>
+                </ng-container>
 
+                <ng-container *ngIf="gstFileErr" class="errorMsg">
+
+                  Please upload GST File
+                </ng-container>
+              </div>
             </ion-col>
             <ion-col size="4">
 
@@ -189,9 +248,19 @@
 
           <ion-row>
             <ion-col size="8">
-              <ion-input type="text" [(ngModel)]="pan_num" name="pan_num" value="" placeholder="Pan Card Number">
+              <ion-input type="text" formControlName="pan_num" value="{{pan_num}}" placeholder="Pan Card Number">
               </ion-input>
+              <div class="errorMsg">
+                <ng-container *ngFor="let error of error_messages.pan_num">
+                  <div class="errorMsg" *ngIf="form.get('pan_num').hasError(error.type) && (form.get('pan_num').dirty || form.get('pan_num').touched)">
+                    {{ error.message }}
+                  </div>
+                </ng-container>
+                <ng-container *ngIf="PanFileErr" class="errorMsg">
 
+                  Please upload pan card copy
+                </ng-container>
+              </div>
             </ion-col>
             <ion-col size="4">
               <ion-fab vertical="bottom" horizontal="end">
@@ -208,9 +277,20 @@
 
           <ion-row>
             <ion-col size="8">
-              <ion-input type="text" [(ngModel)]="reg_num" name="reg_num" value=""
+              <ion-input type="text" formControlName="reg_num" value="{{reg_num}}"
                 placeholder="Company Registration Number"></ion-input>
+                <div class="errorMsg">
+                  <ng-container *ngFor="let error of error_messages.reg_num">
+                    <div class="errorMsg" *ngIf="form.get('reg_num').hasError(error.type) && (form.get('reg_num').dirty || form.get('reg_num').touched)">
+                      {{ error.message }}
+                    </div>
+                  </ng-container>
 
+                  <ng-container *ngIf="RegFileErr" class="errorMsg">
+
+                    Please upload company registration document
+                  </ng-container>
+                </div>
             </ion-col>
             <ion-col size="4">
               <ion-fab vertical="bottom" horizontal="end">
@@ -228,9 +308,20 @@
 
           <ion-row>
             <ion-col size="8">
-              <ion-input type="text" [(ngModel)]="adhaar_num" name="adhaar_num" value="" placeholder="Adhaar Number">
+              <ion-input type="text" formControlName="adhaar_num" value="{{adhaar_num}}" placeholder="Adhaar Number">
               </ion-input>
+              <div class="errorMsg">
+                <ng-container *ngFor="let error of error_messages.adhaar_num">
+                  <div class="errorMsg" *ngIf="form.get('adhaar_num').hasError(error.type) && (form.get('adhaar_num').dirty || form.get('adhaar_num').touched)">
+                    {{ error.message }}
+                  </div>
+                </ng-container>
 
+                <ng-container *ngIf="adhaarFileErr"  class="errorMsg">
+
+                  Please select Adhaar File
+                </ng-container>
+              </div>
             </ion-col>
             <ion-col size="4">
               <ion-fab vertical="bottom" horizontal="end">
@@ -245,8 +336,15 @@
               <ion-label>{{adhaar_File}}</ion-label>
             </ion-col>
           </ion-row>
+        </div>
 
-          <ion-button type="submit" expand="block" class="ion-text-center">Submit</ion-button>
+        <div *ngIf="userStatus != 2">
+          <ion-input type="hidden" formControlName="reg_num" value="{{reg_num}}"></ion-input>
+          <ion-input type="hidden" formControlName="pan_num" value="{{pan_num}}"></ion-input>
+          <ion-input type="hidden" formControlName="adhaar_num" value="{{adhaar_num}}"></ion-input>
+          <ion-input type="hidden" formControlName="gst_num" value="{{gst_num}}"></ion-input>
+        </div>
+          <ion-button type="submit" expand="block" class="ion-text-center" [disabled]="!form.valid">Submit</ion-button>
         </ion-card-content>
       </ion-card>
 

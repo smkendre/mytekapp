@@ -24,7 +24,7 @@
       </ion-card-content>
     </ion-card>
 
-<form #form="ngForm" (ngSubmit)="onSubmit(form)">
+<form [formGroup]="myForm" (ngSubmit)="onSubmit()">
 
     <ion-card class="transparent-card">
 
@@ -32,21 +32,58 @@
         <ion-row class="ion-align-items-center">
           <ion-col size="12" size-sm="12" >
             <ion-label>Tender List: </ion-label>
-            <ion-select name="tender" ngModel required  (ionChange)="onChangeTender($event.target.value)">
+            <ion-select formControlName="tender"  required  (ionChange)="onChangeTender($event.target.value)">
               <ion-select-option value="">Select Tender</ion-select-option>
               <ion-select-option value="{{item.id}}" *ngFor="let item of Tenders">{{item.name}}</ion-select-option>
             </ion-select>
+            <div class="errorMsg">
+              <ng-container *ngFor="let error of error_messages.tender">
+                <div class="errorMsg" *ngIf="myForm.get('tender').hasError(error.type) && (myForm.get('tender').dirty || myForm.get('tender').touched)">
+                  {{ error.message }}
+                </div>
+              </ng-container>
+            </div>
           </ion-col>
           <ion-col size="12" size-sm="12">
             <ion-label>Material List: </ion-label>
-            <ion-select name="material" ngModel required >
+            <ion-select formControlName="material"  required >
               <ion-select-option value="">Select Material</ion-select-option>
               <ion-select-option value="{{item.id}}" *ngFor="let item of Materials">{{item.name}}</ion-select-option>
             </ion-select>
+            <div class="errorMsg">
+              <ng-container *ngFor="let error of error_messages.material">
+                <div class="errorMsg" *ngIf="myForm.get('material').hasError(error.type) && (myForm.get('material').dirty || myForm.get('material').touched)">
+                  {{ error.message }}
+                </div>
+              </ng-container>
+            </div>
           </ion-col>
-          <ion-col size="12" size-sm="12" >
+        </ion-row>
+          <ion-row class="ion-align-items-center">
+
+          <ion-col size="8" size-sm="8" >
             <ion-label>Quantity: </ion-label>
-            <ion-input type="text" name="qnt" value="" placeholder="Quantity" ngModel required ></ion-input>
+            <ion-input type="number" formControlName="qnt" value="" placeholder="Quantity" required ></ion-input>
+            <div class="errorMsg">
+              <ng-container *ngFor="let error of error_messages.qnt">
+                <div class="errorMsg" *ngIf="myForm.get('qnt').hasError(error.type) && (myForm.get('qnt').dirty || myForm.get('qnt').touched)">
+                  {{ error.message }}
+                </div>
+              </ng-container>
+            </div>
+          </ion-col>
+          <ion-col size="1" size-sm="1" >
+          </ion-col>
+          <ion-col size="3" size-sm="3" >
+            <ion-label>Unit: </ion-label>
+            <ion-input type="text" formControlName="unit" value="" placeholder="Unit" required ></ion-input>
+            <div class="errorMsg">
+              <ng-container *ngFor="let error of error_messages.unit">
+                <div class="errorMsg" *ngIf="myForm.get('unit').hasError(error.type) && (myForm.get('unit').dirty || myForm.get('unit').touched)">
+                  {{ error.message }}
+                </div>
+              </ng-container>
+            </div>
           </ion-col>
           <!-- <ion-col size="1" size-sm="1" class="ion-no-padding middle_align">
             <ion-label></ion-label>
@@ -78,7 +115,7 @@
         </ion-row> -->
 
         <div class="ion-text-center">
-        <ion-button type="submit" class="ion-text-center">Submit Request</ion-button>
+        <ion-button  [disabled]="!myForm.valid" type="submit" class="submitBtn ion-text-center">Submit Request</ion-button>
       </div>
       </ion-card-content>
     </ion-card>

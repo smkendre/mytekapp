@@ -1,12 +1,25 @@
 <app-topbar></app-topbar>
 
 <ion-content center text-center>
-  <ion-grid>
+  <div class="ion-text-center"  *ngIf="isLoading">
+    <ion-spinner color="primary"></ion-spinner>
+
+  </div>
+  <ion-grid  *ngIf="!isLoading">
     <ion-row center>
-      <ion-col class="ion-text-center">
-        <h1 text-uppercase no-padding no-margin>Thank you for your request.</h1>
+      <ion-col class="ion-text-center" >
+<!--
+        <div *ngIf="userStatus == 4">
+          <h3 no-padding no-margin>your application is under review and you will be able to access the portal shortly after the confirmation from our end.</h3>
+          <ion-button color="light" routerLink="/tenders">Go Back</ion-button>
+        </div> -->
+
+        <!-- <div *ngIf="userStatus != 4"> -->
+          <h1 text-uppercase no-padding no-margin >Thank you for your request.</h1>
         <h3 no-padding no-margin>We will notify you once the admin approves your request.</h3>
         <ion-button color="light" routerLink="/tenders">Go Back</ion-button>
+        <!-- </div> -->
+
 
       </ion-col>
 

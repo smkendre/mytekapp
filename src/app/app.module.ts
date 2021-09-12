@@ -21,13 +21,14 @@ import { IonicStorageModule } from '@ionic/storage-angular';
 import { FileTransfer } from '@ionic-native/file-transfer/ngx';
 import { FileOpener } from '@ionic-native/file-opener/ngx';
 import { SharedModule } from './shared/shared.module';
+import { Base64 } from '@ionic-native/base64/ngx';
 
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
   imports: [BrowserModule, IonicModule.forRoot(), IonicStorageModule.forRoot(),    AppRoutingModule, FontAwesomeModule, HttpClientModule, SharedModule,
   FormsModule, ReactiveFormsModule],
-  providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }, CallNumber , FileChooser, FilePath, File , FileTransfer, FileOpener
+  providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }, CallNumber , FileChooser, FilePath, File , FileTransfer, FileOpener, Base64
 ],
   bootstrap: [AppComponent],
 })

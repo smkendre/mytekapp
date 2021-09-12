@@ -28,8 +28,9 @@ export class ReportsPage implements OnInit {
 
    ) { }
 
-  ngOnInit() {
 
+   ngOnInit() {}
+   ionViewWillEnter() {
     this.isLoading = true;
 
     this.storageService.get(AuthConstants.AUTH).then(res => {

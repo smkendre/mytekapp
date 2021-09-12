@@ -1,5 +1,5 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { FormGroup, NgForm  } from '@angular/forms';
+import { FormBuilder, FormGroup, NgForm, Validators  } from '@angular/forms';
 import { TendersService, ApiImage } from '../../services/tenders.service';
 import {  AlertController, ActionSheetController, Platform } from '@ionic/angular';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -25,6 +25,11 @@ export class SubmitReportPage implements OnInit {
 
   @ViewChild('fileInput', { static: false }) fileInput: ElementRef;
 
+  error_messages = {
+    'comment': [
+      { type: 'required', message: 'Please enter comment' },
+    ],
+  }
 
   constructor(private tenderService: TendersService,
     private router: Router,
@@ -33,9 +38,17 @@ export class SubmitReportPage implements OnInit {
     private route: ActivatedRoute,
     private actionSheetController: ActionSheetController,
     private platform: Platform,
-    private filePath: FilePath
+    private filePath: FilePath,
+    private formBuilder: FormBuilder
 
-    ) { }
+    ) {
+
+      this.form = this.formBuilder.group({
+        'comment': ['', Validators.required],
+        'tender_id': [''],
+        'file_path': ['']
+      });
+    }
 
   ngOnInit() {
 
@@ -79,7 +92,7 @@ export class SubmitReportPage implements OnInit {
 
   }
 
-  onSubmit(form: NgForm){
+  onSubmit(){
     this.isLoading = true;
 
     // this.router.navigateByUrl('/reports');
@@ -116,12 +129,12 @@ export class SubmitReportPage implements OnInit {
     //     );
     //   });
 
-    if (!form.valid) {
+    if (!this.form.valid) {
       return;
     }
     // console.log(form.value);
 
-    const formData = form.value;
+    const formData = this.form.value;
 
     this.tenderService.submitReportData(formData, this.imageUrl, this.userId, this.tender_id, this.accessToken).subscribe(res => {
       this.isLoading = false;

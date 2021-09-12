@@ -20,8 +20,10 @@ export class MaterialListPage implements OnInit {
     private storageService: StorageService
    ) { }
 
-  ngOnInit() {
-    this.isLoading = true;
+
+   ngOnInit() {}
+   ionViewWillEnter() {
+         this.isLoading = true;
 
 
     this.storageService.get(AuthConstants.AUTH).then(res => {

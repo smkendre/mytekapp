@@ -2,7 +2,8 @@
 
 <ion-content>
   <ion-grid>
-    <form #f="ngForm" (ngSubmit)="onSubmit(f)">
+    <form [formGroup]="form"  (ngSubmit)="onSubmit()">
+      <!-- <form #f="ngForm" (ngSubmit)="onSubmit(f)"> -->
 
     <ion-row  class="text-align-center">
 
@@ -17,36 +18,73 @@
 
           <ion-card-content>
             <ion-item>
-              <ion-label position="floating"><ion-icon name="mail-outline" slot="start"></ion-icon>
-                Name</ion-label>
-              <ion-input type="text" ngModel name="uname" id="uname" placeholder="Name" required  #nameCtrl="ngModel" autocomplete="off"></ion-input>
+              <!-- <ion-label position="floating"><ion-icon name="mail-outline" slot="start"></ion-icon>
+                Name</ion-label> -->
+                <ion-icon name="person" size="small" color="dark" slot="start"></ion-icon>
+
+              <ion-input type="text" class="form-control" formControlName="uname" id="uname" placeholder="Name *" autocomplete="off"></ion-input>
             </ion-item>
-            <ion-item *ngIf="!nameCtrl.valid && nameCtrl.touched" lines="none" class="errorMsg">
-              <ion-label>Please enter name</ion-label>
-            </ion-item>
+            <div class="errorMsg">
+              <ng-container *ngFor="let error of error_messages.uname">
+                <div class="errorMsg" *ngIf="form.get('uname').hasError(error.type) && (form.get('uname').dirty || form.get('uname').touched)">
+                  {{ error.message }}
+                </div>
+              </ng-container>
+            </div>
+
             <ion-item>
-              <ion-label position="floating"><ion-icon name="mail-outline" slot="start"></ion-icon>
-                Email Address</ion-label>
-              <ion-input type="email" ngModel name="email" id="email" placeholder="Email Address" required email #emailCtrl="ngModel" autocomplete="off"></ion-input>
+              <!-- <ion-label position="floating"><ion-icon name="mail-outline" slot="start"></ion-icon>
+                Email Address</ion-label> -->
+                <ion-icon name="mail-outline" size="small" color="dark" slot="start"></ion-icon>
+
+              <ion-input type="email"  formControlName="email" id="email" placeholder="Email Address *"></ion-input>
             </ion-item>
-            <ion-item *ngIf="!emailCtrl.valid && emailCtrl.touched" lines="none" class="errorMsg">
-              <ion-label>Please enter valid email address</ion-label>
-            </ion-item>
+            <div class="errorMsg">
+              <ng-container *ngFor="let error of error_messages.email">
+                <div class="errorMsg" *ngIf="form.get('email').hasError(error.type) && (form.get('email').dirty || form.get('email').touched)">
+                  {{ error.message }}
+                </div>
+              </ng-container>
+            </div>
+
+
             <ion-item>
-              <ion-label position="floating"><ion-icon name="lock-closed-outline" slot="start"></ion-icon> Password</ion-label>
-              <ion-input type="password" ngModel name="pwd" id="pwd" placeholder="Password" required minlength="8" #pwdCtrl="ngModel" autocomplete="off"></ion-input>
+              <!-- <ion-label position="floating"><ion-icon name="lock-closed-outline" slot="start"></ion-icon> Password</ion-label> -->
+              <ion-icon name="lock-closed-outline" size="small" color="dark" slot="start"></ion-icon>
+
+              <ion-input type="password"  formControlName="pwd" id="pwd" placeholder="Password *" ></ion-input>
             </ion-item>
-            <ion-item *ngIf="!pwdCtrl.valid && pwdCtrl.touched" lines="none" class="errorMsg">
-              <ion-label>Password should be 8 character long</ion-label>
-            </ion-item>
+            <div class="errorMsg">
+              <ng-container *ngFor="let error of error_messages.pwd">
+                <div class="errorMsg" *ngIf="form.get('pwd').hasError(error.type) && (form.get('pwd').dirty || form.get('pwd').touched)">
+                  {{ error.message }}
+                </div>
+              </ng-container>
+            </div>
+
+
             <ion-item>
-              <ion-label position="floating"><ion-icon name="lock-closed-outline" slot="start"></ion-icon>Confirm Password</ion-label>
-              <ion-input type="password" ngModel name="cpwd" id="cpwd" placeholder="Confirm Password" required minlength="8" #cpwdCtrl="ngModel" autocomplete="off"></ion-input>
+              <!-- <ion-label position="floating"><ion-icon name="lock-closed-outline" slot="start"></ion-icon>Confirm Password</ion-label> -->
+              <ion-icon name="lock-closed-outline" size="small" color="dark" slot="start"></ion-icon>
+
+              <ion-input type="password" formControlName="cpwd" id="cpwd" placeholder="Confirm Password *" ></ion-input>
             </ion-item>
-            <ion-item *ngIf="!cpwdCtrl.valid && cpwdCtrl.touched" lines="none" class="errorMsg">
-              <ion-label>Password and confirm password do not match</ion-label>
-            </ion-item>
-            <ion-button type="submit" [disabled]="!f.valid">Signup</ion-button>
+            <div class="errorMsg">
+              <ng-container *ngFor="let error of error_messages.cpwd">
+                <div class="errorMsg" *ngIf="form.get('cpwd').hasError(error.type) && (form.get('cpwd').dirty || form.get('cpwd').touched)">
+                  {{ error.message }}
+                </div>
+                <!-- <div *ngIf="form.errors">Password and Confirm Password must be match.</div> -->
+
+
+              </ng-container>
+              <label class="text-danger" *ngIf="form.controls['cpwd'].hasError('NoPassswordMatch')">
+                Password and Confirm Password does not match
+              </label>
+            </div>
+
+
+            <ion-button type="submit" [disabled]="!form.valid">Signup</ion-button>
 
           </ion-card-content>
 
