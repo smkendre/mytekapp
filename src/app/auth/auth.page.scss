@@ -53,15 +53,31 @@ ion-item{
   word-space: normal;
 }
 
-ion-grid{
 
-  height: 100%;
+.errorMsg ion-label{
+  white-space: normal;
+
 }
 
-// form{
-//   display: flex;
-//   align-items: center;
-//   justify-content: center;
-//   height: 100%;
+ion-grid{
 
-// }
+  // height: 100%;
+}
+ion-icon{
+  margin: 0 10px 0 0;
+}
+
+
+.native-input.sc-ion-input-md:-webkit-autofill, input:-internal-autofill-selected
+
+ {
+  background-color:#c8c8c8 !important;
+}
+
+@-webkit-keyframes autofill {
+  0%,
+  100% {
+      color: #666;
+      background: transparent;
+  }
+}

@@ -7,8 +7,7 @@ import { IonicModule } from '@ionic/angular';
 import { MaterialListPageRoutingModule } from './material-list-routing.module';
 
 import { MaterialListPage } from './material-list.page';
-import { HeaderComponent } from '../shared/header/header.component';
-import { FooterComponent } from '../shared/footer/footer.component';
+import { SharedModule } from '../shared/shared.module';
 
 
 @NgModule({
@@ -16,8 +15,9 @@ import { FooterComponent } from '../shared/footer/footer.component';
     CommonModule,
     FormsModule,
     IonicModule,
-    MaterialListPageRoutingModule
+    MaterialListPageRoutingModule,
+    SharedModule
   ],
-  declarations: [MaterialListPage, HeaderComponent, FooterComponent]
+  declarations: [MaterialListPage]
 })
 export class MaterialListPageModule {}

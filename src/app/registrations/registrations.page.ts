@@ -1,5 +1,8 @@
+/* eslint-disable max-len */
+/* eslint-disable @typescript-eslint/member-ordering */
+/* eslint-disable @typescript-eslint/naming-convention */
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { NgForm } from '@angular/forms';
+import { FormBuilder, FormGroup, NgForm, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ActionSheetController, AlertController, Platform, ToastController } from '@ionic/angular';
 import { AuthConstants } from '../config/auth-constant';
@@ -10,6 +13,8 @@ import { AuthService } from '../services/auth.service';
 import { FilePath } from '@ionic-native/file-path/ngx';
 import { File } from '@ionic-native/file/ngx';
 import { Filesystem, Directory, Encoding } from '@capacitor/filesystem';
+import { environment } from 'src/environments/environment';
+import { faLeaf } from '@fortawesome/free-solid-svg-icons';
 
 export interface imgFile {
   name: string;
@@ -56,12 +61,70 @@ export class RegistrationsPage implements OnInit {
   pan_num: string;
   adhaar_num: string;
   compareWith: any;
+  userStatus: any;
+  gstFileErr  = false;
+  PanFileErr = false;
+  RegFileErr  = false;
+  adhaarFileErr = false;
+  workLocationErr = false;
+  addstateValue: string;
   // toggle.contact = false;
   interested = [];
   iLikeIt = { isChecked: false };
   user: any;
   images: ApiImage[] = [];
+
+  form: FormGroup;
+
   @ViewChild('fileInput', { static: false }) fileInput: ElementRef;
+
+  error_messages = {
+    uname: [
+      { type: 'required', message: 'Please enter name' },
+    ],
+    company: [
+      { type: 'required', message: 'Please company name' },
+    ],
+    address: [
+      { type: 'required', message: 'Please enter address' },
+    ],
+    state: [
+      { type: 'required', message: 'Please select state' },
+    ],
+    district: [
+      { type: 'required', message: 'Please select district' },
+    ],
+    taluka: [
+      { type: 'required', message: 'Please select taluka' },
+    ],
+
+    pincode: [
+      { type: 'required', message: 'Please enter pincode' },
+    ],
+    // 'area_of_interst[]': [
+    //   { type: 'required', message: 'Please select area of interest' },
+    // ],
+
+    gst_num: [
+      { type: 'pattern', message: 'Please enter valid GST number',  },
+    ],
+
+    pan_num: [
+      { type: 'pattern', message: 'Please enter valid pan card number' },
+    ],
+
+    adhaar_num: [
+      { type: 'pattern', message: 'Please enter valid adhaar card number' },
+    ],
+
+    reg_num: [
+      { type: 'required', message: 'Please enter company registration number' },
+      { type: 'minlength', message: 'Please enter company registration number' },
+      { type: 'maxlength', message: 'Please enter company registration number' },
+    ],
+
+  };
+
 
   constructor(private router: Router, private registrationService: RegistrationService, private storageService: StorageService,
     private alertCtrl: AlertController,
@@ -69,9 +132,26 @@ export class RegistrationsPage implements OnInit {
     private platform: Platform,
     private authService: AuthService,
     private filePath: FilePath,
+    private formBuilder: FormBuilder,
     private toaster: ToastController
+  ) {
 
-  ) { }
+    this.form = this.formBuilder.group({
+      uname: ['', Validators.required],
+      company: ['', Validators.required ],
+      address: ['', Validators.required ],
+      state: ['', Validators.required ],
+      district: ['', Validators.required ],
+      taluka: ['', Validators.required ],
+      pincode: ['', Validators.required],
+      gst_num: ['', Validators.pattern('^([0][1-9]|[1-2][0-9]|[3][0-7])([a-zA-Z]{5}[0-9]{4}[a-zA-Z]{1}[1-9a-zA-Z]{1}[zZ]{1}[0-9a-zA-Z]{1})+$') ],
+      pan_num: ['', Validators.pattern('[A-Z]{5}[0-9]{4}[A-Z]{1}$') ],
+      adhaar_num: ['', Validators.pattern('\\d{12}') ],
+      reg_num: ['', Validators.compose([
+        Validators.required, Validators.minLength(21),  Validators.maxLength(21)
+      ]),]
+    });
+  }
 
 
   compareWithFn = (o1, o2) => o1 && o2 ? o1.id === o2.id : o1 === o2;
@@ -105,6 +185,11 @@ export class RegistrationsPage implements OnInit {
       district: this.getdistricts(),
       taluka: this.getTalukas(),
     };
+
+    if(this.workLocations == null){
+      this.workLocations = [];
+
+    }
     this.workLocations.push(location);
     this.stateValue = null;
     this.districtValue = this.talukaValue = [];
@@ -118,6 +203,7 @@ export class RegistrationsPage implements OnInit {
     });
     return districtArray;
   }
+
   getTalukas() {
     const talukaArray = [];
     this.talukaValue.forEach(talukaID => {
@@ -148,7 +234,7 @@ export class RegistrationsPage implements OnInit {
     this.authService.user_details({ user_id: this.userId }, this.accessToken).subscribe(response => {
 
 
-      if (response.status == 'success') {
+      if (response.status === 'success') {
 
 
         this.user = response.data;
@@ -156,8 +242,16 @@ export class RegistrationsPage implements OnInit {
         this.uname = response.data.name;
         this.cname = response.data.cname;
         this.addr = response.data.addr;
-        this.area_of_interest = this.interested = JSON.parse(response.data.area_of_interest);
-        this.stateValue = response.data.state;
+        this.area_of_interest = JSON.parse(response.data.area_of_interest);
+        this.form.get('address').setValue(this.addr);
+
+        // console.log('area of interest: ' + this.area_of_interest);
+
+        if(Array.isArray(this.area_of_interest)){
+        //  console.log('area of interest: ' + this.area_of_interest);
+          this.interested = JSON.parse(response.data.area_of_interest);
+        }
+        this.addstateValue = this.stateValue = response.data.state;
 
         this.districtValue = response.data.district;
         this.talukaValue = response.data.taluka;
@@ -165,6 +259,11 @@ export class RegistrationsPage implements OnInit {
         this.reg_num = response.data.reg_num;
         this.pan_num = response.data.pan_num;
         this.adhaar_num = response.data.adhaar_num;
+        this.userStatus = response.data.status;
+        // this.form.get('district').setValue(this.adddistrictValue);
+        // this.form.get('taluka').setValue(this.addtalukaValue);
+
+        console.log('user status: '+this.userStatus);
 
         this.workLocations = response.data.locations;
 
@@ -197,7 +296,9 @@ export class RegistrationsPage implements OnInit {
     console.log('stateID', stateID);
     this.registrationService.get_districts(stateID, this.accessToken).subscribe((response) => {
       if (response.status === 'success') {
-        if (field == 'address') {
+
+        this.stateValue = stateID;
+        if (field === 'address') {
           this.districts = response.data;
         } else {
           this.work_districts = response.data;
@@ -213,7 +314,7 @@ export class RegistrationsPage implements OnInit {
     console.log('districtId', districtId);
     this.registrationService.get_talukas(districtId, this.accessToken).subscribe((response) => {
       if (response.status === 'success') {
-
+        this.districtValue = districtId;
         if (field === 'address') {
           this.talukas = response.data;
         } else {
@@ -222,6 +323,10 @@ export class RegistrationsPage implements OnInit {
         }
       }
     }, error => console.log(error));
+  }
+
+  onTalukaChange(event: any, type: string){
+    this.talukaValue = event.target.value;
   }
 
   toggleOtherField() {
@@ -398,21 +503,54 @@ export class RegistrationsPage implements OnInit {
   }
 
 
-  onSubmit(form: NgForm) {
+  onSubmit() {
 
     //  console.log(form.value); return false;
+
+
+    if(!this.imageUrl){
+
+      this.gstFileErr = true;
+      return;
+    }
+
+    if(!this.RegimageUrl){
+      this.RegFileErr = true;
+      return;
+    }
+
+    if(!this.PanimageUrl){
+      this.PanFileErr = true;
+      return;
+    }
+
+    if(!this.AdhaarimageUrl){
+
+      this.adhaarFileErr = true;
+      return;
+    }
+
+
+    if(this.workLocations == null || (Array.isArray(this.workLocations) && this.workLocations.length <= 0 )){
+      this.workLocationErr = true;
+      return;
+    }
+
+
     const postData = {
-      name: form.value.uname,
-      company: form.value.company,
+      name: this.form.value.uname,
+      company: this.form.value.company,
       area_of_interest: this.interested,
-      address: form.value.address,
-      state: form.value.state,
-      district: form.value.district,
-      taluka: form.value.taluka,
-      gst_num: form.value.gst_num,
-      reg_num: form.value.reg_num,
-      pan_num: form.value.pan_num,
-      adhaar_num: form.value.adhaar_num,
+      address: this.form.value.address,
+      state: this.form.value.state,
+      district: this.form.value.district,
+      taluka: this.form.value.taluka,
+      gst_num: this.form.value.gst_num,
+      work_locations: this.workLocations,
+      reg_num: this.form.value.reg_num,
+      pan_num: this.form.value.pan_num,
+      adhaar_num: this.form.value.adhaar_num,
+      pincode: this.form.value.pincode,
       user_id: this.userId,
 
     };
@@ -428,10 +566,22 @@ export class RegistrationsPage implements OnInit {
 
     this.registrationService.register(postData, this.accessToken).subscribe(response => {
 
-      if (response.status == 'success') {
+      if (response.status === 'success') {
+
+        this.storageService.get(AuthConstants.AUTH).then(valueStr => {
+          // let value = valueStr ? JSON.parse(valueStr) : {};
+
+           // Modify just that property
+           valueStr.status = 4;
+
+           // Save the entire data again
+           this.storageService.store(AuthConstants.AUTH, valueStr);
+      });
+
         this.router.navigateByUrl('/registration-thankyou');
+
       } else {
-        this.showAlert(response.message);
+        this.showAlert('Some error occurred, please try again after sometime');
       }
       // console.log(response);
     });
@@ -454,7 +604,7 @@ export class RegistrationsPage implements OnInit {
     if (this.stateValue === null || this.districtValue === null || this.talukaValue === null) {
       return true;
     }
-    else if (this.districtValue.length === 0 || this.talukaValue.length === 0) { return true; }
+    else if (this.stateValue === null || this.districtValue.length === 0 || this.talukaValue.length === 0) { return true; }
     else { return false; }
   }
   makeBlobFromURI(uri, fieldName) {
@@ -476,23 +626,13 @@ export class RegistrationsPage implements OnInit {
           });
           console.log('File read results in base64String', contents);
           const imgblob = new Blob([contents.data]); //create blob
-          console.log(imgblob);
-          // check blob size if larger than 5MB (5242880 Bytes == 5MB)
-          if(imgblob.size > 5242880){
-            this.toastMessage('Document should not exceed 5MB in size');
-            this.updatedocumentLink(fieldName, '');
-            return;
-          };
-          // upload base64String of the file read to server
-          // timer to check uploadtime ---( REMOVE IN PRODUCTION )
-          const t1 = performance.now();
-          console.warn('uploading document ---');
-          this.registrationService.uploadImage(contents, fieldName, this.userId, this.accessToken)
-          .subscribe(res => {
-            const t2 = performance.now();
-            console.warn(`Time taken to upload ${fieldName} document `,t2- t1 +' milliseconds');
-            console.log('uploaded', res);
-          }, error => console.log('upload error', error));
+          console.log('Image blob: ' + imgblob);
+          console.log('Field Name: ' + fieldName);
+          // upload blob
+          this.registrationService.uploadImage(imgblob, fieldName, this.userId, this.accessToken)
+            .subscribe(data => {
+              console.log('uploaded',data);
+            }, error => console.log('upload error', error));
         };
         readDocument().catch(error => console.log('File read error', error));
       }).catch(error => console.log('path resolve error', error));

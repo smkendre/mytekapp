@@ -1,23 +1,24 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
 import { RegistrationsPageRoutingModule } from './registrations-routing.module';
 
 import { RegistrationsPage } from './registrations.page';
-import { ImagePickerComponent } from '../shared/image-picker/image-picker.component';
-import { HeaderComponent } from '../shared/header/header.component';
-import { FooterComponent } from '../shared/footer/footer.component';
+import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    RegistrationsPageRoutingModule  ],
-  declarations: [RegistrationsPage, ImagePickerComponent, HeaderComponent, FooterComponent],
-  exports: [ImagePickerComponent]
+    RegistrationsPageRoutingModule,
+  SharedModule,
+  ReactiveFormsModule
+  ],
+  declarations: [RegistrationsPage],
+  exports: []
 })
 export class RegistrationsPageModule {}

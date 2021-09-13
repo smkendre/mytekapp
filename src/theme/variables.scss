@@ -268,3 +268,16 @@ ion-footer ion-button{
 .header-logo{
   height: 55px;
 }
+
+body{
+  text-transform: capitalize;
+}
+
+.errorMsg{
+  border: none;
+  border-radius: 0;
+  --background: transparent;
+  font-size: 14px;
+  color: red;
+  margin: 0;
+}

@@ -1,4 +1,4 @@
-<app-header></app-header>
+<app-topbar></app-topbar>
 <ion-content >
 
 
@@ -16,7 +16,7 @@
   </ion-row>
   <ion-grid class="ion-no-padding"  *ngIf="!isLoading && Fields.length > 0">
 
-<form #form="ngForm" (ngSubmit)="onSubmit(form)">
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
 
     <ion-card class="transparent-card">
       <ion-card-header>            <h2>Upate Daily Report</h2>
@@ -28,14 +28,21 @@
           </ion-col>
 
           <ion-col size="8" class="ion-no-padding">
-            <ion-input type="text" ngModel name="field_{{row.name}}" value="" ></ion-input>
+            <ion-input type="text" name="field_{{row.name}}" required value="" ></ion-input>
           </ion-col>
         </ion-row>
 
         <ion-row >
           <ion-col size="12" class="ion-no-padding">
             <ion-label>Comment: </ion-label>
-            <ion-textarea rows="5" ngModel name="comment"></ion-textarea>
+            <ion-textarea rows="5" required formControlName="comment"></ion-textarea>
+            <div class="errorMsg">
+              <ng-container *ngFor="let error of error_messages.comment">
+                <div class="errorMsg" *ngIf="form.get('comment').hasError(error.type) && (form.get('comment').dirty || form.get('comment').touched)">
+                  {{ error.message }}
+                </div>
+              </ng-container>
+            </div>
           </ion-col>
 
         </ion-row>
@@ -46,25 +53,22 @@
 
           </ion-col>
           <ion-col size="12" class="ion-no-padding">
-              <!-- <input
-                type="file"
-                #fileInput
-                (change)="uploadFile($event)"
-                hidden="true"
-                accept="image/*"
-              /> -->
 
               <ion-button (click)="selectImageSource('file')">
         Upload      </ion-button>
           </ion-col>
+          <ion-col size="12" class="ion-no-padding ion-text-center">
 
+
+            <ion-input type="hidden"  formControlName="tender_id" value="{{tender_id}}" ></ion-input>
+            <ion-input type="hidden" formControlName="file_path" value="{{imageUrl}}" ></ion-input>
+
+
+            <ion-button type="submit" class="ion-text-center" [disabled]="!form.valid">Submit</ion-button>
+          </ion-col>
         </ion-row>
 
 
-        <ion-input type="hidden" ngModel name="tender_id" value="{{tender_id}}" ></ion-input>
-        <ion-input type="hidden" ngModel name="file_path" value="{{imageUrl}}" ></ion-input>
-
-        <ion-button type="submit" class="ion-text-center">Submit</ion-button>
       </ion-card-content>
     </ion-card>
 

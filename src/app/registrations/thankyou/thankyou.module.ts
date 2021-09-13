@@ -7,16 +7,16 @@ import { IonicModule } from '@ionic/angular';
 import { ThankyouPageRoutingModule } from './thankyou-routing.module';
 
 import { ThankyouPage } from './thankyou.page';
-import { HeaderComponent } from 'src/app/shared/header/header.component';
-import { FooterComponent } from 'src/app/shared/footer/footer.component';
+import { SharedModule } from 'src/app/shared/shared.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    ThankyouPageRoutingModule
+    ThankyouPageRoutingModule,
+    SharedModule
   ],
-  declarations: [ThankyouPage, HeaderComponent, FooterComponent]
+  declarations: [ThankyouPage]
 })
 export class ThankyouPageModule {}

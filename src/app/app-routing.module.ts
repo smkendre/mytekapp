@@ -6,7 +6,7 @@ import { IndexGuard } from './guards/index.guard';
 const routes: Routes = [
   {
     path: '',
-    // canActivate: [IndexGuard],
+    canActivate: [IndexGuard],
     loadChildren: () => import('./home-slides/home-slides.module').then( m => m.HomeSlidesPageModule),
 
      //redirectTo: 'home-slides',
@@ -16,7 +16,7 @@ const routes: Routes = [
 
   {
     path: 'auth',
-    // canActivate: [IndexGuard],
+    canActivate: [IndexGuard],
 
     loadChildren: () => import('./auth/auth.module').then( m => m.AuthPageModule),
 

@@ -20,15 +20,33 @@ export class MaterialRequestPage implements OnInit {
   Tenders: any;
   Materials: any;
 
+  error_messages = {
+    'tender': [
+      { type: 'required', message: 'Please select tender' },
+    ],
+    'material': [
+      { type: 'required', message: 'Please select material.' }
+    ],
+
+    'qnt': [
+      {type: 'required', message: 'Please enter material quantity.'}
+    ],
+    'unit': [
+      {type: 'required', message: 'Please enter unit.'},
+      {type: 'pattern', message: 'Please enter alphbet only.'},
+    ]
+  }
+
   constructor(private router: Router, private formBuilder: FormBuilder,
     private storageService: StorageService,
     private tenderService: TendersService,
     private alertCtrl: AlertController) {
 
-    this.myForm = formBuilder.group({
+    this.myForm = this.formBuilder.group({
       'tender': ['', Validators.required],
       'material': ['', Validators.required],
-      'qnt': ['', Validators.required]
+      'qnt': ['', Validators.required],
+      'unit': ['', Validators.required]
     });
    }
 
@@ -38,20 +56,20 @@ export class MaterialRequestPage implements OnInit {
     this.storageService.get(AuthConstants.AUTH).then(res => {
       console.log(res);
 
-    
+
       if(res){
 
         if(res.status == 2) {
           this.router.navigate(['registration']);
-  
+
         }
 
-        
+
         this.accessToken = res.token;
         this.userId = res.id;
 
 
-  this.tenderService.getMyTenders(this.userId, this.accessToken).subscribe((response) => {
+  this.tenderService.getMyTenders(this.userId, res.role, this.accessToken).subscribe((response) => {
 
     if(response.status == 'success')
     this.Tenders = response.data;
@@ -86,12 +104,12 @@ export class MaterialRequestPage implements OnInit {
     });
   }
 
-  onSubmit(form: NgForm){
+  onSubmit(){
 
     let postData = {
-      tender_id: form.value.tender,
-      material_id: form.value.material,
-      quantity: form.value.qnt,
+      tender_id: this.myForm.value.tender,
+      material_id: this.myForm.value.material,
+      quantity: this.myForm.value.qnt+' '+this.myForm.value.unit,
       user_id: this.userId
 
     };
@@ -106,21 +124,21 @@ export class MaterialRequestPage implements OnInit {
   }
 
 
-  private showAlert(message: string) {
-    this.alertCtrl
-      .create({
-        header: 'Alert Message',
-        message: message,
-        buttons: [{
-          text: 'Okey',
-          handler: () => {
-            this.router.navigate(['material-request-list']);
+    private showAlert(message: string) {
+      this.alertCtrl
+        .create({
+          header: 'Alert Message',
+          message: message,
+          buttons: [{
+            text: 'Okey',
+            handler: () => {
+              this.router.navigate(['material-request-list']);
+            }
           }
-        }
-  ]
-      })
-      .then(alertEl => alertEl.present());
-  }
+    ]
+        })
+        .then(alertEl => alertEl.present());
+    }
 
 
 }

@@ -16,6 +16,7 @@ export class DetailsPage implements OnInit {
    accessToken: any;
    userId: string;
    userStatus: string;
+   userRole: any;
     isLoading = false;
     tenderId: string;
 
@@ -36,7 +37,7 @@ export class DetailsPage implements OnInit {
 
         this.accessToken = res.token;
         this.userId = res.id;
-
+        this.userRole = res.role;
 
     this.tenderService.tenderDetails(this.tenderId, this.accessToken).subscribe((response) => {
       this.isLoading = false;

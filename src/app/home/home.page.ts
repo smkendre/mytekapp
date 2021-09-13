@@ -15,6 +15,9 @@ export class HomePage {
   accessToken: any;
   isLoading = true;
 
+  userRole: any;
+
+
   tenderPath: string = 'tenders';
   myTenderPath: string = 'my-tenders';
   reportsPath: string = 'reports';
@@ -86,22 +89,28 @@ export class HomePage {
 
   }
 
-  ngOnInit() {
+  ngOnInit() {}
+  ionViewWillEnter() {
 
     // this.slides.startAutoplay();
     this.isLoading = true;
 
     this.storageService.get(AuthConstants.AUTH).then(res => {
-      //  console.log(res.status);
 
       if(res){
         this.userId = res.id;
         this.accessToken = res.token;
         this.userStatus = res.status;
+        this.userRole = res.role;
 
         if(res.status == 2){
           this.tenderPath = this.myTenderPath = this.invoicePath = this.reportsPath = this.requestPath = 'registration';
         }
+
+        if(res.status == 4){
+          this.tenderPath = this.myTenderPath = this.invoicePath = this.reportsPath = this.requestPath = 'registration-thankyou';
+        }
+
       }else{
         this.router.navigate(['auth']);
       }
@@ -110,5 +119,11 @@ export class HomePage {
     });
   }
 
+  doRefresh(event) {
+    console.log('Pull Event Triggered!');
+    setTimeout(() => {
+      event.target.complete();
+    }, 2000);
+  }
 
 }

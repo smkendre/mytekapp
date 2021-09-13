@@ -13,15 +13,17 @@ export class MaterialListPage implements OnInit {
   isLoading = false;
   accessToken: string;
   userId: string;
-
+  userRole: any;
   constructor(
     private router: Router,
     private tenderService: TendersService,
     private storageService: StorageService
    ) { }
 
-  ngOnInit() {
-    this.isLoading = true;
+
+   ngOnInit() {}
+   ionViewWillEnter() {
+         this.isLoading = true;
 
 
     this.storageService.get(AuthConstants.AUTH).then(res => {
@@ -31,15 +33,16 @@ export class MaterialListPage implements OnInit {
 
         if(res.status == 2) {
           this.router.navigate(['registration']);
-  
+
         }
-        
+
         this.accessToken = res.token;
         this.userId = res.id;
+        this.userRole = res.role;
 
 
 
-  this.tenderService.getMaterialRequests(this.userId, this.accessToken).subscribe((response) => {
+  this.tenderService.getMaterialRequests(this.userId, this.userRole, this.accessToken).subscribe((response) => {
     this.isLoading = false;
 
     if(response.status == 'success')

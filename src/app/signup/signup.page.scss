@@ -15,7 +15,7 @@ ion-item{
   border: 2px solid #c8c8c8;
   border-radius: 8px;
   --background: #eaeaea;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 }
 
 .login-container{
@@ -44,13 +44,20 @@ ion-item{
   font-weight: 700;
 
 }
+
 .errorMsg{
   border: none;
   border-radius: 0;
   --background: transparent;
   font-size: 14px;
   color: red;
-  word-space: normal;
+  margin: 0;
+}
+
+.errorMsg ion-label{
+  white-space: normal;
+  margin: 0;
+
 }
 
 ion-grid{
@@ -72,7 +79,9 @@ ion-grid{
       background: transparent;
   }
 }
-
+ion-icon{
+  margin: 0 10px 0 0;
+}
 
 // form{
 //   display: flex;

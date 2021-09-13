@@ -15,6 +15,7 @@ import { AuthConstants } from '../config/auth-constant';
 export class AuthPage implements OnInit {
   isLogin = true;
   isLoading = false;
+
   constructor(
     private authService: AuthService,
     private router: Router,
@@ -27,7 +28,6 @@ export class AuthPage implements OnInit {
     this.isLoading = true;
 
     this.storageService.get(AuthConstants.AUTH).then(res => {
-      // console.log(res.name);
 
       if(res){
         this.router.navigate(['home']);
@@ -36,56 +36,6 @@ export class AuthPage implements OnInit {
       this.isLoading = false;
 
     });
-  }
-
-
-
-  authenticate(email: string, password: string) {
-    this.isLoading = true;
-    this.loadingCtrl
-      .create({ keyboardClose: true, message: 'Logging in...' })
-      .then(loadingEl => {
-        loadingEl.dismiss();
-        this.router.navigateByUrl('/home');
-        // let authObs: Observable<AuthResponseData>;
-        // if (this.isLogin) {
-        //   authObs = this.authService.login(email, password);
-        //    console.log(authObs);
-        // } else {
-        // //  authObs = this.authService.signup(email, password);
-        // }
-
-        // authObs.subscribe(
-        //   resData => {
-        //     // console.log(resData);
-        //     this.isLoading = false;
-        //     loadingEl.dismiss();
-
-        //     const code = resData.error_code;
-        //     if(code){
-        //       this.showAlert(resData.message);
-
-        //     }else{
-
-        //     }
-
-        //     this.router.navigateByUrl('/home');
-        //   },
-        //   errRes => {
-        //     loadingEl.dismiss();
-        //     // const code = errRes.error.error.message;
-        //     // let message = 'Could not sign you up, please try again.';
-        //     // if (code === 'EMAIL_EXISTS') {
-        //     //   message = 'This email address exists already!';
-        //     // } else if (code === 'EMAIL_NOT_FOUND') {
-        //     //   message = 'E-Mail address could not be found.';
-        //     // } else if (code === 'INVALID_PASSWORD') {
-        //     //   message = 'This password is not correct.';
-        //     // }
-        //     // this.showAlert(message);
-        //   }
-        // );
-      });
   }
 
   onSwitchAuthMode() {
@@ -97,36 +47,40 @@ export class AuthPage implements OnInit {
     this.loadingCtrl
     .create({ keyboardClose: true, message: 'Logging in...' })
     .then(loadingEl => {
+
     if (!form.valid) {
       return;
     }
+
     const email = form.value.email;
     const password = form.value.pwd;
 
     this.authService.login({'email': email, 'password': password}).subscribe((res: any) => {
-      // console.log(res);
+
       loadingEl.dismiss();
 
       if(res.status == 'success'){
 
-        // console.log(AuthConstants.AUTH);
-        // console.log(res.data);
-        this.storageService.store(AuthConstants.AUTH, res.data);
-        this.router.navigateByUrl('/home');
+        if(res.data.role == 1 || res.data.role == 2){
+          this.showAlert('You are not authorize to access this app');
+        }else{
+          this.storageService.store(AuthConstants.AUTH, res.data);
+          this.router.navigateByUrl('/home');
+        }
+
       }else{
         this.showAlert(res.message);
       }
     },
     (error: any) =>{
-      // console.log("Network Error");
+
       this.showAlert("Network Error");
 
     }
 
     )
   });
-    // console.log(form.value);
-   // this.authenticate(email, password);
+
   }
 
   private showAlert(message: string) {

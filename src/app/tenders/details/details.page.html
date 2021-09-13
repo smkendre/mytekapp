@@ -1,4 +1,4 @@
-<app-header></app-header>
+<app-topbar></app-topbar>
 
 <ion-content>
 
@@ -36,7 +36,7 @@
           <strong>Scope of work: </strong>{{tender.scope}}
         </ion-col  >
 
-        <ion-col size=12>
+        <ion-col size=12 *ngIf="userRole == 3">
           <ion-button (click)="submitRequest(tender.id)" class="ion-text-center"  *ngIf=" tender.request_status == null" >Submit Request</ion-button>
 
         </ion-col>
