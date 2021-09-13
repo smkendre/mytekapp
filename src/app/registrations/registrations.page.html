@@ -111,7 +111,7 @@
                 </div>
               </ion-col>
               <ion-col size="12" class="ion-no-padding">
-                <ion-input type="text" formControlName="pincode"  value="{{pincode}}" placeholder="Pincode Number"></ion-input>
+                <ion-input type="text" formControlName="pincode"  value="{{form.controls['pincode']}}" placeholder="Pincode Number"></ion-input>
               </ion-col>
 
 
@@ -149,7 +149,7 @@
           </div>
           <h2>Preferred work location</h2>
           <br>
-          <ion-row *ngIf="workLocations != null && workLocations.length > 0">
+          <ion-row *ngIf="workLocations !== null && workLocations.length > 0">
             <ion-card *ngFor="let item of workLocations;let i=index" class="location-card">
               <ion-card-header>
                 <ion-icon color="primary" name="location-outline"></ion-icon>&nbsp;
@@ -190,7 +190,7 @@
             </ion-col>
           </ion-row>
           <br>
-          <div *ngIf="userStatus == 2">
+          <div *ngIf="userStatus === 2">
           <ion-row>
             <h2>Documents</h2>
             <br>
@@ -338,7 +338,7 @@
           </ion-row>
         </div>
 
-        <div *ngIf="userStatus != 2">
+        <div *ngIf="userStatus !== 2">
           <ion-input type="hidden" formControlName="reg_num" value="{{reg_num}}"></ion-input>
           <ion-input type="hidden" formControlName="pan_num" value="{{pan_num}}"></ion-input>
           <ion-input type="hidden" formControlName="adhaar_num" value="{{adhaar_num}}"></ion-input>

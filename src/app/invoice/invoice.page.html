@@ -35,10 +35,9 @@
       hidden="true"
       accept="image/*"
     />
-
-      <ion-button color="danger" (click)="selectImageSource('invoice')">Upload      </ion-button>
-      <ion-label *ngIf="imageError" class="errorMsg">Please upload file</ion-label>
-      <ion-icon name="attach-outline" slot="primary"></ion-icon>
+    <ion-label *ngIf="imageError" class="errorMsg">Please upload file</ion-label><br>
+      <ion-button color="danger" (click)="selectImageSource('invoice')">Upload</ion-button>
+      <ion-note>{{selectedFile}}</ion-note>
   </ion-col>
 </ion-row>
 
@@ -64,25 +63,18 @@
     <ion-card-content>
       <ion-row>
         <ion-col size="6" size-sm="6">
-
-
           <h1>My Invoices</h1>
-
-
     </ion-col>
-
     </ion-row>
     </ion-card-content>
   </ion-card>
 
 
   <ion-card class="btn-grad"  *ngFor="let item of invoices" >
-
     <ion-card-content>
       <ion-row>
         <ion-col size="12" size-sm="12" >
               <h2>{{item.created_at | date: 'dd MMMM yyyy, hh:mm a'}}</h2>
-
         </ion-col>
         <ion-col size="12" size-sm="12" >
           <h2>{{item.name}}</h2>

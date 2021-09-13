@@ -1,20 +1,20 @@
+/* eslint-disable @typescript-eslint/consistent-type-assertions */
+/* eslint-disable @typescript-eslint/member-ordering */
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, NgForm, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 import { FilePath } from '@ionic-native/file-path/ngx';
-import { File } from '@ionic-native/file/ngx';
-import { ActionSheetController, AlertController, Platform } from '@ionic/angular';
+import { ActionSheetController, AlertController, Platform, ToastController } from '@ionic/angular';
 import { AuthConstants } from '../config/auth-constant';
 import { InvoiceService } from '../services/invoice.service';
 import { RegistrationService } from '../services/registration.service';
 import { StorageService } from '../services/storage.service';
-import {  TendersService } from '../services/tenders.service';
+import { TendersService } from '../services/tenders.service';
 import { Filesystem, Encoding } from '@capacitor/filesystem';
 import { environment } from 'src/environments/environment';
-import { FileTransfer, FileTransferObject, FileUploadOptions } from '@ionic-native/file-transfer/ngx';
 import { FileChooser } from '@ionic-native/file-chooser/ngx';
-import { Base64 } from '@ionic-native/base64/ngx';
+import { DocumentViewer } from '@ionic-native/document-viewer/ngx';
 
 @Component({
   selector: 'app-invoice',
@@ -30,12 +30,13 @@ export class InvoicePage implements OnInit {
   isLoading = true;
   livePath: string = environment.liveUrl;
   form: FormGroup;
+  selectedFile: string;
 
   error_messages = {
-    'tender': [
+    tender: [
       { type: 'required', message: 'Please select tender' },
     ],
-  }
+  };
 
   imageError = true;
 
@@ -51,19 +52,18 @@ export class InvoicePage implements OnInit {
     private registrationService: RegistrationService,
     private filePath: FilePath,
     private formBuilder: FormBuilder,
-    private transfer: FileTransfer,
     private fileChooser: FileChooser,
-    private file: File,
-    private base64: Base64
+    private toast: ToastController,
+    private documentViewer: DocumentViewer
   ) {
 
     this.form = this.formBuilder.group({
       tender: ['', Validators.required]
-    })
-   }
+    });
+  }
 
-  ngOnInit() {}
-  ionViewWillEnter(){
+  ngOnInit() { }
+  ionViewWillEnter() {
     this.isLoading = true;
 
     this.storageService.get(AuthConstants.AUTH).then(res => {
@@ -71,7 +71,7 @@ export class InvoicePage implements OnInit {
 
       if (res) {
 
-        if(res.status == 2 ) {
+        if (res.status === 2) {
           this.router.navigate(['registration']);
 
         }
@@ -99,9 +99,6 @@ export class InvoicePage implements OnInit {
     });
   }
 
-
-
-
   async selectImageSource(fileName) {
     const buttons = [
       {
@@ -115,7 +112,7 @@ export class InvoicePage implements OnInit {
         text: 'Choose from Gallery',
         icon: 'Image',
         handler: () => {
-          this.addImage(CameraSource.Photos,fileName);
+          this.addImage(CameraSource.Photos, fileName);
         }
       }
     ];
@@ -174,35 +171,39 @@ export class InvoicePage implements OnInit {
         icon: 'attach',
         handler: () => {
           this.fileChooser.open().then(uri => {
-            console.log('uri'+JSON.stringify(uri));
-                // get file path
-                this.filePath
-                .resolveNativePath(uri)
-                .then(async (resolvedPath) => {
-                  console.log('path', resolvedPath);
-                  const pathSplit = resolvedPath.split('/');
-                  fileName = pathSplit[pathSplit.length - 1];
-                  const dirPath = 'file:///storage/emulated/0/' + pathSplit.splice(pathSplit.length - 2, 1) + '/';
-                  console.log('fileName', fileName);
-                  console.log('dirPath', dirPath);
-                  const readDocument = async () => {
-                    const contents = await Filesystem.readFile({
-                      path: resolvedPath,
-                      encoding: Encoding.UTF8,
-                    });
-                    console.log('File read results', contents);
-                    const imgblob = new Blob([contents.data]); //create blob
-                    console.log("Image blob: " + imgblob);
-                    // upload blob
+            console.log('uri' + JSON.stringify(uri));
+            // get file path
+            this.filePath
+              .resolveNativePath(uri)
+              .then(async (resolvedPath) => {
+                console.log('path', resolvedPath);
 
-                  };
-                  readDocument().catch(error => console.log('File read error', error));
-                }).catch(error => console.log('path resolve error', error));
+                const pathSplit = resolvedPath.split('/');
+                this.selectedFile = pathSplit[pathSplit.length - 1];
+                const dirPath = 'file:///storage/emulated/0/' + pathSplit.splice(pathSplit.length - 2, 1) + '/';
+                console.log('selectedFile', this.selectedFile);
+                console.log('dirPath', dirPath);
+                const readDocument = async () => {
+                  const contents = await Filesystem.readFile({
+                    path: resolvedPath,
+                    encoding: Encoding.UTF8,
+                  });
+                  console.log('File read results', contents);
+                  // upload blob
+                  this.registrationService.uploadImage(contents.data, fileName, this.userId, this.accessToken)
+                    .subscribe(data => {
+                      console.log('uploaded', data);
+                      this.toaster('document uploaded');
+                    }, error => console.log('upload error', error));
+
+                };
+                readDocument().catch(error => console.log('File read error', error));
+              }).catch(error => console.log('path resolve error', error));
           })
-          .catch(e => alert('uri'+JSON.stringify(e)));
-          }
+            .catch(e => alert('uri' + JSON.stringify(e)));
+        }
 
-        });
+      });
 
     }
 
@@ -251,10 +252,10 @@ export class InvoicePage implements OnInit {
   }
 
   onSubmit() {
-// console.log("image url:  "+this.imageUrl);
-    if(this.imageUrl == undefined || this.imageUrl == ''){
+    // console.log("image url:  "+this.imageUrl);
+    if (this.imageUrl === undefined || this.imageUrl === '') {
       this.imageError = true;
-    }else{
+    } else {
       const postData = {
         tender_id: this.form.value.tender,
         user_id: this.userId,
@@ -296,7 +297,7 @@ export class InvoicePage implements OnInit {
           // upload blob
           this.registrationService.uploadImage(imgblob, fieldName, this.userId, this.accessToken)
             .subscribe(data => {
-              console.log('uploaded',data);
+              console.log('uploaded', data);
             }, error => console.log('upload error', error));
         };
         readDocument().catch(error => console.log('File read error', error));
@@ -304,11 +305,11 @@ export class InvoicePage implements OnInit {
   }
 
 
-  getImageUrl(url: string){
-    if(url.indexOf('documents') >=  0 ){
-      return this.livePath+url;;
+  getImageUrl(url: string) {
+    if (url.indexOf('documents') >= 0) {
+      return this.livePath + url;;
     } else {
-      return  url;
+      return url;
     }
   }
 
@@ -326,5 +327,14 @@ export class InvoicePage implements OnInit {
         ]
       })
       .then(alertEl => alertEl.present());
+  }
+  async toaster(msg: string){
+    const ts = await this.toast.create({
+      message: msg,
+      duration: 3000,
+      position:'bottom',
+      cssClass: 'toast'
+    });
+    await ts.present();
   }
 }
